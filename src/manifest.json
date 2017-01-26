@@ -1,0 +1,35 @@
+{
+
+  "manifest_version": 2,
+  "name": "InfoBubbles",
+  "version": "1.0",
+
+  "description": "Visualizes filter bubbles",
+
+  "icons": {
+    "48": "icons/bubble-48.png"
+  },
+
+  "browser_action": {
+    "default_icon": "icons/bubble-48.png",
+    "default_title": "InfoBubbles",
+    "default_popup": "bubbles.html"
+  },
+
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+
+  "background": {
+    "page": "background.html"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["*://*/", "*://*/*"],
+      "js": ["content.js"]
+    }
+  ]
+
+}
