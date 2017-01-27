@@ -13,7 +13,7 @@
   "browser_action": {
     "default_icon": "icons/bubble-48.png",
     "default_title": "InfoBubbles",
-    "default_popup": "bubbles.html"
+    "default_popup": "popup.html"
   },
 
   "permissions": [
@@ -21,15 +21,14 @@
     "storage"
   ],
 
-  "background": {
-    "page": "background.html"
-  },
-
   "content_scripts": [
     {
-      "matches": ["*://*/", "*://*/*"],
-      "js": ["content.js"]
+        "matches": ["*://*/*", "*://*/"],
+        "js": ["content.js"]
     }
-  ]
+  ],
 
+  "background": {
+    "page": "background.html"
+  }
 }

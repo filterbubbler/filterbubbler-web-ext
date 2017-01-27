@@ -1,3 +1,2 @@
-src/lib
 node_modules
-src/web-ext-artifacts
+extension/dist
