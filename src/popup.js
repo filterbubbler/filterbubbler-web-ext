@@ -93,30 +93,3 @@ class Popup extends React.Component {
 }
 
 ReactDOM.render(<Popup/>, document.getElementById('app'));
-
-/*
-var documentText = function() {
-    return "some text";
-}
-
-var bubblePort = browser.runtime.connect({name:"bubble-scan"});
-var bubblename = document.querySelector('#bubblename');
-var button = document.querySelector('#classify');
-
-button.onclick = function(e) {
-    console.log('clickity');
-    bubblePort.postMessage({
-        type: 'PAGE_TEXT',
-        title: 'document title',
-        text: documentText()
-    });
-};
-
-chrome.browserAction.onClicked.addListener(function(tab) {
-    // No tabs or host permissions needed!
-    console.log('popped up');
-    chrome.tabs.executeScript({
-        code: 'document.body.style.backgroundColor="red"'
-    });
-});
-*/
