@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "webpack -w -v --display-error-details --progress --colors",
+    "install": "webpack -v --display-error-details --progress --colors",
     "start": "web-ext run -s extension/"
   },
   "author": "",
@@ -13,6 +13,7 @@
     "grunt": "^1.0.1"
   },
   "devDependencies": {
+    "ajv": "4.11.2",
     "babel-core": "6.20.0",
     "babel-loader": "6.2.9",
     "babel-plugin-transform-class-properties": "6.19.0",
@@ -21,6 +22,7 @@
     "babel-preset-react": "6.16.0",
     "babel-preset-stage-2": "6.18.0",
     "bayes": "0.0.6",
+    "dispensary": "0.10.3",
     "level-fs-browser": "1.0.0",
     "natural": "0.4.0",
     "react": "15.4.1",
