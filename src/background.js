@@ -3,6 +3,17 @@ import bayes from 'bayes';
 console.log('InfoBubbles: Background script starting');
 
 var classifier = bayes();
+var DBNAME = 'infobubbledb';
+
+browser.storage.local.get(DBNAME).then(function(existingdb) {
+    console.log('Existing DB', existingdb);
+    if (existingdb[DBNAME]) {
+        console.log('Loaded classification DB from localstorage:', existingdb);
+        classifier = bayes.fromJson(existingdb[DBNAME]);
+    } else {
+        console.log('No pre-existing DB');
+    }
+});
 
 var port;
 browser.runtime.onConnect.addListener(function(_port) {
@@ -11,6 +22,13 @@ browser.runtime.onConnect.addListener(function(_port) {
         console.log('InfoBubbles: Background: Message:', m);
         if (m.action === 'CLASSIFY') {
             classifier.learn(m.text.join(' '), m.tag);
+            var db = {};
+            db[DBNAME] = classifier.toJson();
+            browser.storage.local.set(db).then(function(result) {
+                console.log('Stored successfully');
+            }, function(error) {
+                console.log('Error storing DB');
+            });
         }
         if (m.action === 'ANALYZE') {
             var category = classifier.categorize(m.text.join(' '));
