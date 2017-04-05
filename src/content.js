@@ -1,4 +1,4 @@
-console.log('InfoBubbles: Content!');
+console.log('FilterBubbler: Content!');
 
 var port = browser.runtime.connect({name:"bubble-scan"});
 
@@ -14,7 +14,7 @@ window.infobubble = {
         return text;
     },
     analyze: function() {
-        console.log('Content ANALYZE');
+        console.log('FilterBubbler: Content ANALYZE');
         port.postMessage({
             action: 'ANALYZE',
             title: 'document title',
@@ -22,12 +22,18 @@ window.infobubble = {
         });
     },
     classify: function(tag) {
-        console.log('Content CLASSIFY');
+        console.log('FilterBubbler: Content CLASSIFY');
         port.postMessage({
             action: 'CLASSIFY',
             title: 'document title',
             text: this.getText(),
             tag: tag
+        });
+
+        port.postMessage({
+            action: 'ANALYZE',
+            title: 'document title',
+            text: this.getText()
         });
     }
 }

@@ -79,7 +79,7 @@ class Popup extends React.Component {
       <div>
         <h1>{this.state.matchedTag}</h1>
         <p>
-          Active tab: {activeTab ? activeTab.url : '[waiting for result]'}
+          Active: {activeTab ? activeTab.url : '[waiting for result]'}
         </p>
         <button onClick={this.analyzeText}>Analyze</button>
         <hr/>

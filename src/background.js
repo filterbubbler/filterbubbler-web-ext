@@ -1,9 +1,9 @@
 import bayes from 'bayes';
 
-console.log('InfoBubbles: Background script starting');
+console.log('FilterBubbler: Background script starting');
 
 var classifier = bayes();
-var DBNAME = 'infobubbledb';
+var DBNAME = 'FilterBubblerDB';
 
 browser.storage.local.get(DBNAME).then(function(existingdb) {
     console.log('Existing DB', existingdb);
@@ -19,7 +19,7 @@ var port;
 browser.runtime.onConnect.addListener(function(_port) {
     port = _port;
     port.onMessage.addListener(function(m) {
-        console.log('InfoBubbles: Background: Message:', m);
+        console.log('FilterBubbler: Background: Message:', m);
         if (m.action === 'CLASSIFY') {
             classifier.learn(m.text.join(' '), m.tag);
             var db = {};
