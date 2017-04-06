@@ -1,4 +1,4 @@
-# InfoBubbles
+# FilterBubbler
 
 This is an early sketch of a tool for performing collaborative text
 analysis and classification of web page text content.
@@ -22,4 +22,3 @@ Change to the `extension` subdirectory of this repository, and use web-ext to st
 cd extension
 web-ext run
 ```
-
