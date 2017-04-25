@@ -1,5 +1,8 @@
+import 'material-icons-font/material-icons-font.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import MainView from './MainView';
 
 class Popup extends React.Component {
   constructor(props) {
@@ -76,20 +79,22 @@ class Popup extends React.Component {
   render() {
     const {activeTab} = this.state;
     return (
-      <div>
-        <h1>{this.state.matchedTag}</h1>
-        <p>
-          Active: {activeTab ? activeTab.url : '[waiting for result]'}
-        </p>
-        <button onClick={this.analyzeText}>Analyze</button>
-        <hr/>
-        <form onSubmit={this.classify}>
-            <input type="text" value={this.state.tag} onChange={this.handleChange} />
-            <button onClick={this.classify}>Classify</button>
-        </form>
-      </div>
+            <div>
+        <MuiThemeProvider>
+            <MainView classification={this.state.matchedTag} url={activeTab ? activeTab.url : 'loading...'} />
+        </MuiThemeProvider>
+            <hr/>
+            <button onClick={this.analyzeText}>Analyze</button>
+
+            <form onSubmit={this.classify}>
+                <input type="text" value={this.state.tag} onChange={this.handleChange} />
+                <button onClick={this.classify}>Classify</button>
+            </form>
+        </div>
     );
   }
 }
+/*
+*/
 
 ReactDOM.render(<Popup/>, document.getElementById('app'));
