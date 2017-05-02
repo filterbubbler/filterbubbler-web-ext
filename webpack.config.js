@@ -7,7 +7,7 @@ module.exports = {
     // and included in the extension source.
     // For example, you could add a background script like:
     // background: './src/background.js',
-    popup: './src/popup.js',
+    popup: ['babel-polyfill', './src/popup.js'],
     content: './src/content.js',
     background: './src/background.js',
   },

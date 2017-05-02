@@ -1,4 +1,6 @@
 import bayes from 'bayes';
+import store from './store';
+import {addClassification, analyzeContent} from './actions';
 
 console.log('FilterBubbler: Background script starting');
 
@@ -39,3 +41,5 @@ browser.runtime.onConnect.addListener(function(_port) {
         }
     });
 });
+
+

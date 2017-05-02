@@ -4,6 +4,10 @@ import ReactDOM from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import MainView from './MainView';
 
+import {connect} from 'react-redux'
+import {Provider} from 'react-redux';
+import {createUIStore} from 'redux-webext';
+
 class Popup extends React.Component {
   constructor(props) {
     super(props);
@@ -77,13 +81,15 @@ class Popup extends React.Component {
   }
 
   render() {
-    const {activeTab} = this.state;
+    console.log(this);    
+    const {url} = this.props;
     return (
             <div>
-        <MuiThemeProvider>
-            <MainView classification={this.state.matchedTag} url={activeTab ? activeTab.url : 'loading...'} />
-        </MuiThemeProvider>
+            <MuiThemeProvider>
+                <MainView classification={this.state.matchedTag} url={url ? url : 'loading...'} />
+            </MuiThemeProvider>
             <hr/>
+
             <button onClick={this.analyzeText}>Analyze</button>
 
             <form onSubmit={this.classify}>
@@ -94,7 +100,35 @@ class Popup extends React.Component {
     );
   }
 }
-/*
-*/
 
-ReactDOM.render(<Popup/>, document.getElementById('app'));
+const mapStateToProps = (state) => {
+    console.log('Map state to props ', state);
+    return {
+        url: state.url 
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+    }
+}
+
+const MyPopup = connect(mapStateToProps, mapDispatchToProps)(Popup)
+
+async function initApp() {
+    const store = await createUIStore();
+
+    console.log('store', store);
+
+    const mountNode = document.getElementById('app');
+//    document.body.appendChild(mountNode);
+
+    ReactDOM.render(
+        <Provider store={store}>
+            <MyPopup/>
+        </Provider>,
+        mountNode
+    );
+}
+
+initApp();
