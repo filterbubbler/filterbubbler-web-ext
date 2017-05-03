@@ -1,5 +1,6 @@
 import {
     ADD_CLASSIFCATION,
+    SET_URL,
     ANALYZE_CONTENT
 } from './constants';
 
@@ -8,6 +9,13 @@ export function addClassification({value}) {
         type: ADD_CLASSIFICATION,
         value
     };
+}
+
+export function setUrl({value}) {
+    return {
+        type: SET_URL,
+        value
+    }
 }
 
 export function analyzeContent({}) {

@@ -4,6 +4,8 @@ import {addClassification, analyzeContent} from './actions';
 
 console.log('FilterBubbler: Background script starting');
 
+console.log('STORE', store.getState());
+
 var classifier = bayes();
 var DBNAME = 'FilterBubblerDB';
 
