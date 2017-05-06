@@ -1,7 +1,8 @@
 import {combineReducers} from 'redux';
 import {
     ADD_CLASSIFICATION,
-    ANALYZE_CONTENT
+    ANALYZE_CONTENT,
+    SET_URL
 } from './constants';
 
 const initialState = {
