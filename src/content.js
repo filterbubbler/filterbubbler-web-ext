@@ -2,6 +2,10 @@ console.log('FilterBubbler: Content!');
 
 var port = browser.runtime.connect({name:"bubble-scan"});
 
+browser.tabs.getCurrent().then((tabInfo) => {
+    console.log('Current tab:', tabInfo);
+});
+
 window.infobubble = {
     getText: function() {
         var text = [];

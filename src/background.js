@@ -1,6 +1,6 @@
 import bayes from 'bayes';
 import store from './store';
-import {addClassification, analyzeContent} from './actions';
+import {addClassification, setUrl, analyzeContent} from './actions';
 
 console.log('FilterBubbler: Background script starting');
 

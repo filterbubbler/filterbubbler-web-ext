@@ -11,10 +11,11 @@ export function addClassification({value}) {
     };
 }
 
-export function setUrl({value}) {
+export function setUrl({url}) {
+    console.log('setUrl', url);
     return {
         type: SET_URL,
-        value
+        url
     }
 }
 

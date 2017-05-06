@@ -9,8 +9,8 @@ const store = createStore(reducer);
 export default createBackgroundStore({
     store,
     actions: {
-        'UI_ADD_CLASSIFICATION': addClassification,
-        'UI_SET_URL': setUrl,
-        'UI_ANALYZE_CONTENT': analyzeContent
+        'ADD_CLASSIFICATION': addClassification,
+        'SET_URL': setUrl,
+        'ANALYZE_CONTENT': analyzeContent
     }
 });
