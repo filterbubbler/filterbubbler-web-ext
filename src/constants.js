@@ -1,3 +1,4 @@
+export const ADD_CORPUS = 'ADD_CORPUS';
 export const ADD_CLASSIFICATION = 'ADD_CLASSIFICATION';
 export const ANALYZE_CONTENT = 'ANALYZE_CONTENT';
 export const SET_URL = 'SET_URL';

@@ -1,4 +1,5 @@
 import {
+    ADD_CORPUS,
     ADD_CLASSIFCATION,
     SET_URL,
     ANALYZE_CONTENT
@@ -12,10 +13,16 @@ export function addClassification({value}) {
 }
 
 export function setUrl({url}) {
-    console.log('setUrl', url);
     return {
         type: SET_URL,
         url
+    }
+}
+
+export function addCorpus({corpus}) {
+    return {
+        type: ADD_CORPUS,
+        corpus
     }
 }
 

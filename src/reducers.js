@@ -9,11 +9,22 @@ const initialState = {
     url: 'http://test.com',
     content: '',
     classification: '',
-    classifications: []
+    classifications: [],
+    corpura: [],
+    recipes: []
 }
 
 function addClassification(state = initialState.classifications, action) {
     return state;
+}
+
+function addCorpus(state = initialState.corpura, action) {
+    switch (action.type) {
+        case ADD_CORPUS:
+            return [...state, action.corpus];
+        default:
+            return state;
+    }
 }
 
 function analyzeContent(state = initialState.content, action) {

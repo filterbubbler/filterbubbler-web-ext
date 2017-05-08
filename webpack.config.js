@@ -24,7 +24,10 @@ module.exports = {
           exclude: /node_modules/,
           test: /\.js$/,
           // Babel options are in .babelrc
-          loaders: ['babel'],
+          loader: 'babel-loader',
+          query: {
+            presets:[ 'es2015', 'stage-2', 'react' ]
+          }
         },
         { test: /\.css$/, loader: "style-loader!css-loader" },
         {
@@ -38,6 +41,10 @@ module.exports = {
         }
     ],
   },
+/*  babel: {
+    presets: ["es2015", "stage-2"],
+    plugins: ['transform-object-rest-spread']
+  },*/
   resolve: {
     // This allows you to import modules just like you would in a NodeJS app.
     extensions: ['', '.js', '.jsx'],
@@ -54,7 +61,7 @@ module.exports = {
     // to set this environment var to avoid reference errors.
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production'),
-    }),
+    })
   ],
   // This will expose source map files so that errors will point to your
   // original source files instead of the transpiled files.

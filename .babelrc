@@ -2,10 +2,11 @@
   "presets": [
     "es2015",
     "stage-2",
-    "react"
+    "react",
   ],
   "plugins": [
     "transform-class-properties",
+    "transform-object-rest-spread",
     "transform-es2015-modules-commonjs"
   ]
 }
