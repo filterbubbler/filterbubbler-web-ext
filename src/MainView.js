@@ -3,6 +3,7 @@ import React from 'react';
 import RaisedButton from 'material-ui/RaisedButton';
 import TextField from 'material-ui/TextField';
 import FontIcon from 'material-ui/FontIcon';
+import Paper from 'material-ui/Paper';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 import {connect} from 'react-redux'
 import * as actions from './actions';
@@ -17,17 +18,20 @@ class MainView extends React.Component {
         console.log('RENDER', this.props);
 
         const {
-            classification,
-            url,
-            content
+            currentClassification,
+            url
         } = this.props;
 
         return (
             <div>
-              <h1>{classification}</h1>
-              <p>"{url}"</p>
-              <TextField hintText="Classification" />
-              <RaisedButton onClick={this.analyzeText}>Analyze</RaisedButton>
+              <Paper style={{margin: 10, padding: 5}}>
+                <p><strong>{currentClassification}</strong></p>
+                {url}
+              </Paper>
+              <div className="classification">
+                <TextField hintText="Classification" />
+                <div className="right10"><RaisedButton onClick={this.analyzeText}>Analyze</RaisedButton></div>
+              </div>
               <BottomNavigation>
                 <BottomNavigationItem icon={matchesIcon} label="Matches" />
                 <BottomNavigationItem icon={dashboardIcon} label="Dashboard" />

@@ -1,23 +1,7 @@
-import bayes from 'bayes';
 import store from './store';
-import {addClassification, setUrl, analyzeContent} from './actions';
+import {addClassification, addCorpus, setUrl, analyzeContent} from './actions';
 
 console.log('FilterBubbler: Background script starting');
-
-console.log('STORE', store.getState());
-
-var classifier = bayes();
-var DBNAME = 'FilterBubblerDB';
-
-browser.storage.local.get(DBNAME).then(function(existingdb) {
-    console.log('Existing DB', existingdb);
-    if (existingdb[DBNAME]) {
-        console.log('Loaded classification DB from localstorage:', existingdb);
-        classifier = bayes.fromJson(existingdb[DBNAME]);
-    } else {
-        console.log('No pre-existing DB');
-    }
-});
 
 var port;
 browser.runtime.onConnect.addListener(function(_port) {
