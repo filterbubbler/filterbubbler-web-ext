@@ -1,12 +1,8 @@
-console.log('FilterBubbler: Content!');
+console.log('FilterBubbler: Content script startup');
 
-var port = browser.runtime.connect({name:"bubble-scan"});
+var fbblPort = browser.runtime.connect({name:"filterbubbler"});
 
-browser.tabs.getCurrent().then((tabInfo) => {
-    console.log('Current tab:', tabInfo);
-});
-
-window.infobubble = {
+window.filterBubbler = {
     getText: function() {
         var text = [];
         var nodes = document.querySelectorAll('body *');
@@ -19,7 +15,7 @@ window.infobubble = {
     },
     analyze: function() {
         console.log('FilterBubbler: Content ANALYZE');
-        port.postMessage({
+        fbblPort.postMessage({
             action: 'ANALYZE',
             title: 'document title',
             text: this.getText()
@@ -27,17 +23,19 @@ window.infobubble = {
     },
     classify: function(tag) {
         console.log('FilterBubbler: Content CLASSIFY');
-        port.postMessage({
+        fbblPort.postMessage({
             action: 'CLASSIFY',
             title: 'document title',
             text: this.getText(),
             tag: tag
         });
 
-        port.postMessage({
+        fbblPort.postMessage({
             action: 'ANALYZE',
             title: 'document title',
             text: this.getText()
         });
     }
 }
+
+window.filterBubbler.analyze()

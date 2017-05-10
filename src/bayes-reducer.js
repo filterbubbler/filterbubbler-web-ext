@@ -14,6 +14,7 @@ browser.storage.local.get(DBNAME).then(function(existingdb) {
 });
 
 var reducer = (state = 'None', action) => {
+    console.log('Bayes classifier', action);
     switch (action.type) {
         case 'CLASSIFY':
             classifier.learn(action.text, m.tag);
@@ -25,7 +26,7 @@ var reducer = (state = 'None', action) => {
                 console.log('Error storing DB');
             });
             return state;
-        case 'ANALYZE':
+        case 'ANALYZE_CONTENT':
             return classifier.categorize(action.text);
         default:
             return state;

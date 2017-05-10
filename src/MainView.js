@@ -7,8 +7,13 @@ import Paper from 'material-ui/Paper';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
 import {connect} from 'react-redux'
 import * as actions from './actions';
+import ClassificationForm from 'classification-form';
 
 class MainView extends React.Component {
+    handleSubmit(data) {
+        console.log('Form submit', data)
+    }
+
     render() {
         const matchesIcon = <FontIcon className="material-icons">assessment</FontIcon>;
         const dashboardIcon = <FontIcon className="material-icons">dashboard</FontIcon>;
@@ -19,19 +24,18 @@ class MainView extends React.Component {
 
         const {
             currentClassification,
-            url
+            url,
+            ui,
+            changeClassification
         } = this.props;
 
         return (
             <div>
               <Paper style={{margin: 10, padding: 5}}>
-                <p><strong>{currentClassification}</strong></p>
+                <div><strong>{currentClassification}</strong></div>
                 {url}
               </Paper>
-              <div className="classification">
-                <TextField hintText="Classification" />
-                <div className="right10"><RaisedButton onClick={this.analyzeText}>Analyze</RaisedButton></div>
-              </div>
+              <ClassificationForm onSubmit={this.handleSubmit}/>
               <BottomNavigation>
                 <BottomNavigationItem icon={matchesIcon} label="Matches" />
                 <BottomNavigationItem icon={dashboardIcon} label="Dashboard" />

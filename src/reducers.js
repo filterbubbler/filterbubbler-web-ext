@@ -1,12 +1,7 @@
 import {combineReducers} from 'redux';
-import reducer from 'bayes-reducer';
-import {
-    ADD_CLASSIFICATION,
-    ADD_CORPUS,
-    ANALYZE_CONTENT,
-    CLASSIFY,
-    SET_URL
-} from './constants';
+import bayesReducer from 'bayes-reducer';
+import {ADD_CORPUS, CHANGE_CLASSIFICATION, SET_URL} from './constants';
+import { reducer as formReducer } from 'redux-form';
 
 const initialState = {
     url: 'http://test.com',
@@ -16,7 +11,10 @@ const initialState = {
     classifications: [],
     corpura: [],
     recipes: [],
-    repositories: []
+    repositories: [],
+    ui: {
+        classification: ''
+    }
 }
 
 function addClassification(state = initialState.classifications, action) {
@@ -52,13 +50,25 @@ function classify(state = initialState.currentClassification, action) {
     return state;
 }
 
-console.log('BAYES REDUCER', reducer)
+function ui(state = initialState.ui, action) {
+    switch (action.type) {
+        case CHANGE_CLASSIFICATION:
+            return {...state, classification: state.classification + action.value}
+        default:
+            return state
+    }
+    return state;
+}
+
+console.log('BAYES REDUCER', bayesReducer)
 
 export default combineReducers({
     url: urls,
     corpura: addCorpus,
-    currentClassification: reducer,
+    currentClassification: bayesReducer,
     classifications: addClassification,
-    content: analyzeContent
+    content: analyzeContent,
+    form: formReducer,
+    ui: ui
 });
 

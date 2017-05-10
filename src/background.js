@@ -9,6 +9,8 @@ browser.runtime.onConnect.addListener(function(_port) {
     port.onMessage.addListener(function(m) {
         console.log('FilterBubbler: Background: Message:', m);
         if (m.action === 'CLASSIFY') {
+            console.log('CONTENT: classify', m.text.join(' '), m.tag)
+            /*
             classifier.learn(m.text.join(' '), m.tag);
             var db = {};
             db[DBNAME] = classifier.toJson();
@@ -17,13 +19,10 @@ browser.runtime.onConnect.addListener(function(_port) {
             }, function(error) {
                 console.log('Error storing DB');
             });
+            */
         }
         if (m.action === 'ANALYZE') {
-            var category = classifier.categorize(m.text.join(' '));
-            port.postMessage({
-                action: 'REPORT',
-                tag: category
-            });
+            store.dispatch(analyzeContent({content: m.text.join(' ')}))
         }
     });
 });

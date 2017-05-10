@@ -39,6 +39,7 @@
     "natural": "0.4.0",
     "react-redux": "5.0.4",
     "redux": "3.6.0",
+    "redux-form": "6.7.0",
     "style-loader": "0.16.1",
     "url-loader": "0.5.8",
     "web-ext": "1.6.0",
