@@ -9,8 +9,13 @@ import {actionTypes as formActionTypes} from 'redux-form';
 const store = createStore(reducers)
 
 const actions = {}
-actions[formActionTypes.REGISTER_FIELD] = formActions.registerField,
+actions[formActionTypes.REGISTER_FIELD] = formActions.registerField
 actions[formActionTypes.SUBMIT] = formActions.sumbit
+actions[formActionTypes.SET_SUBMIT_SUCCEEDED] = formActions.setSubmitSucceeded
+actions[formActionTypes.TOUCH] = formActions.touch
+actions[formActionTypes.CHANGE] = formActions.change
+actions[formActionTypes.BLUR] = formActions.blur
+actions[formActionTypes.FOCUS] = formActions.focus
 
 export default createBackgroundStore({
     store,

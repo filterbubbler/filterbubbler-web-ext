@@ -17,6 +17,7 @@ const ClassificationForm = props => {
 
     return (
         <form onSubmit={handleSubmit}>
+            <Field name="firstName" component="input" type="text" placeholder="First Name" />
             <Field name="currentClassification" component={renderTextField} label="Current Classification"/>
             <div className="right10"><RaisedButton type="submit">Classify</RaisedButton></div>
         </form>
