@@ -60,8 +60,6 @@ function ui(state = initialState.ui, action) {
     return state;
 }
 
-console.log('BAYES REDUCER', bayesReducer)
-
 export default combineReducers({
     url: urls,
     corpura: addCorpus,

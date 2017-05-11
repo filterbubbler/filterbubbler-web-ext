@@ -1,5 +1,5 @@
 import React from 'react'
-import { Field, reduxForm } from 'redux-form'
+import {Field, reduxForm} from 'redux-form'
 import {connect} from 'react-redux'
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'

@@ -20,8 +20,6 @@ class MainView extends React.Component {
         const cloudIcon = <FontIcon className="material-icons">cloud</FontIcon>;
         const settingsIcon = <FontIcon className="material-icons">settings</FontIcon>;
 
-        console.log('RENDER', this.props);
-
         const {
             currentClassification,
             url,

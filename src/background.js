@@ -1,8 +1,10 @@
 import store from './store';
 import {addClassification, addCorpus, setUrl, analyzeContent} from './actions';
 
-console.log('FilterBubbler: Background script starting');
+console.log('FilterBubbler: Background script starting')
 
+// We'll stick with using messages to request content text in order to
+// keep the footprint in external pages as minimal as possible
 var port;
 browser.runtime.onConnect.addListener(function(_port) {
     port = _port;
