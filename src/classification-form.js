@@ -4,7 +4,7 @@ import {connect} from 'react-redux'
 import RaisedButton from 'material-ui/RaisedButton'
 import TextField from 'material-ui/TextField'
 
-const ClassificationForm = props => {
+let ClassificationForm = props => {
     const {handleSubmit, pristine, reset, submitting} = props
 
     const renderTextField = props => (
@@ -24,6 +24,12 @@ const ClassificationForm = props => {
     )
 }
 
-export default reduxForm({
+ClassificationForm = reduxForm({
     form: 'ClassificationForm',
 })(ClassificationForm)
+
+ClassificationForm = connect(
+    state => state,
+)(ClassificationForm)
+
+export default ClassificationForm

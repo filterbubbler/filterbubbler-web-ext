@@ -18,6 +18,7 @@ const initialState = {
 }
 
 function addClassification(state = initialState.classifications, action) {
+    console.log('ACTION', action)
     return state;
 }
 
