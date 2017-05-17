@@ -18,7 +18,7 @@ const initialState = {
 }
 
 function addClassification(state = initialState.classifications, action) {
-    console.log('ACTION', action)
+    console.log('REDUCER', action)
     return state;
 }
 

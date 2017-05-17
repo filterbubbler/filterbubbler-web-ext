@@ -9,7 +9,7 @@ var port;
 browser.runtime.onConnect.addListener(function(_port) {
     port = _port;
     port.onMessage.addListener(function(m) {
-        console.log('FilterBubbler: Background: Message:', m);
+//        console.log('FilterBubbler: Background: Message:', m);
         if (m.action === 'CLASSIFY') {
             console.log('CONTENT: classify', m.text.join(' '), m.tag)
             /*

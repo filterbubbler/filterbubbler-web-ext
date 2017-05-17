@@ -1,25 +1,42 @@
 import React from 'react'
 import {Field, reduxForm} from 'redux-form'
 import {connect} from 'react-redux'
-import RaisedButton from 'material-ui/RaisedButton'
-import TextField from 'material-ui/TextField'
+import {RaisedButton} from 'material-ui'
+import {
+    AutoComplete,
+    Checkbox,
+    DatePicker,
+    TimePicker,
+    RadioButtonGroup,
+    SelectField,
+    Slider,
+    TextField,
+    Toggle,
+} from 'redux-form-material-ui';
 
 let ClassificationForm = props => {
     const {handleSubmit, pristine, reset, submitting} = props
 
-    const renderTextField = props => (
-        <TextField hintText={props.label}
-            floatingLabelText={props.label}
-            errorText={props.touched && props.error}
-            {...props}
-        />
-    )
+    const required = value => (value == null ? 'Required' : undefined);
 
     return (
         <form onSubmit={handleSubmit}>
             <Field name="firstName" component="input" type="text" placeholder="First Name" />
-            <Field name="currentClassification" component={renderTextField} label="Current Classification"/>
-            <div className="right10"><RaisedButton type="submit">Classify</RaisedButton></div>
+            <Field
+              name="currentClassification"
+              component={TextField}
+              hintText="Name"
+              floatingLabelText="Name"
+              validate={required}
+              ref="currentClassification"
+              withRef
+            />
+            <div className="right10">
+            <RaisedButton
+              primary
+              type="submit"
+              label="Classify"/>
+            </div>
         </form>
     )
 }
@@ -29,7 +46,9 @@ ClassificationForm = reduxForm({
 })(ClassificationForm)
 
 ClassificationForm = connect(
-    state => state,
+    state => ({
+        initialValues: state
+    })
 )(ClassificationForm)
 
 export default ClassificationForm
