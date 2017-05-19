@@ -1,26 +1,26 @@
-import bayes from 'bayes';
+import store from './store';
+import {addClassification, addCorpus, setUrl, analyzeContent} from './actions';
 
-console.log('FilterBubbler: Background script starting');
+console.log('FilterBubbler: Background script starting')
 
-var classifier = bayes();
-var DBNAME = 'FilterBubblerDB';
-
-browser.storage.local.get(DBNAME).then(function(existingdb) {
-    console.log('Existing DB', existingdb);
-    if (existingdb[DBNAME]) {
-        console.log('Loaded classification DB from localstorage:', existingdb);
-        classifier = bayes.fromJson(existingdb[DBNAME]);
-    } else {
-        console.log('No pre-existing DB');
-    }
-});
-
+// We'll stick with using messages to request content text in order to
+// keep the footprint in external pages as minimal as possible
 var port;
+/*
 browser.runtime.onConnect.addListener(function(_port) {
     port = _port;
     port.onMessage.addListener(function(m) {
-        console.log('FilterBubbler: Background: Message:', m);
+//        console.log('FilterBubbler: Background: Message:', m);
         if (m.action === 'CLASSIFY') {
+            console.log('CONTENT: classify', m.text.join(' '), m.tag)
+        }
+        if (m.action === 'ANALYZE') {
+            store.dispatch(analyzeContent({content: m.text.join(' ')}))
+        }
+    });
+});
+*/
+            /*
             classifier.learn(m.text.join(' '), m.tag);
             var db = {};
             db[DBNAME] = classifier.toJson();
@@ -29,13 +29,5 @@ browser.runtime.onConnect.addListener(function(_port) {
             }, function(error) {
                 console.log('Error storing DB');
             });
-        }
-        if (m.action === 'ANALYZE') {
-            var category = classifier.categorize(m.text.join(' '));
-            port.postMessage({
-                action: 'REPORT',
-                tag: category
-            });
-        }
-    });
-});
+            */
+
