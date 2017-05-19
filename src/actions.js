@@ -2,30 +2,112 @@ import {
     ADD_CORPUS,
     ADD_CLASSIFICATION,
     CHANGE_CLASSIFICATION,
-    SET_URL,
-    ANALYZE_CONTENT
-} from './constants';
+    ACTIVE_URL,
+    REPORT_ERROR,
+    UI_REQUEST_ACTIVE_URL,
+    ANALYZE_CONTENT,
+    SET_CONTENT,
+    REQUEST_ACTIVE_TAB_TEXT,
+    COULD_NOT_FETCH_TAB_TEXT
+} from './constants'
+import { analyze, classify } from 'bayes-classifier'
 
-export function addClassification({value}) {
-    console.log('Add classification', arguments);
+export function addClassification(classification) {
+    fetchActiveTabContent().then(
+        content => {
+            classify(content, classification.newClassification)
+        }
+    )
     return {
         type: ADD_CLASSIFICATION,
-        value
-    };
-}
-
-export function changeClassification(obj, value) {
-    console.log('Change classification', arguments);
-    return {
-        type: CHANGE_CLASSIFICATION,
-        value
+        classification: classification.newClassification
     }
 }
 
-export function setUrl({url}) {
+export function changeClassification(classification) {
+    classification = classification ? classification : 'None'
+    console.log('Change classification', classification);
     return {
-        type: SET_URL,
+        type: CHANGE_CLASSIFICATION,
+        classification: classification
+    }
+}
+
+export function setContent(content) {
+    return {
+        type: SET_CONTENT,
+        content
+    }
+}
+
+export function reportError(error) {
+    return {
+        type: REPORT_ERROR,
+        error
+    }
+}
+
+function fetchActiveTabContent() {
+    return browser.tabs.query({active: true}).then(
+        tabs => {
+            return browser.tabs.sendMessage(
+                tabs[0].id,
+                {
+                    type: 'PAGE_TEXT'
+                }
+            )
+        },
+        error => {
+            return 'error fetching'
+        }
+    ).then(
+        response => {
+            return response.text
+        },
+        error => {
+            return 'error sending'
+        }
+    )
+}
+
+export function requestActiveTabContent() {
+    return function (dispatch) {
+        fetchActiveTabContent().then(
+            content => {
+                //console.log('Text retrieved', setContent(content))
+                //dispatch(setContent(content));
+                let classification = analyze(content);
+                console.log('Classification', classification);
+                dispatch(changeClassification(classification));
+            },
+            error => {
+                console.log('Error occurred', error)
+                dispatch(reportError('Could not fetch tab content'));
+            }
+        )
+    }
+}
+
+export function activeUrl(url) {
+    return {
+        type: ACTIVE_URL,
         url
+    }
+}
+
+// Plain object for WebExtension bridge
+export function uiRequestActiveUrl() {
+    return {
+        type: UI_REQUEST_ACTIVE_URL
+    }
+}
+
+export function requestActiveUrl() {
+    return dispatch => {
+        chrome.tabs.query({active: true}, tabs => {
+            dispatch(activeUrl(tabs[0].url));
+            dispatch(requestActiveTabContent());
+        })
     }
 }
 

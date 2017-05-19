@@ -21,14 +21,13 @@ let ClassificationForm = props => {
 
     return (
         <form onSubmit={handleSubmit}>
-            <Field name="firstName" component="input" type="text" placeholder="First Name" />
             <Field
-              name="currentClassification"
+              name="newClassification"
               component={TextField}
               hintText="Name"
               floatingLabelText="Name"
               validate={required}
-              ref="currentClassification"
+              ref="newClassification"
               withRef
             />
             <div className="right10">

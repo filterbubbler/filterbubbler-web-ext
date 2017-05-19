@@ -10,10 +10,6 @@ import * as actions from './actions';
 import ClassificationForm from 'classification-form';
 
 class MainView extends React.Component {
-    handleSubmit(data) {
-        console.log('Form submit', data)
-    }
-
     render() {
         const matchesIcon = <FontIcon className="material-icons">assessment</FontIcon>;
         const dashboardIcon = <FontIcon className="material-icons">dashboard</FontIcon>;
@@ -21,10 +17,11 @@ class MainView extends React.Component {
         const settingsIcon = <FontIcon className="material-icons">settings</FontIcon>;
 
         const {
+            requestActiveUrl,
             currentClassification,
             url,
             ui,
-            changeClassification
+            addClassification
         } = this.props;
 
         return (
@@ -33,7 +30,7 @@ class MainView extends React.Component {
                 <div><strong>{currentClassification}</strong></div>
                 {url}
               </Paper>
-              <ClassificationForm onSubmit={this.handleSubmit}/>
+              <ClassificationForm onSubmit={addClassification}/>
               <BottomNavigation>
                 <BottomNavigationItem icon={matchesIcon} label="Matches" />
                 <BottomNavigationItem icon={dashboardIcon} label="Dashboard" />
