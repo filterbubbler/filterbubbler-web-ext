@@ -1,4 +1,5 @@
 import bayes from 'bayes';
+import browser from 'webextension-polyfill';
 //import changeClassification from './actions';
 
 var DBNAME = 'FilterBubblerDB';

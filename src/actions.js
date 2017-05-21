@@ -12,15 +12,22 @@ import {
 } from './constants'
 import { analyze, classify } from 'bayes-classifier'
 
-export function addClassification(classification) {
-    fetchActiveTabContent().then(
-        content => {
-            classify(content, classification.newClassification)
-        }
-    )
+export function addClassification(form) {
+    return function (dispatch) {
+        fetchActiveTabContent().then(
+            content => {
+                console.log('CLASSIFY', form.newClassification, content)
+                classify(content, form.newClassification)
+                dispatch(requestActiveTabContent())
+            }
+        )
+    }
+}
+
+export function uiAddClassification(classification) {
     return {
         type: ADD_CLASSIFICATION,
-        classification: classification.newClassification
+        classification: classification
     }
 }
 
@@ -74,15 +81,15 @@ export function requestActiveTabContent() {
     return function (dispatch) {
         fetchActiveTabContent().then(
             content => {
-                //console.log('Text retrieved', setContent(content))
-                //dispatch(setContent(content));
                 let classification = analyze(content);
                 console.log('Classification', classification);
                 dispatch(changeClassification(classification));
+                return Promise.resolve()
             },
             error => {
                 console.log('Error occurred', error)
                 dispatch(reportError('Could not fetch tab content'));
+                return Promise.resolve()
             }
         )
     }
@@ -118,7 +125,7 @@ export function addCorpus({corpus}) {
     }
 }
 
-export function analyzeContent({content}) {
+export function analyzeCurrentTab() {
     return {
         type: ANALYZE_CONTENT,
         content
