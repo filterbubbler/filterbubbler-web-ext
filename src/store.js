@@ -20,8 +20,8 @@ actions[formActionTypes.BLUR] = (data) => { return { type: formActionTypes.BLUR,
 actions[formActionTypes.FOCUS] = (data) => { return { type: formActionTypes.FOCUS, ...data }; }
 actions[formActionTypes.UPDATE_SYNC_ERRORS] = (data) => { return { type: formActionTypes.UPDATE_SYNC_ERRORS, ...data }; }
 actions[CHANGE_CLASSIFICATION] = (data) => { return { type: CHANGE_CLASSIFICATION, ...data }; }
-actions[ADD_CLASSIFICATION] = (data) => { return { type: ADD_CLASSIFICATION, ...data }; }
 actions[UI_REQUEST_ACTIVE_URL] = (data) => { return requestActiveUrl(); }
+actions[ADD_CLASSIFICATION] = (data) => { return addClassification(data.classification); }
 
 const store = createStore(
     reducers,

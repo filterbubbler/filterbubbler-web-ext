@@ -1,6 +1,8 @@
 // content-script.js
 "use strict";
 
+import browser from 'webextension-polyfill';
+
 browser.runtime.onMessage.addListener(request => {
     console.log("Message from the background script:", request);
     if (request.type && request.type == 'PAGE_TEXT') {

@@ -21,7 +21,7 @@ class MainView extends React.Component {
             currentClassification,
             url,
             ui,
-            addClassification
+            uiAddClassification
         } = this.props;
 
         return (
@@ -30,7 +30,7 @@ class MainView extends React.Component {
                 <div><strong>{currentClassification}</strong></div>
                 {url}
               </Paper>
-              <ClassificationForm onSubmit={addClassification}/>
+              <ClassificationForm onSubmit={uiAddClassification}/>
               <BottomNavigation>
                 <BottomNavigationItem icon={matchesIcon} label="Matches" />
                 <BottomNavigationItem icon={dashboardIcon} label="Dashboard" />
