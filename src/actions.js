@@ -55,7 +55,7 @@ export function reportError(error) {
 }
 
 function fetchActiveTabContent() {
-    return browser.tabs.query({active: true}).then(
+    return browser.tabs.query({active: true, currentWindow: true}).then(
         tabs => {
             return browser.tabs.sendMessage(
                 tabs[0].id,
@@ -111,10 +111,12 @@ export function uiRequestActiveUrl() {
 
 export function requestActiveUrl() {
     return dispatch => {
-        chrome.tabs.query({active: true}, tabs => {
-            dispatch(activeUrl(tabs[0].url));
-            dispatch(requestActiveTabContent());
-        })
+        browser.tabs.query({active: true, currentWindow: true}).then(
+            tabs => {
+                dispatch(activeUrl(tabs[0].url));
+                dispatch(requestActiveTabContent());
+            }
+        )
     }
 }
 
