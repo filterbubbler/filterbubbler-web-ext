@@ -10,8 +10,8 @@ browser.runtime.onMessage.addListener(request => {
         var nodes = document.querySelectorAll('body *');
 
         nodes.forEach(function(node) {
-            if (node.innerText != null && node.tagName != 'SCRIPT' && 
-                node.tagName != 'STYLE' && node.innerText.trim() !== '') {
+            if (node.innerText != null && node.tagName.toUpperCase() != 'SCRIPT' &&
+                node.tagName.toUpperCase() != 'STYLE' && node.innerText.trim() !== '') {
                 text.push('' + node.innerText);
             }
         });
