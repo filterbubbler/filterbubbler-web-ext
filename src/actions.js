@@ -8,7 +8,8 @@ import {
     ANALYZE_CONTENT,
     SET_CONTENT,
     REQUEST_ACTIVE_TAB_TEXT,
-    COULD_NOT_FETCH_TAB_TEXT
+    COULD_NOT_FETCH_TAB_TEXT,
+    MAIN_TAB
 } from './constants'
 import { analyze, classify } from 'bayes-classifier'
 
@@ -124,6 +125,14 @@ export function addCorpus({corpus}) {
     return {
         type: ADD_CORPUS,
         corpus
+    }
+}
+
+export const changeMainTab = (index) => {
+    console.log('Main tab');
+    return {
+        type: MAIN_TAB,
+        index
     }
 }
 

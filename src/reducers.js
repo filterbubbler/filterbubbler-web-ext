@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 import { reducer as bayesReducer } from 'bayes-classifier';
-import {UI_REQUEST_ACTIVE_URL, REQUEST_ACTIVE_TAB_TEXT, SET_CONTENT, ADD_CORPUS, CHANGE_CLASSIFICATION, ACTIVE_URL} from './constants';
+import { MAIN_TAB, UI_REQUEST_ACTIVE_URL, REQUEST_ACTIVE_TAB_TEXT, SET_CONTENT, ADD_CORPUS, CHANGE_CLASSIFICATION, ACTIVE_URL} from './constants';
 import { reducer as formReducer } from 'redux-form';
 
 const initialState = {
@@ -66,6 +66,15 @@ function ui(state = initialState.ui, action) {
     return state;
 }
 
+let tabs = (state = 0, action) => {
+    switch (action.type) {
+        case MAIN_TAB:
+            return action.index
+        default:
+            return state
+    }
+}
+
 export default combineReducers({
     url: urls,
     corpura: corpura,
@@ -73,5 +82,6 @@ export default combineReducers({
     classifications: classifications,
     content: content,
     form: formReducer,
+    mainTab: tabs,
     ui: ui
 });

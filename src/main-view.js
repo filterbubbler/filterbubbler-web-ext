@@ -1,41 +1,58 @@
-import 'material-icons-font/material-icons-font.css';
-import React from 'react';
-import RaisedButton from 'material-ui/RaisedButton';
-import TextField from 'material-ui/TextField';
-import FontIcon from 'material-ui/FontIcon';
-import Paper from 'material-ui/Paper';
-import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
+import 'material-icons-font/material-icons-font.css'
+import React, {Component} from 'react'
+import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation'
+import TextField from 'material-ui/TextField'
+import FontIcon from 'material-ui/FontIcon'
 import {connect} from 'react-redux'
-import * as actions from './actions';
-import ClassificationForm from 'classification-form';
+import * as actions from './actions'
+import ClassificationForm from 'classification-form'
+import SettingsPanel from './settings-panel'
+import SwipeableViews from 'react-swipeable-views'
 
-class MainView extends React.Component {
+const matchesIcon = <FontIcon className="material-icons">assessment</FontIcon>;
+const dashboardIcon = <FontIcon className="material-icons">dashboard</FontIcon>;
+const cloudIcon = <FontIcon className="material-icons">cloud</FontIcon>;
+const settingsIcon = <FontIcon className="material-icons">settings</FontIcon>;
+
+class MainView extends Component {
+
+    select = (index) => { console.log('CLICK', index) }
+    changeIndex = (index) => { console.log('CHANGE INDEX', index) }
+
     render() {
-        const matchesIcon = <FontIcon className="material-icons">assessment</FontIcon>;
-        const dashboardIcon = <FontIcon className="material-icons">dashboard</FontIcon>;
-        const cloudIcon = <FontIcon className="material-icons">cloud</FontIcon>;
-        const settingsIcon = <FontIcon className="material-icons">settings</FontIcon>;
-
         const {
             requestActiveUrl,
             currentClassification,
             url,
             ui,
-            uiAddClassification
+            panel,
+            uiAddClassification,
+            mainTab,
+            changeMainTab
         } = this.props;
 
         return (
             <div>
-              <Paper style={{margin: 10, padding: 5}}>
-                <div><strong>{currentClassification}</strong></div>
-                {url}
-              </Paper>
-              <ClassificationForm onSubmit={uiAddClassification}/>
-              <BottomNavigation>
-                <BottomNavigationItem icon={matchesIcon} label="Matches" />
-                <BottomNavigationItem icon={dashboardIcon} label="Dashboard" />
-                <BottomNavigationItem icon={cloudIcon} label="Recipes" />
-                <BottomNavigationItem icon={settingsIcon} label="Settings" />
+            <SwipeableViews index={mainTab}>
+                <div>
+                    <h2>Panel 0</h2>
+                </div>
+                <div>
+                    <h2>Panel 1</h2>
+                </div>
+                <div>
+                    <SettingsPanel onSubmit={() => console.log('submit')} />
+                </div>
+                <div>
+                  <ClassificationForm url={url} currentClassification={currentClassification} onSubmit={uiAddClassification}/>
+                </div>
+            </SwipeableViews>
+
+              <BottomNavigation selectedIndex={mainTab}>
+                <div onTouchTap={() => changeMainTab(0)}><BottomNavigationItem label="Matches" icon={matchesIcon} /></div>
+                <div onTouchTap={() => changeMainTab(1)}><BottomNavigationItem icon={dashboardIcon} label="Dashboard" /></div>
+                <div onTouchTap={() => changeMainTab(2)}><BottomNavigationItem icon={cloudIcon} label="Recipes" /></div>
+                <div onTouchTap={() => changeMainTab(3)}><BottomNavigationItem icon={settingsIcon} label="Settings" /></div>
               </BottomNavigation>
             </div>
         );

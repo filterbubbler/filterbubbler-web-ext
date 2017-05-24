@@ -1,8 +1,8 @@
 import {createStore, applyMiddleware} from 'redux';
 import {createBackgroundStore} from 'redux-webext';
-import {ADD_CLASSIFICATION, CHANGE_CLASSIFICATION, UI_REQUEST_ACTIVE_URL, ANALYZE_CONTENT} from './constants';
+import {MAIN_TAB, ADD_CLASSIFICATION, CHANGE_CLASSIFICATION, UI_REQUEST_ACTIVE_URL, ANALYZE_CONTENT} from './constants';
 import reducers from './reducers';
-import {addClassification, setUrl, analyzeContent, requestActiveUrl} from './actions';
+import {changeMainTab, addClassification, setUrl, analyzeContent, requestActiveUrl} from './actions';
 import {actions as formActions} from 'redux-form';
 import {actionTypes as formActionTypes} from 'redux-form';
 import thunk from 'redux-thunk';
@@ -22,6 +22,7 @@ actions[formActionTypes.UPDATE_SYNC_ERRORS] = (data) => { return { type: formAct
 actions[CHANGE_CLASSIFICATION] = (data) => { return { type: CHANGE_CLASSIFICATION, ...data }; }
 actions[UI_REQUEST_ACTIVE_URL] = (data) => { return requestActiveUrl(); }
 actions[ADD_CLASSIFICATION] = (data) => { return addClassification(data.classification); }
+actions[MAIN_TAB] = (data) => { return changeMainTab(data.index); }
 
 const store = createStore(
     reducers,
