@@ -30,7 +30,6 @@ let SettingsPanel = props => {
                 <ListItem primaryText="Recipe 3" rightToggle={<Toggle />} />
             </List>
 
-            <form onSubmit={handleSubmit}>
                 <Field
                   name="newRecipe"
                   component={TextField}
@@ -44,7 +43,6 @@ let SettingsPanel = props => {
                   primary
                   type="submit"
                   label="Add"/>
-            </form>
         </div>
     )
 }

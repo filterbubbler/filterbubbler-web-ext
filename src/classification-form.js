@@ -21,6 +21,7 @@ let ClassificationForm = props => {
     const required = value => (value == null ? 'Required' : undefined);
 
     return (
+        <div>
         <form onSubmit={handleSubmit}>
             <Paper style={{margin: 10, padding: 5}}>
               <div><strong>{currentClassification}</strong></div>
@@ -40,9 +41,10 @@ let ClassificationForm = props => {
             <RaisedButton
               primary
               type="submit"
-              label="Classify"/>
+              label="Classify" />
             </div>
         </form>
+        </div>
     )
 }
 

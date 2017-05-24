@@ -7,7 +7,9 @@ import {connect} from 'react-redux'
 import * as actions from './actions'
 import ClassificationForm from 'classification-form'
 import SettingsPanel from './settings-panel'
+import CorpuraPanel from './corpura-panel'
 import SwipeableViews from 'react-swipeable-views'
+import {RaisedButton} from 'material-ui'
 
 const matchesIcon = <FontIcon className="material-icons">assessment</FontIcon>;
 const dashboardIcon = <FontIcon className="material-icons">dashboard</FontIcon>;
@@ -35,16 +37,16 @@ class MainView extends Component {
             <div>
             <SwipeableViews index={mainTab}>
                 <div>
-                    <h2>Panel 0</h2>
+                    <CorpuraPanel />
                 </div>
                 <div>
-                    <h2>Panel 1</h2>
+                  <ClassificationForm url={url} currentClassification={currentClassification} onSubmit={uiAddClassification} />
+                </div>
+                <div>
+                    <h2>Corpura</h2>
                 </div>
                 <div>
                     <SettingsPanel onSubmit={() => console.log('submit')} />
-                </div>
-                <div>
-                  <ClassificationForm url={url} currentClassification={currentClassification} onSubmit={uiAddClassification}/>
                 </div>
             </SwipeableViews>
 
