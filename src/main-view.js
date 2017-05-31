@@ -5,9 +5,10 @@ import TextField from 'material-ui/TextField'
 import FontIcon from 'material-ui/FontIcon'
 import {connect} from 'react-redux'
 import * as actions from './actions'
-import ClassificationForm from 'classification-form'
+import ClassificationPanel from 'classification-panel'
 import SettingsPanel from './settings-panel'
 import CorpuraPanel from './corpura-panel'
+import RecipePanel from './corpura-panel'
 import SwipeableViews from 'react-swipeable-views'
 import {RaisedButton} from 'material-ui'
 
@@ -37,13 +38,13 @@ class MainView extends Component {
             <div>
             <SwipeableViews index={mainTab}>
                 <div>
-                    <CorpuraPanel />
-                </div>
-                <div>
                   <ClassificationForm url={url} currentClassification={currentClassification} onSubmit={uiAddClassification} />
                 </div>
                 <div>
-                    <h2>Corpura</h2>
+                    <CorpuraPanel />
+                </div>
+                <div>
+                    <RecipePanel />
                 </div>
                 <div>
                     <SettingsPanel onSubmit={() => console.log('submit')} />
@@ -52,7 +53,7 @@ class MainView extends Component {
 
               <BottomNavigation selectedIndex={mainTab}>
                 <div onTouchTap={() => changeMainTab(0)}><BottomNavigationItem label="Matches" icon={matchesIcon} /></div>
-                <div onTouchTap={() => changeMainTab(1)}><BottomNavigationItem icon={dashboardIcon} label="Dashboard" /></div>
+                <div onTouchTap={() => changeMainTab(1)}><BottomNavigationItem icon={dashboardIcon} label="Corpura" /></div>
                 <div onTouchTap={() => changeMainTab(2)}><BottomNavigationItem icon={cloudIcon} label="Recipes" /></div>
                 <div onTouchTap={() => changeMainTab(3)}><BottomNavigationItem icon={settingsIcon} label="Settings" /></div>
               </BottomNavigation>

@@ -15,7 +15,7 @@ import {
     Toggle,
 } from 'redux-form-material-ui';
 
-let ClassificationForm = props => {
+let ClassificationPanel = props => {
     const {url, currentClassification, handleSubmit, pristine, reset, submitting} = props
 
     const required = value => (value == null ? 'Required' : undefined);
@@ -48,14 +48,14 @@ let ClassificationForm = props => {
     )
 }
 
-ClassificationForm = reduxForm({
-    form: 'ClassificationForm',
-})(ClassificationForm)
+ClassificationPanel = reduxForm({
+    form: 'ClassificationPanel',
+})(ClassificationPanel)
 
-ClassificationForm = connect(
+ClassificationPanel = connect(
     state => ({
         initialValues: state
     })
-)(ClassificationForm)
+)(ClassificationPanel)
 
-export default ClassificationForm
+export default ClassificationPanel
