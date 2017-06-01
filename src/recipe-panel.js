@@ -10,7 +10,7 @@ import IconMenu from 'material-ui/IconMenu'
 import MenuItem from 'material-ui/MenuItem'
 
 let RecipePanel = props => {
-    const {pristine, reset, submitting} = props
+    const {recipes, pristine, reset, submitting} = props
 
     const iconButtonElement = (
       <IconButton
@@ -29,13 +29,16 @@ let RecipePanel = props => {
         </IconMenu>
     )
 
+    const RecipeList = recipes => {
+    }
+
     return (
         <div>
             <List>
-                <Subheader>Corpura</Subheader>
-                <ListItem primaryText="Corpura 1" rightIconButton={rightIconMenu} />
-                <ListItem primaryText="Corpura 2" rightIconButton={rightIconMenu} />
-                <ListItem primaryText="Corpura 3" rightIconButton={rightIconMenu} />
+                <Subheader>Recipes</Subheader>
+                {recipes.map(recipe => 
+                    <ListItem key={recipe.name} primaryText={recipe.name} rightIconButton={rightIconMenu} />
+                )}
             </List>
         </div>
     )
@@ -43,7 +46,7 @@ let RecipePanel = props => {
 
 RecipePanel = connect(
     state => ({
-        initialValues: state
+        recipes: state.recipes
     })
 )(RecipePanel)
 

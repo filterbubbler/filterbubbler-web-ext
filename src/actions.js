@@ -9,7 +9,8 @@ import {
     SET_CONTENT,
     REQUEST_ACTIVE_TAB_TEXT,
     COULD_NOT_FETCH_TAB_TEXT,
-    MAIN_TAB
+    MAIN_TAB,
+    UPDATE_RECIPES
 } from './constants'
 import { analyze, classify } from 'bayes-classifier'
 
@@ -121,15 +122,24 @@ export function requestActiveUrl() {
     }
 }
 
-export function addCorpus({corpus}) {
+export const addCorpus = (corpus) => {
     return {
         type: ADD_CORPUS,
         corpus
     }
 }
 
+export const readCorpus = (corpusUrl) => {
+    return dispatch => fetch(corpusUrl).then(
+        result => result.json().then(
+            corpus => dispatch(addCorpus(corpus)),
+            error => dispatch(reportError('Could not decode corpus'))
+        ),
+        error => dispatch(reportError('Could not read corpus'))
+    )
+}
+
 export const changeMainTab = (index) => {
-    console.log('Main tab');
     return {
         type: MAIN_TAB,
         index
@@ -141,4 +151,29 @@ export function analyzeCurrentTab() {
         type: ANALYZE_CONTENT,
         content
     };
+}
+
+// Recipe retrieval
+export const readRecipes = (dispatch) => {
+    return dispatch => fetch('http://filterbubbler.localhost/wp-json/filterbubbler/v1/recipe').then(
+        result => result.json().then(
+            recipes => {
+                recipes.map(recipe => {
+                    recipe.corpora.map(corpusUrl => {
+                        dispatch(readCorpus(corpusUrl))
+                    })
+                })
+                dispatch(updateRecipes(recipes))
+            },
+            error => dispatch(reportError('Could not decode recipe response'))
+        ),
+        error => dispatch(reportError('Could not fetch recipes'))
+    )
+}
+
+export function updateRecipes(recipes) {
+    return {
+        type: UPDATE_RECIPES,
+        recipes
+    }
 }

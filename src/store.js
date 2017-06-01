@@ -2,7 +2,7 @@ import {createStore, applyMiddleware} from 'redux';
 import {createBackgroundStore} from 'redux-webext';
 import {MAIN_TAB, ADD_CLASSIFICATION, CHANGE_CLASSIFICATION, UI_REQUEST_ACTIVE_URL, ANALYZE_CONTENT} from './constants';
 import reducers from './reducers';
-import {changeMainTab, addClassification, setUrl, analyzeContent, requestActiveUrl} from './actions';
+import {changeMainTab, addClassification, requestActiveUrl, readRecipes} from './actions';
 import {actions as formActions} from 'redux-form';
 import {actionTypes as formActionTypes} from 'redux-form';
 import thunk from 'redux-thunk';
@@ -28,7 +28,12 @@ const store = createStore(
     reducers,
     applyMiddleware(thunk))
 
-export default createBackgroundStore({
+const backgroundStore = createBackgroundStore({
     store,
     actions: actions
 })
+
+// Fetch recipes from the current server
+store.dispatch(readRecipes());
+
+export default backgroundStore

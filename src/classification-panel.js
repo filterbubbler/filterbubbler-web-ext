@@ -1,19 +1,7 @@
 import React from 'react'
-import {Field, reduxForm} from 'redux-form'
 import {connect} from 'react-redux'
-import {RaisedButton} from 'material-ui'
+import {TextField, RaisedButton} from 'material-ui'
 import Paper from 'material-ui/Paper';
-import {
-    AutoComplete,
-    Checkbox,
-    DatePicker,
-    TimePicker,
-    RadioButtonGroup,
-    SelectField,
-    Slider,
-    TextField,
-    Toggle,
-} from 'redux-form-material-ui';
 
 let ClassificationPanel = props => {
     const {url, currentClassification, handleSubmit, pristine, reset, submitting} = props
@@ -28,15 +16,7 @@ let ClassificationPanel = props => {
               {url}
             </Paper>
 
-            <Field
-              name="newClassification"
-              component={TextField}
-              hintText="Name"
-              floatingLabelText="Name"
-              validate={required}
-              ref="newClassification"
-              withRef
-            />
+            <TextField name="newClassification" />
             <div className="right10">
             <RaisedButton
               primary
@@ -47,10 +27,6 @@ let ClassificationPanel = props => {
         </div>
     )
 }
-
-ClassificationPanel = reduxForm({
-    form: 'ClassificationPanel',
-})(ClassificationPanel)
 
 ClassificationPanel = connect(
     state => ({

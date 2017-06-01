@@ -7,8 +7,8 @@ import {connect} from 'react-redux'
 import * as actions from './actions'
 import ClassificationPanel from 'classification-panel'
 import SettingsPanel from './settings-panel'
-import CorpuraPanel from './corpura-panel'
-import RecipePanel from './corpura-panel'
+import CorpuraPanel from './corpora-panel'
+import RecipePanel from './recipe-panel'
 import SwipeableViews from 'react-swipeable-views'
 import {RaisedButton} from 'material-ui'
 
@@ -38,7 +38,7 @@ class MainView extends Component {
             <div>
             <SwipeableViews index={mainTab}>
                 <div>
-                  <ClassificationForm url={url} currentClassification={currentClassification} onSubmit={uiAddClassification} />
+                  <ClassificationPanel url={url} currentClassification={currentClassification} onSubmit={uiAddClassification} />
                 </div>
                 <div>
                     <CorpuraPanel />
