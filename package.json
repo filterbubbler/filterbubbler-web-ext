@@ -1,5 +1,5 @@
 {
-  "name": "infobubble-web-extension",
+  "name": "filterbubbler-web-extension",
   "version": "0.0.0",
   "description": "",
   "main": "index.js",
@@ -11,7 +11,6 @@
   "license": "MPL-2.0",
   "dependencies": {
     "grunt": "^1.0.1",
-    "material-ui": "0.17.4",
     "react": "15.4.2",
     "react-dom": "15.4.2",
     "react-tap-event-plugin": "2.0.1",
@@ -36,8 +35,11 @@
     "file-loader": "0.11.1",
     "level-fs-browser": "1.0.0",
     "material-icons-font": "1.1.1",
+    "material-ui": "0.18.1",
     "natural": "0.4.0",
     "react-redux": "5.0.4",
+    "react-swipeable-views": "0.12.3",
+    "react-tap-event-plugin": "2.0.1",
     "redux": "3.6.0",
     "redux-form": "6.7.0",
     "redux-form-material-ui": "4.2.0",

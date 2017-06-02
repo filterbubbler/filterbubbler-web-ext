@@ -1,6 +1,15 @@
 import {combineReducers} from 'redux';
 import { reducer as bayesReducer } from 'bayes-classifier';
-import {UI_REQUEST_ACTIVE_URL, REQUEST_ACTIVE_TAB_TEXT, SET_CONTENT, ADD_CORPUS, CHANGE_CLASSIFICATION, ACTIVE_URL} from './constants';
+import { 
+    UPDATE_RECIPES,
+    MAIN_TAB,
+    UI_REQUEST_ACTIVE_URL,
+    REQUEST_ACTIVE_TAB_TEXT,
+    SET_CONTENT,
+    ADD_CORPUS,
+    CHANGE_CLASSIFICATION,
+    ACTIVE_URL
+} from './constants';
 import { reducer as formReducer } from 'redux-form';
 
 const initialState = {
@@ -8,8 +17,10 @@ const initialState = {
     content: '',
     classifierStatus: '',
     currentClassification: '',
+    servers: [],
+    currentServer: 'http://filterbubbler.localhost',
     classifications: [],
-    corpura: [],
+    corpora: {},
     recipes: [],
     repositories: [],
     ui: {
@@ -22,12 +33,14 @@ function classifications(state = initialState.classifications, action) {
     return state;
 }
 
-function corpura(state = initialState.corpura, action) {
+const corpora = (state = initialState.corpora, action) => {
     switch (action.type) {
         case ADD_CORPUS:
-            return [...state, action.corpus]
+            let newState = {...state}
+            newState[action.corpus.url] = action.corpus
+            return newState
         default:
-            return state;
+            return state
     }
 }
 
@@ -66,12 +79,48 @@ function ui(state = initialState.ui, action) {
     return state;
 }
 
+const recipes = (state = [], action) => {
+    switch (action.type) {
+        case UPDATE_RECIPES:
+            return action.recipes
+        default:
+            return state
+    }
+}
+
+const tabs = (state = 0, action) => {
+    switch (action.type) {
+        case MAIN_TAB:
+            return action.index
+        default:
+            return state
+    }
+}
+
+const servers = (state = initialState.servers, action) => {
+    switch (action.type) {
+        default:
+            return state
+    }
+}
+
+const currentServer = (state = initialState.currentServer, action) => {
+    switch (action.type) {
+        default:
+            return state
+    }
+}
+
 export default combineReducers({
     url: urls,
-    corpura: corpura,
+    corpora: corpora,
+    recipes: recipes,
+    servers: servers,
+    currentServer: currentServer,
     currentClassification: classify,
     classifications: classifications,
     content: content,
     form: formReducer,
+    mainTab: tabs,
     ui: ui
 });

@@ -8,6 +8,8 @@ export const UI_REQUEST_ACTIVE_URL = 'UI_REQUEST_ACTIVE_URL'
 export const REQUEST_ACTIVE_TAB_TEXT = 'REQUEST_ACTIVE_TAB_TEXT'
 export const REPORT_ERROR = 'REPORT_ERROR'
 export const SET_CONTENT = 'SET_CONTENT'
+export const MAIN_TAB = 'MAIN_TAB'
+export const UPDATE_RECIPES = 'UPDATE_RECIPES'
 
 // UI Text
 export const COULD_NOT_FETCH_TAB_TEXT = 'Could not fetch text from the active tab'

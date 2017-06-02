@@ -2,13 +2,16 @@ import {
     ADD_CORPUS,
     ADD_CLASSIFICATION,
     CHANGE_CLASSIFICATION,
+    CHANGE_SERVER,
     ACTIVE_URL,
     REPORT_ERROR,
     UI_REQUEST_ACTIVE_URL,
     ANALYZE_CONTENT,
     SET_CONTENT,
     REQUEST_ACTIVE_TAB_TEXT,
-    COULD_NOT_FETCH_TAB_TEXT
+    COULD_NOT_FETCH_TAB_TEXT,
+    MAIN_TAB,
+    UPDATE_RECIPES
 } from './constants'
 import { analyze, classify } from 'bayes-classifier'
 
@@ -111,19 +114,38 @@ export function uiRequestActiveUrl() {
 
 export function requestActiveUrl() {
     return dispatch => {
-        browser.tabs.query({active: true, currentWindow: true}).then(
+        return browser.tabs.query({active: true, currentWindow: true}).then(
             tabs => {
-                dispatch(activeUrl(tabs[0].url));
+                if (tabs && tabs[0] && tabs[0].url) {
+                    dispatch(activeUrl(tabs[0].url))
+                }
                 dispatch(requestActiveTabContent());
             }
         )
     }
 }
 
-export function addCorpus({corpus}) {
+export const addCorpus = (corpus) => {
     return {
         type: ADD_CORPUS,
         corpus
+    }
+}
+
+export const readCorpus = (corpusUrl) => {
+    return dispatch => fetch(corpusUrl).then(
+        result => result.json().then(
+            corpus => dispatch(addCorpus({...corpus, url: corpusUrl})),
+            error => dispatch(reportError('Could not decode corpus'))
+        ),
+        error => dispatch(reportError('Could not read corpus'))
+    )
+}
+
+export const changeMainTab = (index) => {
+    return {
+        type: MAIN_TAB,
+        index
     }
 }
 
@@ -132,4 +154,36 @@ export function analyzeCurrentTab() {
         type: ANALYZE_CONTENT,
         content
     };
+}
+
+// Recipe retrieval
+export const readRecipes = (dispatch) => {
+    return dispatch => fetch('http://filterbubbler.localhost/wp-json/filterbubbler/v1/recipe').then(
+        result => result.json().then(
+            recipes => {
+                recipes.map(recipe => {
+                    recipe.corpora.map(corpusUrl => {
+                        dispatch(readCorpus(corpusUrl))
+                    })
+                })
+                dispatch(updateRecipes(recipes))
+            },
+            error => dispatch(reportError('Could not decode recipe response'))
+        ),
+        error => dispatch(reportError('Could not fetch recipes'))
+    )
+}
+
+export const changeServer = (server) => {
+    return {
+        type: CHANGE_SERVER,
+        server
+    }
+}
+
+export function updateRecipes(recipes) {
+    return {
+        type: UPDATE_RECIPES,
+        recipes
+    }
 }
