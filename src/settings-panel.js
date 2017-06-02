@@ -5,45 +5,30 @@ import {RaisedButton} from 'material-ui'
 import {List, ListItem} from 'material-ui/List'
 import Toggle from 'material-ui/Toggle';
 import Subheader from 'material-ui/Subheader';
-import {
-    AutoComplete,
-    Checkbox,
-    DatePicker,
-    TimePicker,
-    RadioButtonGroup,
-    SelectField,
-    Slider,
-    TextField,
-} from 'redux-form-material-ui';
+import AutoComplete from 'material-ui/AutoComplete';
+import Paper from 'material-ui/Paper';
 
 let SettingsPanel = props => {
-    const {handleSubmit, pristine, reset, submitting} = props
+    const {servers, currentServer, pristine, reset, submitting} = props
 
     const required = value => (value == null ? 'Required' : undefined);
 
-    return (
-        <div>
-            <List>
-                <Subheader>Active Recipes</Subheader>
-                <ListItem primaryText="Recipe 1" rightToggle={<Toggle />} />
-                <ListItem primaryText="Recipe 2" rightToggle={<Toggle />} />
-                <ListItem primaryText="Recipe 3" rightToggle={<Toggle />} />
-            </List>
+    const changeServer = (server) => {
+        console.log('CHANGE SERVER', server)
+    }
 
-                <Field
-                  name="newRecipe"
-                  component={TextField}
-                  hintText="Recipe server"
-                  floatingLabelText="Name"
-                  validate={required}
-                  ref="newRecipe"
-                  withRef
-                />
-                <RaisedButton
-                  primary
-                  type="submit"
-                  label="Add"/>
-        </div>
+    return (
+        <Paper style={{ padding: 10 }} zDepth={0}>
+                <h3>Server</h3>
+                <p><b>Current server: </b>{currentServer}</p>
+                <AutoComplete
+                    floatingLabelText="Enter a FilterBubbler server name"
+                    filter={AutoComplete.fuzzyFilter}
+                    dataSource={servers}
+                    maxSearchResults={5}
+                /><br />
+                <RaisedButton label="Connect" onTouchTab={changeServer} />
+        </Paper>
     )
 }
 
@@ -53,7 +38,8 @@ SettingsPanel = reduxForm({
 
 SettingsPanel = connect(
     state => ({
-        initialValues: state
+        servers: state.servers,
+        currentServer: state.currentServer
     })
 )(SettingsPanel)
 

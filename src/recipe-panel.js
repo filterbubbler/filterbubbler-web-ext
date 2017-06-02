@@ -8,6 +8,8 @@ import IconButton from 'material-ui/IconButton';
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
 import IconMenu from 'material-ui/IconMenu'
 import MenuItem from 'material-ui/MenuItem'
+import Toggle from 'material-ui/Toggle';
+import Checkbox from 'material-ui/Checkbox';
 
 let RecipePanel = props => {
     const {recipes, pristine, reset, submitting} = props
@@ -37,7 +39,7 @@ let RecipePanel = props => {
             <List>
                 <Subheader>Recipes</Subheader>
                 {recipes.map(recipe => 
-                    <ListItem key={recipe.name} primaryText={recipe.name} rightIconButton={rightIconMenu} />
+                    <ListItem leftCheckbox={<Checkbox />} key={recipe.name} primaryText={recipe.name} rightToggle={<Toggle />} />
                 )}
             </List>
         </div>

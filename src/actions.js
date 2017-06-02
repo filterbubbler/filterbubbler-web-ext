@@ -2,6 +2,7 @@ import {
     ADD_CORPUS,
     ADD_CLASSIFICATION,
     CHANGE_CLASSIFICATION,
+    CHANGE_SERVER,
     ACTIVE_URL,
     REPORT_ERROR,
     UI_REQUEST_ACTIVE_URL,
@@ -113,9 +114,11 @@ export function uiRequestActiveUrl() {
 
 export function requestActiveUrl() {
     return dispatch => {
-        browser.tabs.query({active: true, currentWindow: true}).then(
+        return browser.tabs.query({active: true, currentWindow: true}).then(
             tabs => {
-                dispatch(activeUrl(tabs[0].url));
+                if (tabs && tabs[0] && tabs[0].url) {
+                    dispatch(activeUrl(tabs[0].url))
+                }
                 dispatch(requestActiveTabContent());
             }
         )
@@ -132,7 +135,7 @@ export const addCorpus = (corpus) => {
 export const readCorpus = (corpusUrl) => {
     return dispatch => fetch(corpusUrl).then(
         result => result.json().then(
-            corpus => dispatch(addCorpus(corpus)),
+            corpus => dispatch(addCorpus({...corpus, url: corpusUrl})),
             error => dispatch(reportError('Could not decode corpus'))
         ),
         error => dispatch(reportError('Could not read corpus'))
@@ -169,6 +172,13 @@ export const readRecipes = (dispatch) => {
         ),
         error => dispatch(reportError('Could not fetch recipes'))
     )
+}
+
+export const changeServer = (server) => {
+    return {
+        type: CHANGE_SERVER,
+        server
+    }
 }
 
 export function updateRecipes(recipes) {

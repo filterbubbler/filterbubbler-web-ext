@@ -17,8 +17,10 @@ const initialState = {
     content: '',
     classifierStatus: '',
     currentClassification: '',
+    servers: [],
+    currentServer: 'http://filterbubbler.localhost',
     classifications: [],
-    corpora: [],
+    corpora: {},
     recipes: [],
     repositories: [],
     ui: {
@@ -31,12 +33,14 @@ function classifications(state = initialState.classifications, action) {
     return state;
 }
 
-function corpora(state = initialState.corpora, action) {
+const corpora = (state = initialState.corpora, action) => {
     switch (action.type) {
         case ADD_CORPUS:
-            return [...state, action.corpus]
+            let newState = {...state}
+            newState[action.corpus.url] = action.corpus
+            return newState
         default:
-            return state;
+            return state
     }
 }
 
@@ -93,10 +97,26 @@ const tabs = (state = 0, action) => {
     }
 }
 
+const servers = (state = initialState.servers, action) => {
+    switch (action.type) {
+        default:
+            return state
+    }
+}
+
+const currentServer = (state = initialState.currentServer, action) => {
+    switch (action.type) {
+        default:
+            return state
+    }
+}
+
 export default combineReducers({
     url: urls,
     corpora: corpora,
     recipes: recipes,
+    servers: servers,
+    currentServer: currentServer,
     currentClassification: classify,
     classifications: classifications,
     content: content,

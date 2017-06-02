@@ -3,14 +3,18 @@ import {connect} from 'react-redux'
 import {List, ListItem} from 'material-ui/List'
 import Subheader from 'material-ui/Subheader'
 import LinearProgress from 'material-ui/LinearProgress'
-import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors';
-import IconButton from 'material-ui/IconButton';
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert';
+import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors'
+import IconButton from 'material-ui/IconButton'
+import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
 import IconMenu from 'material-ui/IconMenu'
 import MenuItem from 'material-ui/MenuItem'
+import ActionGrade from 'material-ui/svg-icons/action/grade'
+import AutoComplete from 'material-ui/AutoComplete'
 
 let CorpuraPanel = props => {
-    const {pristine, reset, submitting} = props
+    const {currentUrl, corpora, pristine, reset, submitting} = props
+
+    console.log('CORPORA', corpora)
 
     const iconButtonElement = (
       <IconButton
@@ -29,13 +33,34 @@ let CorpuraPanel = props => {
         </IconMenu>
     )
 
+    const classifications = ['Cool', 'Funky', 'Fresh']
+
+    const addClassification = (classification) => {
+        console.log('ADD IT!', classification)
+    }
+
     return (
         <div>
             <List>
                 <Subheader>Corpura</Subheader>
-                <ListItem primaryText="Corpura 1" rightIconButton={rightIconMenu} />
-                <ListItem primaryText="Corpura 2" rightIconButton={rightIconMenu} />
-                <ListItem primaryText="Corpura 3" rightIconButton={rightIconMenu} />
+                {Object.keys(corpora).map(corpusUrl => {
+                return <ListItem
+                  key={corpusUrl}
+                  primaryText={corpora[corpusUrl].corpus}
+                  initiallyOpen={false}
+                  primaryTogglesNestedList={true}
+                  nestedItems={[
+                    <ListItem
+                      primaryText="cool"
+                      leftIcon={<ActionGrade />}
+                    />,
+                    <ListItem
+                      onTouchTap={() => addClassification(corpusUrl)}
+                      primaryText="Add classification..."
+                    />,
+                    ]}
+                 />
+                })}
             </List>
         </div>
     )
@@ -43,7 +68,8 @@ let CorpuraPanel = props => {
 
 CorpuraPanel = connect(
     state => ({
-        initialValues: state
+        currentUrl: state.currentUrl,
+        corpora: state.corpora
     })
 )(CorpuraPanel)
 
