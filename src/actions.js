@@ -1,6 +1,7 @@
 import {
     ADD_CORPUS,
     ADD_CLASSIFICATION,
+    ADD_CORPUS_CLASSIFICATION,
     CHANGE_CLASSIFICATION,
     CHANGE_SERVER,
     ACTIVE_URL,
@@ -24,6 +25,13 @@ export function addClassification(form) {
                 dispatch(requestActiveTabContent())
             }
         )
+    }
+}
+
+export const addCorpusClassification(classification) {
+    return {
+        type: ADD_CORPUS_CLASSIFICATION,
+        classification
     }
 }
 

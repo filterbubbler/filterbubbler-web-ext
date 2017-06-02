@@ -10,6 +10,9 @@ import IconMenu from 'material-ui/IconMenu'
 import MenuItem from 'material-ui/MenuItem'
 import ActionGrade from 'material-ui/svg-icons/action/grade'
 import AutoComplete from 'material-ui/AutoComplete'
+import Checkbox from 'material-ui/Checkbox'
+import TextField from 'material-ui/TextField'
+import addCorpusClassification from 'actions'
 
 let CorpuraPanel = props => {
     const {currentUrl, corpora, pristine, reset, submitting} = props
@@ -39,6 +42,13 @@ let CorpuraPanel = props => {
         console.log('ADD IT!', classification)
     }
 
+    let newClassification = ''
+
+    const changeClassification = (ev, newValue) => {
+        console.log('Change classification', ev, newValue)
+        newClassiciation = newClassification + newValue
+    }
+
     return (
         <div>
             <List>
@@ -52,11 +62,11 @@ let CorpuraPanel = props => {
                   nestedItems={[
                     <ListItem
                       primaryText="cool"
-                      leftIcon={<ActionGrade />}
+                      leftCheckbox={<Checkbox />}
                     />,
                     <ListItem
                       onTouchTap={() => addClassification(corpusUrl)}
-                      primaryText="Add classification..."
+                      primaryText={<TextField floatingLabelText="Add a classification..." value={newClassification} onChange={changeClassification} />}
                     />,
                     ]}
                  />
@@ -70,7 +80,7 @@ CorpuraPanel = connect(
     state => ({
         currentUrl: state.currentUrl,
         corpora: state.corpora
-    })
+    }, { addClassification })
 )(CorpuraPanel)
 
 export default CorpuraPanel

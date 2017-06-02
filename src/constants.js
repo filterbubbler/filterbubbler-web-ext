@@ -10,6 +10,7 @@ export const REPORT_ERROR = 'REPORT_ERROR'
 export const SET_CONTENT = 'SET_CONTENT'
 export const MAIN_TAB = 'MAIN_TAB'
 export const UPDATE_RECIPES = 'UPDATE_RECIPES'
+export const ADD_CORPUS_CLASSIFICATION = 'ADD_CORPUS_CLASSIFICATION'
 
 // UI Text
 export const COULD_NOT_FETCH_TAB_TEXT = 'Could not fetch text from the active tab'

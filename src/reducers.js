@@ -39,6 +39,10 @@ const corpora = (state = initialState.corpora, action) => {
             let newState = {...state}
             newState[action.corpus.url] = action.corpus
             return newState
+        case ADD_CORPUS_CLASSIFICATION:
+            let newState = {...state}
+            newState.corpora[action.corpus].classification = [...newState.corpora[action.corpus].classification, action.classification]
+            return newState
         default:
             return state
     }
