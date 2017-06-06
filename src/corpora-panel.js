@@ -12,12 +12,12 @@ import ActionGrade from 'material-ui/svg-icons/action/grade'
 import AutoComplete from 'material-ui/AutoComplete'
 import Checkbox from 'material-ui/Checkbox'
 import TextField from 'material-ui/TextField'
-import addCorpusClassification from 'actions'
+import * as actions from 'actions'
 
 let CorpuraPanel = props => {
-    const {currentUrl, corpora, pristine, reset, submitting} = props
+    const {addCorpusClassification, url, corpora, pristine, reset, submitting} = props
 
-    console.log('CORPORA', corpora)
+    console.log('CORPORA', url, corpora)
 
     const iconButtonElement = (
       <IconButton
@@ -65,7 +65,7 @@ let CorpuraPanel = props => {
                       leftCheckbox={<Checkbox />}
                     />,
                     <ListItem
-                      onTouchTap={() => addClassification(corpusUrl)}
+                      onTouchTap={() => addCorpusClassification(corpusUrl, url)}
                       primaryText={<TextField floatingLabelText="Add a classification..." value={newClassification} onChange={changeClassification} />}
                     />,
                     ]}
@@ -78,9 +78,10 @@ let CorpuraPanel = props => {
 
 CorpuraPanel = connect(
     state => ({
-        currentUrl: state.currentUrl,
+        url: state.url,
         corpora: state.corpora
-    }, { addClassification })
+    }),
+    actions
 )(CorpuraPanel)
 
 export default CorpuraPanel

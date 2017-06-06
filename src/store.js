@@ -1,8 +1,8 @@
 import {createStore, applyMiddleware} from 'redux';
 import {createBackgroundStore} from 'redux-webext';
-import {MAIN_TAB, ADD_CLASSIFICATION, CHANGE_CLASSIFICATION, UI_REQUEST_ACTIVE_URL, ANALYZE_CONTENT} from './constants';
+import {ADD_CORPUS_CLASSIFICATION, MAIN_TAB, ADD_CLASSIFICATION, CHANGE_CLASSIFICATION, UI_REQUEST_ACTIVE_URL, UI_SHOW_ADD_RECIPE, ANALYZE_CONTENT} from './constants';
 import reducers from './reducers';
-import {changeMainTab, addClassification, requestActiveUrl, readRecipes} from './actions';
+import {addCorpusClassification, changeMainTab, addClassification, requestActiveUrl, readRecipes, uiShowAddRecipe} from './actions';
 import {actions as formActions} from 'redux-form';
 import {actionTypes as formActionTypes} from 'redux-form';
 import thunk from 'redux-thunk';
@@ -23,6 +23,8 @@ actions[CHANGE_CLASSIFICATION] = (data) => { return { type: CHANGE_CLASSIFICATIO
 actions[UI_REQUEST_ACTIVE_URL] = (data) => { return requestActiveUrl(); }
 actions[ADD_CLASSIFICATION] = (data) => { return addClassification(data.classification); }
 actions[MAIN_TAB] = (data) => { return changeMainTab(data.index); }
+actions[ADD_CORPUS_CLASSIFICATION] = (data) => { return addCorpusClassification(data.classification, data.url) }
+actions[UI_SHOW_ADD_RECIPE] = (data) => { return uiShowAddRecipe(data.visible) }
 
 const store = createStore(
     reducers,

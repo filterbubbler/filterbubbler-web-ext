@@ -12,7 +12,8 @@ import {
     REQUEST_ACTIVE_TAB_TEXT,
     COULD_NOT_FETCH_TAB_TEXT,
     MAIN_TAB,
-    UPDATE_RECIPES
+    UPDATE_RECIPES,
+    UI_SHOW_ADD_RECIPE
 } from './constants'
 import { analyze, classify } from 'bayes-classifier'
 
@@ -28,14 +29,22 @@ export function addClassification(form) {
     }
 }
 
-export const addCorpusClassification(classification) {
+export const uiShowAddRecipe = (visible) => {
     return {
-        type: ADD_CORPUS_CLASSIFICATION,
-        classification
+        type: UI_SHOW_ADD_RECIPE,
+        visible
     }
 }
 
-export function uiAddClassification(classification) {
+export const addCorpusClassification = (classification, url) => {
+    return {
+        type: ADD_CORPUS_CLASSIFICATION,
+        classification,
+        url
+    }
+}
+
+export const uiAddClassification = (classification) => {
     return {
         type: ADD_CLASSIFICATION,
         classification: classification
@@ -165,8 +174,9 @@ export function analyzeCurrentTab() {
 }
 
 // Recipe retrieval
-export const readRecipes = (dispatch) => {
-    return dispatch => fetch('http://filterbubbler.localhost/wp-json/filterbubbler/v1/recipe').then(
+export const readRecipes = () => {
+    return (dispatch, getState) => {
+        return fetch('http://' + getState().currentServer + '/wp-json/filterbubbler/v1/recipe').then(
         result => result.json().then(
             recipes => {
                 recipes.map(recipe => {
@@ -180,6 +190,7 @@ export const readRecipes = (dispatch) => {
         ),
         error => dispatch(reportError('Could not fetch recipes'))
     )
+    }
 }
 
 export const changeServer = (server) => {

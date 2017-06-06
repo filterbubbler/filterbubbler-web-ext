@@ -27,7 +27,7 @@ let SettingsPanel = props => {
                     dataSource={servers}
                     maxSearchResults={5}
                 /><br />
-                <RaisedButton label="Connect" onTouchTab={changeServer} />
+                <RaisedButton label="Connect" onTouchTap={changeServer} />
         </Paper>
     )
 }

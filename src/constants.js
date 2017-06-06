@@ -11,6 +11,7 @@ export const SET_CONTENT = 'SET_CONTENT'
 export const MAIN_TAB = 'MAIN_TAB'
 export const UPDATE_RECIPES = 'UPDATE_RECIPES'
 export const ADD_CORPUS_CLASSIFICATION = 'ADD_CORPUS_CLASSIFICATION'
+export const UI_SHOW_ADD_RECIPE = 'UI_SHOW_ADD_RECIPE'
 
 // UI Text
 export const COULD_NOT_FETCH_TAB_TEXT = 'Could not fetch text from the active tab'

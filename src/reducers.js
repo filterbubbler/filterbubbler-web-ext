@@ -4,10 +4,12 @@ import {
     UPDATE_RECIPES,
     MAIN_TAB,
     UI_REQUEST_ACTIVE_URL,
+    UI_SHOW_ADD_RECIPE,
     REQUEST_ACTIVE_TAB_TEXT,
     SET_CONTENT,
     ADD_CORPUS,
     CHANGE_CLASSIFICATION,
+    ADD_CORPUS_CLASSIFICATION,
     ACTIVE_URL
 } from './constants';
 import { reducer as formReducer } from 'redux-form';
@@ -17,11 +19,12 @@ const initialState = {
     content: '',
     classifierStatus: '',
     currentClassification: '',
-    servers: [],
-    currentServer: 'http://filterbubbler.localhost',
+    servers: ['foo.com', 'bar.com', 'baz.com', 'filterbubbler.localhost'],
+    currentServer: 'filterbubbler.localhost',
     classifications: [],
     corpora: {},
     recipes: [],
+    addRecipeDialogOpen: false,
     repositories: [],
     ui: {
         classification: ''
@@ -34,14 +37,15 @@ function classifications(state = initialState.classifications, action) {
 }
 
 const corpora = (state = initialState.corpora, action) => {
+    console.log('STATE', state, 'ACTION', action)
+    let newState = {...state}
     switch (action.type) {
         case ADD_CORPUS:
-            let newState = {...state}
             newState[action.corpus.url] = action.corpus
             return newState
         case ADD_CORPUS_CLASSIFICATION:
-            let newState = {...state}
-            newState.corpora[action.corpus].classification = [...newState.corpora[action.corpus].classification, action.classification]
+            console.log('CLASSIFICATION', newState)
+            newState[action.classification].classifications = [...(newState[action.classification].classifications), action.url]
             return newState
         default:
             return state
@@ -83,7 +87,7 @@ function ui(state = initialState.ui, action) {
     return state;
 }
 
-const recipes = (state = [], action) => {
+const recipes = (state = initialState.recipes, action) => {
     switch (action.type) {
         case UPDATE_RECIPES:
             return action.recipes
@@ -115,10 +119,21 @@ const currentServer = (state = initialState.currentServer, action) => {
     }
 }
 
+const addRecipeDialogOpen = (state = initialState.addRecipeDialogOpen, action) => {
+    switch (action.type) {
+        case UI_SHOW_ADD_RECIPE:
+            console.log('Show add recipe', action.visible)
+            return action.visible
+        default:
+            return state
+    }
+}
+
 export default combineReducers({
     url: urls,
     corpora: corpora,
     recipes: recipes,
+    addRecipeDialogOpen: addRecipeDialogOpen,
     servers: servers,
     currentServer: currentServer,
     currentClassification: classify,
