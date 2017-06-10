@@ -1,9 +1,14 @@
+import browser from 'webextension-polyfill';
+import { analyze, classify } from 'bayes-classifier'
 import {
+    DBNAME,
+    APPLY_RESTORED_STATE,
     ADD_CORPUS,
     ADD_CLASSIFICATION,
     ADD_CORPUS_CLASSIFICATION,
     CHANGE_CLASSIFICATION,
-    CHANGE_SERVER,
+    ADD_SERVER,
+    UI_ADD_SERVER,
     ACTIVE_URL,
     REPORT_ERROR,
     UI_REQUEST_ACTIVE_URL,
@@ -13,9 +18,10 @@ import {
     COULD_NOT_FETCH_TAB_TEXT,
     MAIN_TAB,
     UPDATE_RECIPES,
+    UI_LOAD_RECIPE,
+    LOAD_RECIPE,
     UI_SHOW_ADD_RECIPE
 } from './constants'
-import { analyze, classify } from 'bayes-classifier'
 
 export function addClassification(form) {
     return function (dispatch) {
@@ -150,12 +156,16 @@ export const addCorpus = (corpus) => {
 }
 
 export const readCorpus = (corpusUrl) => {
-    return dispatch => fetch(corpusUrl).then(
-        result => result.json().then(
-            corpus => dispatch(addCorpus({...corpus, url: corpusUrl})),
-            error => dispatch(reportError('Could not decode corpus'))
-        ),
+    return fetch(corpusUrl).then(
+        result => {
+            return result.json()
+        },
         error => dispatch(reportError('Could not read corpus'))
+    ).then(
+        json => {
+            return json
+        },
+        error => dispatch(reportError('Could not decode json'))
     )
 }
 
@@ -174,35 +184,117 @@ export function analyzeCurrentTab() {
 }
 
 // Recipe retrieval
-export const readRecipes = () => {
-    return (dispatch, getState) => {
-        return fetch('http://' + getState().currentServer + '/wp-json/filterbubbler/v1/recipe').then(
-        result => result.json().then(
+export const readRecipes = (server) => {
+    return fetch('http://' + server + '/wp-json/filterbubbler/v1/recipe').then(
+        result => result.json(),
+        error => dispatch(reportError('Could not fetch recipes'))
+    )
+}
+    /*
+        .then(
             recipes => {
                 recipes.map(recipe => {
                     recipe.corpora.map(corpusUrl => {
                         dispatch(readCorpus(corpusUrl))
                     })
                 })
-                dispatch(updateRecipes(recipes))
+                dispatch(updateRecipes(server, recipes))
             },
             error => dispatch(reportError('Could not decode recipe response'))
         ),
-        error => dispatch(reportError('Could not fetch recipes'))
     )
+    }
+    */
+
+// Set whether a given recipe should be loaded locally
+export const uiLoadRecipe = ({server, recipe, load}) => {
+    return {
+        type: UI_LOAD_RECIPE,
+        server,
+        recipe,
+        load
     }
 }
 
-export const changeServer = (server) => {
+export const loadRecipe = ({server, recipe, load}) => {
+   return dispatch => {
+        dispatch({
+            type: LOAD_RECIPE,
+            server, 
+            recipe, 
+            load
+        })
+        return dispatch(persistStateToLocalStorage())
+    }
+}
+
+export const uiAddServer = (server) => {
     return {
-        type: CHANGE_SERVER,
+        type: UI_ADD_SERVER,
         server
     }
 }
 
-export function updateRecipes(recipes) {
+export const addServer = (server) => {
+    return dispatch => {
+        dispatch({
+            type: ADD_SERVER,
+            server
+        })
+        return readRecipes(server).then(
+            recipes => dispatch(updateRecipes(server, recipes)),
+            error => dispatch(reportError('Could not recipes'))
+        ).then(
+            () => dispatch(persistStateToLocalStorage()),
+            error => dispatch(reportError('Could not persist to local storage'))
+        )
+    }
+}
+
+export function updateRecipes(server, recipes) {
     return {
         type: UPDATE_RECIPES,
+        server,
         recipes
     }
 }
+
+// Restore the application state from local storage
+export const restoreStateFromLocalStorage = () => {
+    return (dispatch, getState) => {
+        return browser.storage.local.get(DBNAME).then(db => {
+            console.log('Existing DB', db)
+            if (db[DBNAME]) {
+                console.log('Loaded classification DB from localstorage:', db)
+                return dispatch(applyRestoredState(db[DBNAME]))
+            } else {
+                console.log('No pre-existing DB')
+                return dispatch(reportError('Could not fetch recipes'))
+            }
+        })
+    }
+}
+
+export const applyRestoredState = (restoredState) => {
+    return {
+        type: APPLY_RESTORED_STATE,
+        state: restoredState
+    }
+}
+
+// Persist the application state to local storage
+export const persistStateToLocalStorage = () => {
+    return (dispatch, getState) => {
+        var db = {}
+        db[DBNAME] = getState()
+        return browser.storage.local.set(db).then(
+            result => {
+                console.log('Stored successfully', result)
+            }, 
+            error => {
+                console.log('Error storing DB', error)
+            }
+        )
+    }
+}
+

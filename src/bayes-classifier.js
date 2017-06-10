@@ -1,8 +1,7 @@
 import bayes from 'bayes';
 import browser from 'webextension-polyfill';
+import DBNAME from 'constants'
 //import changeClassification from './actions';
-
-var DBNAME = 'FilterBubblerDB';
 
 var classifier = bayes();
 

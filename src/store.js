@@ -1,11 +1,32 @@
-import {createStore, applyMiddleware} from 'redux';
-import {createBackgroundStore} from 'redux-webext';
-import {ADD_CORPUS_CLASSIFICATION, MAIN_TAB, ADD_CLASSIFICATION, CHANGE_CLASSIFICATION, UI_REQUEST_ACTIVE_URL, UI_SHOW_ADD_RECIPE, ANALYZE_CONTENT} from './constants';
-import reducers from './reducers';
-import {addCorpusClassification, changeMainTab, addClassification, requestActiveUrl, readRecipes, uiShowAddRecipe} from './actions';
-import {actions as formActions} from 'redux-form';
-import {actionTypes as formActionTypes} from 'redux-form';
-import thunk from 'redux-thunk';
+import {createStore, applyMiddleware} from 'redux'
+import {createBackgroundStore} from 'redux-webext'
+import reducers from './reducers'
+import {actions as formActions} from 'redux-form'
+import {actionTypes as formActionTypes} from 'redux-form'
+import thunk from 'redux-thunk'
+import {
+    ADD_CORPUS_CLASSIFICATION,
+    MAIN_TAB,
+    ADD_CLASSIFICATION,
+    CHANGE_CLASSIFICATION,
+    UI_REQUEST_ACTIVE_URL,
+    UI_SHOW_ADD_RECIPE,
+    UI_ADD_SERVER,
+    ANALYZE_CONTENT,
+    UI_LOAD_RECIPE,
+    LOAD_RECIPE
+} from './constants'
+import {
+    addCorpusClassification,
+    changeMainTab,
+    addServer,
+    addClassification,
+    requestActiveUrl,
+    readRecipes,
+    uiShowAddRecipe,
+    restoreStateFromLocalStorage,
+    loadRecipe,
+} from './actions'
 
 const actions = {}
 
@@ -25,6 +46,8 @@ actions[ADD_CLASSIFICATION] = (data) => { return addClassification(data.classifi
 actions[MAIN_TAB] = (data) => { return changeMainTab(data.index); }
 actions[ADD_CORPUS_CLASSIFICATION] = (data) => { return addCorpusClassification(data.classification, data.url) }
 actions[UI_SHOW_ADD_RECIPE] = (data) => { return uiShowAddRecipe(data.visible) }
+actions[UI_ADD_SERVER] = (data) => { return addServer(data.server) }
+actions[UI_LOAD_RECIPE] = loadRecipe
 
 const store = createStore(
     reducers,
@@ -36,6 +59,6 @@ const backgroundStore = createBackgroundStore({
 })
 
 // Fetch recipes from the current server
-store.dispatch(readRecipes());
+store.dispatch(restoreStateFromLocalStorage());
 
 export default backgroundStore

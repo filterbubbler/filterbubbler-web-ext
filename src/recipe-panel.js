@@ -14,14 +14,16 @@ import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import Dialog from 'material-ui/Dialog'
 import AutoComplete from 'material-ui/AutoComplete'
+import DropDownMenu from 'material-ui/DropDownMenu'
 import * as actions from 'actions'
 
 let RecipePanel = props => {
-    const {changeServer, uiShowAddRecipe, panelOpen, recipes, servers, currentServer} = props
+    const {addServer, uiShowAddRecipe, panelOpen, recipes, servers, currentServer} = props
 
     const recipeDialogStyle = {
         width: '100%',
         maxWidth: 'none',
+        height: '80vh',
         transform: 'translate(0, 10px)'
     };
 
@@ -32,7 +34,7 @@ let RecipePanel = props => {
         tooltipPosition="bottom-left"
       >
         <MoreVertIcon color={grey400} />
-      </IconButtont >
+      </IconButton>
     );
 
     const rightIconMenu = (
@@ -64,6 +66,7 @@ let RecipePanel = props => {
         <div>
             <Dialog
                 contentStyle={recipeDialogStyle}
+                bodyStyle={{height: '100%'}}
                 title="Add a new recipe"
                 modal={false}
                 actions={dialogActions}
@@ -71,25 +74,26 @@ let RecipePanel = props => {
                 open={panelOpen}
                 onRequestClose={() => uiShowAddRecipe(false)}
             >
-                <AutoComplete
-                    floatingLabelText="Enter a FilterBubbler server name"
-                    filter={AutoComplete.fuzzyFilter}
-                    dataSource={servers}
-                    maxSearchResults={3}
-                    searchText={newServer}
-                />
-                <IconButton
-                    touch={true}
-                    onTouchTap={() => changeServer(newServer)}
-                >
-                    <CloudDownloadIcon />
-                </IconButton><br />
-                <AutoComplete
-                    floatingLabelText="Choose a recipe"
-                    filter={AutoComplete.fuzzyFilter}
-                    dataSource={recipes.map(recipe => recipe.name)}
-                    maxSearchResults={2}
-                />
+                <div>
+                    <AutoComplete
+                        floatingLabelText="Enter a FilterBubbler server name"
+                        filter={AutoComplete.fuzzyFilter}
+                        dataSource={servers}
+                        maxSearchResults={3}
+                        searchText={newServer}
+                    />
+                    <IconButton
+                        touch={true}
+                        onTouchTap={() => addServer(newServer)}
+                    >
+                        <CloudDownloadIcon />
+                    </IconButton>
+                    <DropDownMenu>
+                        {recipes.map(recipe => 
+                            <MenuItem key={recipe.name} primaryText={recipe.name} />
+                        )}
+                    </DropDownMenu>
+                </div>
             </Dialog>
             <List>
                 <Subheader>Recipes</Subheader>

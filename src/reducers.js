@@ -3,6 +3,7 @@ import { reducer as bayesReducer } from 'bayes-classifier';
 import { 
     UPDATE_RECIPES,
     MAIN_TAB,
+    ADD_SERVER,
     UI_REQUEST_ACTIVE_URL,
     UI_SHOW_ADD_RECIPE,
     REQUEST_ACTIVE_TAB_TEXT,
@@ -10,7 +11,10 @@ import {
     ADD_CORPUS,
     CHANGE_CLASSIFICATION,
     ADD_CORPUS_CLASSIFICATION,
-    ACTIVE_URL
+    ACTIVE_URL,
+    LOAD_RECIPE,
+    UI_LOAD_RECIPE,
+    APPLY_RESTORED_STATE
 } from './constants';
 import { reducer as formReducer } from 'redux-form';
 
@@ -19,8 +23,8 @@ const initialState = {
     content: '',
     classifierStatus: '',
     currentClassification: '',
-    servers: ['foo.com', 'bar.com', 'baz.com', 'filterbubbler.localhost'],
-    currentServer: 'filterbubbler.localhost',
+    servers: [],
+    currentServer: '',
     classifications: [],
     corpora: {},
     recipes: [],
@@ -37,7 +41,6 @@ function classifications(state = initialState.classifications, action) {
 }
 
 const corpora = (state = initialState.corpora, action) => {
-    console.log('STATE', state, 'ACTION', action)
     let newState = {...state}
     switch (action.type) {
         case ADD_CORPUS:
@@ -89,8 +92,8 @@ function ui(state = initialState.ui, action) {
 
 const recipes = (state = initialState.recipes, action) => {
     switch (action.type) {
-        case UPDATE_RECIPES:
-            return action.recipes
+        case APPLY_RESTORED_STATE:
+            return action.state.recipes ? action.state.recipes : state
         default:
             return state
     }
@@ -107,6 +110,28 @@ const tabs = (state = 0, action) => {
 
 const servers = (state = initialState.servers, action) => {
     switch (action.type) {
+        case UPDATE_RECIPES:
+            let newState = [...state]
+            newState = newState.map(server => {
+                server.recipes = (server.url == action.url) ? server.recipes : action.recipes
+                return server
+            })
+            return newState
+        case LOAD_RECIPE:
+            return state.map(server => {
+                return (server.url == action.server.url) ?
+                {
+                    ...server,
+                    recipes: server.recipes.map(recipe => {
+                        return (recipe.name == action.recipe.name) ? {...recipe, load: action.load} : recipe
+                    })
+                } :
+                server
+            })
+        case APPLY_RESTORED_STATE:
+            return action.state.servers ? action.state.servers : state
+        case ADD_SERVER:
+            return [...state, { url: action.server, recipes: [], status: '' }]
         default:
             return state
     }
@@ -114,6 +139,8 @@ const servers = (state = initialState.servers, action) => {
 
 const currentServer = (state = initialState.currentServer, action) => {
     switch (action.type) {
+        case APPLY_RESTORED_STATE:
+            return action.state.currentServer ? action.state.currentServer : state
         default:
             return state
     }
@@ -122,7 +149,6 @@ const currentServer = (state = initialState.currentServer, action) => {
 const addRecipeDialogOpen = (state = initialState.addRecipeDialogOpen, action) => {
     switch (action.type) {
         case UI_SHOW_ADD_RECIPE:
-            console.log('Show add recipe', action.visible)
             return action.visible
         default:
             return state
@@ -132,9 +158,9 @@ const addRecipeDialogOpen = (state = initialState.addRecipeDialogOpen, action) =
 export default combineReducers({
     url: urls,
     corpora: corpora,
+    servers: servers,
     recipes: recipes,
     addRecipeDialogOpen: addRecipeDialogOpen,
-    servers: servers,
     currentServer: currentServer,
     currentClassification: classify,
     classifications: classifications,
