@@ -17,8 +17,6 @@ import * as actions from 'actions'
 let CorpuraPanel = props => {
     const {addCorpusClassification, url, corpora, pristine, reset, submitting} = props
 
-    console.log('CORPORA', url, corpora)
-
     const iconButtonElement = (
       <IconButton
         touch={true}
@@ -54,22 +52,17 @@ let CorpuraPanel = props => {
             <List>
                 <Subheader>Corpura</Subheader>
                 {Object.keys(corpora).map(corpusUrl => {
-                return <ListItem
-                  key={corpusUrl}
-                  primaryText={corpora[corpusUrl].corpus}
-                  initiallyOpen={false}
-                  primaryTogglesNestedList={true}
-                  nestedItems={[
-                    <ListItem
-                      primaryText="cool"
-                      leftCheckbox={<Checkbox />}
-                    />,
-                    <ListItem
-                      onTouchTap={() => addCorpusClassification(corpusUrl, url)}
-                      primaryText={<TextField floatingLabelText="Add a classification..." value={newClassification} onChange={changeClassification} />}
-                    />,
-                    ]}
-                 />
+                    return <ListItem
+                      key={corpusUrl}
+                      primaryText={corpora[corpusUrl].corpus}
+                      initiallyOpen={false}
+                      primaryTogglesNestedList={true}
+                      nestedItems={corpora[corpusUrl].classifications.map((classification, index) => 
+                        <ListItem
+                            key={index}
+                            primaryText={classification.classification}
+                        />
+                    )}/>
                 })}
             </List>
         </div>

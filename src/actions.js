@@ -3,7 +3,7 @@ import { analyze, classify } from 'bayes-classifier'
 import {
     DBNAME,
     APPLY_RESTORED_STATE,
-    ADD_CORPUS,
+    UPDATE_CORPUS,
     ADD_CLASSIFICATION,
     ADD_CORPUS_CLASSIFICATION,
     CHANGE_CLASSIFICATION,
@@ -20,6 +20,8 @@ import {
     UPDATE_RECIPES,
     UI_LOAD_RECIPE,
     LOAD_RECIPE,
+    APPLY_CORPUS,
+    APPLY_CORPORA,
     UI_SHOW_ADD_RECIPE
 } from './constants'
 
@@ -148,23 +150,19 @@ export function requestActiveUrl() {
     }
 }
 
-export const addCorpus = (corpus) => {
+export const applyCorpus = (corpus) => {
     return {
-        type: ADD_CORPUS,
+        type: APPLY_CORPUS,
         corpus
     }
 }
 
 export const readCorpus = (corpusUrl) => {
-    return fetch(corpusUrl).then(
-        result => {
-            return result.json()
-        },
+    return (dispatch) => fetch(corpusUrl).then(
+        result => result.json(),
         error => dispatch(reportError('Could not read corpus'))
     ).then(
-        json => {
-            return json
-        },
+        corpus => dispatch(applyCorpus({ ...corpus, url: corpusUrl})),
         error => dispatch(reportError('Could not decode json'))
     )
 }
@@ -190,21 +188,6 @@ export const readRecipes = (server) => {
         error => dispatch(reportError('Could not fetch recipes'))
     )
 }
-    /*
-        .then(
-            recipes => {
-                recipes.map(recipe => {
-                    recipe.corpora.map(corpusUrl => {
-                        dispatch(readCorpus(corpusUrl))
-                    })
-                })
-                dispatch(updateRecipes(server, recipes))
-            },
-            error => dispatch(reportError('Could not decode recipe response'))
-        ),
-    )
-    }
-    */
 
 // Set whether a given recipe should be loaded locally
 export const uiLoadRecipe = ({server, recipe, load}) => {
@@ -224,7 +207,13 @@ export const loadRecipe = ({server, recipe, load}) => {
             recipe, 
             load
         })
-        return dispatch(persistStateToLocalStorage())
+        return dispatch(updateCorporaFromRecipes()).then(
+            corpora => dispatch(applyCorpora({corpora})),
+            error => dispatch(reportError('Could not update corpora from recipes'))
+        ).then(
+            () => dispatch(persistStateToLocalStorage()),
+            error => dispatch(reportError('Could not apply corpora'))
+        )
     }
 }
 
@@ -245,9 +234,39 @@ export const addServer = (server) => {
             recipes => dispatch(updateRecipes(server, recipes)),
             error => dispatch(reportError('Could not recipes'))
         ).then(
+            () => dispatch(updateCorporaFromRecipes()),
+            error => dispatch(reportError('Could not update corpora'))
+        ).then(
             () => dispatch(persistStateToLocalStorage()),
             error => dispatch(reportError('Could not persist to local storage'))
         )
+    }
+}
+
+export function applyCorpora({ corpora }) {
+    return {
+        type: APPLY_CORPORA,
+        corpora
+    }
+}
+
+export function updateCorporaFromRecipes() {
+    return (dispatch, getState) => {
+        let activeCorpora = getState().servers
+            .map(server => server.recipes)
+            .reduce((acc, cur) => acc.concat(cur), [])
+            .reduce((acc, cur) => cur.load ? acc.concat(cur) : acc, [])
+            .reduce((acc, cur) => acc.concat(cur.corpora.filter(corpus => !acc.includes(corpus))), [])
+            .map(corpus => {
+                return fetch(corpus).then(
+                    body => body.json(),
+                    error => dispatch(reportError('Could not read corpus', corpus))
+                )
+            })
+
+        console.log('CORPORA', activeCorpora)
+
+        return Promise.all(activeCorpora)
     }
 }
 
@@ -292,7 +311,7 @@ export const persistStateToLocalStorage = () => {
                 console.log('Stored successfully', result)
             }, 
             error => {
-                console.log('Error storing DB', error)
+                dispatch(reportError('Error storing DB', error))
             }
         )
     }

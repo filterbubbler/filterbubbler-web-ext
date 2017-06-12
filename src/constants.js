@@ -17,6 +17,8 @@ export const UI_SHOW_ADD_RECIPE = 'UI_SHOW_ADD_RECIPE'
 export const APPLY_RESTORED_STATE = 'APPLY_RESTORED_STATE'
 export const UI_LOAD_RECIPE = 'UI_LOAD_RECIPE'
 export const LOAD_RECIPE = 'LOAD_RECIPE'
+export const APPLY_CORPUS = 'APPLY_CORPUS'
+export const APPLY_CORPORA = 'APPLY_CORPORA'
 
 // UI Text
 export const COULD_NOT_FETCH_TAB_TEXT = 'Could not fetch text from the active tab'

@@ -51,6 +51,8 @@ class SettingsPanel extends React.Component {
                         <ListItem 
                             key={server.url} 
                             primaryText={server.url} 
+                            initiallyOpen={false}
+                            primaryTogglesNestedList={true}
                             nestedItems={server.recipes.map((recipe, index) => 
                                 <ListItem
                                     leftCheckbox={<Checkbox checked={recipe.load} onCheck={(ev, shouldLoad) => loadRecipe(server, recipe, shouldLoad)} />}

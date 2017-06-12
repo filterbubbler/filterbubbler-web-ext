@@ -64,44 +64,12 @@ let RecipePanel = props => {
 
     return (
         <div>
-            <Dialog
-                contentStyle={recipeDialogStyle}
-                bodyStyle={{height: '100%'}}
-                title="Add a new recipe"
-                modal={false}
-                actions={dialogActions}
-                autoDetectWindowHeight={false}
-                open={panelOpen}
-                onRequestClose={() => uiShowAddRecipe(false)}
-            >
-                <div>
-                    <AutoComplete
-                        floatingLabelText="Enter a FilterBubbler server name"
-                        filter={AutoComplete.fuzzyFilter}
-                        dataSource={servers}
-                        maxSearchResults={3}
-                        searchText={newServer}
-                    />
-                    <IconButton
-                        touch={true}
-                        onTouchTap={() => addServer(newServer)}
-                    >
-                        <CloudDownloadIcon />
-                    </IconButton>
-                    <DropDownMenu>
-                        {recipes.map(recipe => 
-                            <MenuItem key={recipe.name} primaryText={recipe.name} />
-                        )}
-                    </DropDownMenu>
-                </div>
-            </Dialog>
             <List>
                 <Subheader>Recipes</Subheader>
                 {recipes.map(recipe => 
-                    <ListItem leftCheckbox={<Checkbox />} key={recipe.name} primaryText={recipe.name} rightToggle={<Toggle />} />
+                    <ListItem key={recipe.name} primaryText={recipe.name} />
                 )}
             </List>
-            <RaisedButton className="add-recipe" label="Add a recipe" onTouchTap={() => uiShowAddRecipe(true)} fullWidth={true} />
         </div>
     )
 }

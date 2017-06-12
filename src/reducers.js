@@ -8,7 +8,8 @@ import {
     UI_SHOW_ADD_RECIPE,
     REQUEST_ACTIVE_TAB_TEXT,
     SET_CONTENT,
-    ADD_CORPUS,
+    APPLY_CORPUS,
+    APPLY_CORPORA,
     CHANGE_CLASSIFICATION,
     ADD_CORPUS_CLASSIFICATION,
     ACTIVE_URL,
@@ -36,20 +37,24 @@ const initialState = {
 }
 
 function classifications(state = initialState.classifications, action) {
-    console.log('REDUCER', action)
+//    console.log('REDUCER', action)
     return state;
 }
 
 const corpora = (state = initialState.corpora, action) => {
     let newState = {...state}
     switch (action.type) {
-        case ADD_CORPUS:
+        case APPLY_CORPUS:
             newState[action.corpus.url] = action.corpus
             return newState
+        case APPLY_CORPORA:
+            return action.corpora
         case ADD_CORPUS_CLASSIFICATION:
             console.log('CLASSIFICATION', newState)
             newState[action.classification].classifications = [...(newState[action.classification].classifications), action.url]
             return newState
+        case APPLY_RESTORED_STATE:
+            return action.state.corpora ? action.state.corpora : state
         default:
             return state
     }
@@ -57,10 +62,6 @@ const corpora = (state = initialState.corpora, action) => {
 
 function content(state = initialState.content, action) {
     switch (action.type) {
-        /*
-        case REQUEST_ACTIVE_TAB_TEXT:
-            return {...state, content: action.content}
-            */
         default:
             return state
     }
@@ -92,6 +93,20 @@ function ui(state = initialState.ui, action) {
 
 const recipes = (state = initialState.recipes, action) => {
     switch (action.type) {
+        case LOAD_RECIPE:
+            let newState = [...state]
+            let existing = newState.find(recipe => recipe.name == action.recipe.name)
+            console.log('Recipe state', newState, existing)
+            if (action.load && !existing) {
+                console.log('Add ', action.recipe.name)
+                newState.push(action.recipe)
+            }
+            if (!action.load && existing) {
+                console.log('Remove ' + existing.name + ' at ' + newState.indexOf(existing))
+                newState.splice(newState.indexOf(existing), 1)
+            }
+            console.log('New recipe state', newState)
+            return newState
         case APPLY_RESTORED_STATE:
             return action.state.recipes ? action.state.recipes : state
         default:
@@ -157,9 +172,9 @@ const addRecipeDialogOpen = (state = initialState.addRecipeDialogOpen, action) =
 
 export default combineReducers({
     url: urls,
-    corpora: corpora,
     servers: servers,
     recipes: recipes,
+    corpora: corpora,
     addRecipeDialogOpen: addRecipeDialogOpen,
     currentServer: currentServer,
     currentClassification: classify,
