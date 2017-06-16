@@ -7,6 +7,7 @@ import IconButton from 'material-ui/IconButton'
 import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
 import CloudDownloadIcon from 'material-ui/svg-icons/file/cloud-download'
 import IconMenu from 'material-ui/IconMenu'
+import AddIcon from 'material-ui/svg-icons/content/add'
 import MenuItem from 'material-ui/MenuItem'
 import Toggle from 'material-ui/Toggle'
 import Checkbox from 'material-ui/Checkbox'
@@ -16,6 +17,7 @@ import Dialog from 'material-ui/Dialog'
 import AutoComplete from 'material-ui/AutoComplete'
 import DropDownMenu from 'material-ui/DropDownMenu'
 import * as actions from 'actions'
+import Paper from 'material-ui/Paper';
 
 let RecipePanel = props => {
     const {addServer, uiShowAddRecipe, panelOpen, recipes, servers, currentServer} = props
@@ -67,8 +69,33 @@ let RecipePanel = props => {
             <List>
                 <Subheader>Recipes</Subheader>
                 {recipes.map(recipe => 
-                    <ListItem key={recipe.name} primaryText={recipe.name} />
+                    <ListItem key={recipe.name} primaryText={recipe.name} nestedItems={[
+                        <Paper>
+                            <h2>Test</h2>
+                        </Paper>,
+                        <ListItem
+                            key={recipe.name + '-classifier'}
+                            primaryText="Classifier: Bayes"
+                        />,
+                        <ListItem
+                            key={recipe.name + '-source'}
+                            primaryText="Source: Default"
+                        />,
+                        <ListItem
+                            key={recipe.name + '-sink'}
+                            primaryText="Sink: Default"
+                        />,
+                        <ListItem
+                            key={recipe.name + '-corpora'}
+                            primaryText="Corpora: Clowns"
+                        />
+                    ]} />
                 )}
+                <ListItem
+                    leftIcon={<AddIcon />}
+                    key="add-recipe"
+                    primaryText="Add a recipe"
+                />
             </List>
         </div>
     )

@@ -9,6 +9,7 @@ import TextField from 'material-ui/TextField';
 import IconButton from 'material-ui/IconButton';
 import Paper from 'material-ui/Paper';
 import CloudDownloadIcon from 'material-ui/svg-icons/file/cloud-download'
+import AddIcon from 'material-ui/svg-icons/content/add'
 import {uiAddServer, uiLoadRecipe} from 'actions'
 
 class SettingsPanel extends React.Component {
@@ -55,9 +56,9 @@ class SettingsPanel extends React.Component {
                             primaryTogglesNestedList={true}
                             nestedItems={server.recipes.map((recipe, index) => 
                                 <ListItem
-                                    leftCheckbox={<Checkbox checked={recipe.load} onCheck={(ev, shouldLoad) => loadRecipe(server, recipe, shouldLoad)} />}
                                     key={index}
                                     primaryText={recipe.name}
+                                    rightIcon={<CloudDownloadIcon />}
                                 />
                             )} />
                     )
@@ -65,25 +66,7 @@ class SettingsPanel extends React.Component {
                     <ListItem key="NONE" primaryText="You have not added any servers" />
                 )}
 
-                <ListItem key="ADD" primaryText={
-                    <div style="overflow:scroll">
-                        <TextField
-                            hintText="http://my.filterbubbler.server"
-                            floatingLabelText="Add a FilterBubbler server"
-                            floatingLabelFixed={true}
-                            onChange={(ev, newValue) => this.changeNewServer(newValue)}
-                            value={newServer}
-                            errortext={serverError}
-                        />
-                        <IconButton
-                            touch={true}
-                            onTouchTap={() => this.doAddServer()}
-                        >
-                            <CloudDownloadIcon />
-                        </IconButton>
-                    </div>
-                }>
-                </ListItem>
+                <ListItem leftIcon={<AddIcon />} key="ADD" primaryText="Add server" />
             </List>
         )
     }
