@@ -11,6 +11,7 @@ import Paper from 'material-ui/Paper';
 import CloudDownloadIcon from 'material-ui/svg-icons/file/cloud-download'
 import AddIcon from 'material-ui/svg-icons/content/add'
 import {uiAddServer, uiLoadRecipe} from 'actions'
+import AddableListItem from 'addable-list-item'
 
 class SettingsPanel extends React.Component {
     constructor(props) {
@@ -22,20 +23,8 @@ class SettingsPanel extends React.Component {
         }
     }
 
-    changeNewServer(newValue) {
-        this.setState({newServer: newValue}) 
-    }
-
-    doAddServer() {
-        if (this.state.newServer != '') {
-            this.props.addServer(this.state.newServer); 
-            this.setState({
-                newServer: '',
-                serverError: ''
-            })
-        } else {
-            this.setState({serverError: 'Required field'})
-        }
+    addServer(serverName) {
+        this.props.addServer(serverName); 
     }
 
     render() {
@@ -66,7 +55,7 @@ class SettingsPanel extends React.Component {
                     <ListItem key="NONE" primaryText="You have not added any servers" />
                 )}
 
-                <ListItem leftIcon={<AddIcon />} key="ADD" primaryText="Add server" />
+                <AddableListItem addText="Add server" hintText="Server name" callback={(name) => this.addServer(name)} />
             </List>
         )
     }

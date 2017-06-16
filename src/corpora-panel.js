@@ -13,6 +13,7 @@ import ActionGrade from 'material-ui/svg-icons/action/grade'
 import AutoComplete from 'material-ui/AutoComplete'
 import Checkbox from 'material-ui/Checkbox'
 import TextField from 'material-ui/TextField'
+import AddableListItem from 'addable-list-item'
 import * as actions from 'actions'
 
 class CorpuraPanel extends React.Component {
@@ -20,15 +21,15 @@ class CorpuraPanel extends React.Component {
         super(props)
 
         this.state = {
-            addingCorpora: false,
-            newCorpora: '',
-            corporaError: ''
         }
     }
 
+    addClassification(corpus, classification) {
+        console.log('Add classification ' + classification + ' to ' + corpus )
+    }
 
-    addClassification(classification) {
-        console.log('ADD IT!', classification)
+    addCorpus(corpus) {
+        console.log('Add corpus ', corpus)
     }
 
     changeClassification(ev, newValue) {
@@ -36,15 +37,6 @@ class CorpuraPanel extends React.Component {
         newClassiciation = newClassification + newValue
     }
 
-    addCorpus() {
-       this.setState({addingCorpora: false}) 
-    }
-
-    prepareAddCorpora() {
-       this.setState({addingCorpora: true}) 
-       setTimeout(() => this.refs.corpusInput.focus(), 100)
-    }
-    
     render() {
         const {addCorpusClassification, url, corpora, pristine, reset, submitting} = this.props
 
@@ -83,28 +75,10 @@ class CorpuraPanel extends React.Component {
                                 key={index}
                                 primaryText={classification.classification}
                             />),
-                        <ListItem
-                            leftIcon={<AddIcon />}
-                            key="add-classification"
-                            primaryText="Add classification"
-                        />
+                        <AddableListItem addText="Add classification" hintText="Classification label" callback={(name) => this.addClassification(corpora[corpusUrl].corpus, name)} />
                       ]}/>
                 })}
-                {this.state.addingCorpora ?
-                    <ListItem
-                        leftIcon={<AddIcon />}
-                        key="add-corpora"
-                        disabled={true}
-                        primaryText={<TextField ref="corpusInput" style={{top: -18}} hintText="Corpus name" onKeyPress={(ev) => ev.charCode == 13 && this.addCorpus()} />}
-                    />
-                    :
-                    <ListItem
-                        leftIcon={<AddIcon />}
-                        key="prepare-add-corpora"
-                        primaryText="Add corpus"
-                        onTouchTap={() => this.prepareAddCorpora()}
-                    />
-                }
+                <AddableListItem addText="Add corpus" hintText="Corpus name" callback={(name) => this.addCorpus(name)} />
             </List>
         )
     }

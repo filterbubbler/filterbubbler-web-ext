@@ -18,87 +18,97 @@ import AutoComplete from 'material-ui/AutoComplete'
 import DropDownMenu from 'material-ui/DropDownMenu'
 import * as actions from 'actions'
 import Paper from 'material-ui/Paper';
+import AddableListItem from 'addable-list-item'
 
-let RecipePanel = props => {
-    const {addServer, uiShowAddRecipe, panelOpen, recipes, servers, currentServer} = props
+class RecipePanel extends React.Component {
+    constructor(props) {
+        super(props)
 
-    const recipeDialogStyle = {
-        width: '100%',
-        maxWidth: 'none',
-        height: '80vh',
-        transform: 'translate(0, 10px)'
-    };
-
-    const iconButtonElement = (
-      <IconButton
-        touch={true}
-        tooltip="more"
-        tooltipPosition="bottom-left"
-      >
-        <MoreVertIcon color={grey400} />
-      </IconButton>
-    );
-
-    const rightIconMenu = (
-        <IconMenu iconButtonElement={iconButtonElement}>
-            <MenuItem>Add classification</MenuItem>
-            <MenuItem>Remove classification</MenuItem>
-        </IconMenu>
-    )
-
-    const dialogActions = [
-      <FlatButton
-        label="Cancel"
-        onTouchTap={() => uiShowAddRecipe(false)}
-      />,
-      <FlatButton
-        label="Submit"
-        primary={true}
-        onTouchTap={() => uiShowAddRecipe(false)}
-      />,
-    ]
-
-    const test = () => {
-        console.log('click')
+        this.state = {
+        }
     }
 
-    let newServer = currentServer
+    addRecipe(recipeName) {
+        console.log('Add recipe ' + recipeName)
+    }
 
-    return (
-        <div>
-            <List>
-                <Subheader>Recipes</Subheader>
-                {recipes.map(recipe => 
-                    <ListItem key={recipe.name} primaryText={recipe.name} nestedItems={[
-                        <Paper>
-                            <h2>Test</h2>
-                        </Paper>,
-                        <ListItem
-                            key={recipe.name + '-classifier'}
-                            primaryText="Classifier: Bayes"
-                        />,
-                        <ListItem
-                            key={recipe.name + '-source'}
-                            primaryText="Source: Default"
-                        />,
-                        <ListItem
-                            key={recipe.name + '-sink'}
-                            primaryText="Sink: Default"
-                        />,
-                        <ListItem
-                            key={recipe.name + '-corpora'}
-                            primaryText="Corpora: Clowns"
-                        />
-                    ]} />
-                )}
-                <ListItem
-                    leftIcon={<AddIcon />}
-                    key="add-recipe"
-                    primaryText="Add a recipe"
-                />
-            </List>
-        </div>
-    )
+    render() {
+        const {addServer, uiShowAddRecipe, panelOpen, recipes, servers, currentServer} = this.props
+
+        const recipeDialogStyle = {
+            width: '100%',
+            maxWidth: 'none',
+            height: '80vh',
+            transform: 'translate(0, 10px)'
+        };
+
+        const iconButtonElement = (
+          <IconButton
+            touch={true}
+            tooltip="more"
+            tooltipPosition="bottom-left"
+          >
+            <MoreVertIcon color={grey400} />
+          </IconButton>
+        );
+
+        const rightIconMenu = (
+            <IconMenu iconButtonElement={iconButtonElement}>
+                <MenuItem>Add classification</MenuItem>
+                <MenuItem>Remove classification</MenuItem>
+            </IconMenu>
+        )
+
+        const dialogActions = [
+          <FlatButton
+            label="Cancel"
+            onTouchTap={() => uiShowAddRecipe(false)}
+          />,
+          <FlatButton
+            label="Submit"
+            primary={true}
+            onTouchTap={() => uiShowAddRecipe(false)}
+          />,
+        ]
+
+        const test = () => {
+            console.log('click')
+        }
+
+        let newServer = currentServer
+
+        return (
+            <div>
+                <List>
+                    <Subheader>Recipes</Subheader>
+                    {recipes.map(recipe => 
+                        <ListItem key={recipe.name} primaryText={recipe.name} nestedItems={[
+                            <Paper>
+                                <h2>Test</h2>
+                            </Paper>,
+                            <ListItem
+                                key={recipe.name + '-classifier'}
+                                primaryText="Classifier: Bayes"
+                            />,
+                            <ListItem
+                                key={recipe.name + '-source'}
+                                primaryText="Source: Default"
+                            />,
+                            <ListItem
+                                key={recipe.name + '-sink'}
+                                primaryText="Sink: Default"
+                            />,
+                            <ListItem
+                                key={recipe.name + '-corpora'}
+                                primaryText="Corpora: Clowns"
+                            />
+                        ]} />
+                    )}
+                    <AddableListItem addText="Add recipe" hintText="Recipe name" callback={(name) => this.addRecipe(name)} />
+                </List>
+            </div>
+        )
+    }
 }
 
 RecipePanel = connect(
