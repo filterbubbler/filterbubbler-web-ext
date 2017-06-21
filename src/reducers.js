@@ -2,6 +2,8 @@ import {combineReducers} from 'redux';
 import { reducer as bayesReducer } from 'bayes-classifier';
 import { 
     UPDATE_RECIPES,
+    UPDATE_APP_VERSION,
+    APP_VERSION,
     MAIN_TAB,
     ADD_SERVER,
     UI_REQUEST_ACTIVE_URL,
@@ -11,6 +13,8 @@ import {
     APPLY_CORPUS,
     APPLY_CORPORA,
     CHANGE_CLASSIFICATION,
+    ADD_CORPUS,
+    ADD_CLASSIFICATION,
     ADD_CORPUS_CLASSIFICATION,
     ACTIVE_URL,
     LOAD_RECIPE,
@@ -22,6 +26,7 @@ import { reducer as formReducer } from 'redux-form';
 const initialState = {
     url: '',
     content: '',
+    version: '_NA_',
     classifierStatus: '',
     currentClassification: '',
     servers: [],
@@ -44,14 +49,19 @@ function classifications(state = initialState.classifications, action) {
 const corpora = (state = initialState.corpora, action) => {
     let newState = {...state}
     switch (action.type) {
+        case ADD_CORPUS:
+            newState[action.corpus] = {
+                corpus: action.corpus,
+                classifications: action.classifications ? action.classifications : {}
+            }
+            return newState
         case APPLY_CORPUS:
             newState[action.corpus.url] = action.corpus
             return newState
         case APPLY_CORPORA:
             return action.corpora
-        case ADD_CORPUS_CLASSIFICATION:
-            console.log('CLASSIFICATION', newState)
-            newState[action.classification].classifications = [...(newState[action.classification].classifications), action.url]
+        case ADD_CLASSIFICATION:
+            newState[action.corpus].classifications[action.classification] = []
             return newState
         case APPLY_RESTORED_STATE:
             return action.state.corpora ? action.state.corpora : state
@@ -170,11 +180,23 @@ const addRecipeDialogOpen = (state = initialState.addRecipeDialogOpen, action) =
     }
 }
 
+const version = (state = initialState.version, action) => {
+    switch (action.type) {
+        case UPDATE_APP_VERSION:
+            return action.version
+        case APPLY_RESTORED_STATE:
+            return action.state.version ? action.state.version : state
+        default:
+            return state
+    }
+}
+
 export default combineReducers({
     url: urls,
     servers: servers,
     recipes: recipes,
     corpora: corpora,
+    version: version,
     addRecipeDialogOpen: addRecipeDialogOpen,
     currentServer: currentServer,
     currentClassification: classify,

@@ -43,13 +43,19 @@ class SettingsPanel extends React.Component {
                             primaryText={server.url} 
                             initiallyOpen={false}
                             primaryTogglesNestedList={true}
-                            nestedItems={server.recipes.map((recipe, index) => 
+                            nestedItems={[server.recipes.map((recipe, index) => 
                                 <ListItem
                                     key={index}
                                     primaryText={recipe.name}
                                     rightIcon={<CloudDownloadIcon />}
                                 />
-                            )} />
+                            ),
+                                <ListItem
+                                    key={'delete-server-' + server.url}
+                                    primaryText="Disconnect server"
+                                    onTouchTap={() => this.removeServer(server.url)}
+                                />
+                            ]} />
                     )
                 :(
                     <ListItem key="NONE" primaryText="You have not added any servers" />
@@ -65,6 +71,9 @@ function mapDispatchToProps(dispatch) {
     return {
         addServer: (server) => {
             dispatch(uiAddServer(server))
+        },
+        removeServer: (server) => {
+            dispatch(uiRemoveServer(server))
         },
         loadRecipe: (server, recipe, load) => {
             dispatch(uiLoadRecipe({server, recipe, load}))

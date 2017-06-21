@@ -2,11 +2,10 @@ import browser from 'webextension-polyfill';
 import { analyze, classify } from 'bayes-classifier'
 import {
     DBNAME,
+    APP_VERSION,
+    UPDATE_APP_VERSION,
     APPLY_RESTORED_STATE,
     UPDATE_CORPUS,
-    ADD_CLASSIFICATION,
-    ADD_CORPUS_CLASSIFICATION,
-    CHANGE_CLASSIFICATION,
     ADD_SERVER,
     UI_ADD_SERVER,
     ACTIVE_URL,
@@ -22,10 +21,19 @@ import {
     LOAD_RECIPE,
     APPLY_CORPUS,
     APPLY_CORPORA,
-    UI_SHOW_ADD_RECIPE
+    UI_SHOW_ADD_RECIPE,
+
+    UI_REMOVE_CORPUS,
+    REMOVE_CORPUS,
+    UI_ADD_CORPUS,
+    ADD_CORPUS,
+    UI_ADD_CLASSIFICATION,
+    ADD_CLASSIFICATION,
+    ADD_CORPUS_CLASSIFICATION,
+    CHANGE_CLASSIFICATION,
 } from './constants'
 
-export function addClassification(form) {
+export function reclassify(form) {
     return function (dispatch) {
         fetchActiveTabContent().then(
             content => {
@@ -37,25 +45,74 @@ export function addClassification(form) {
     }
 }
 
-export const uiShowAddRecipe = (visible) => {
+export function uiShowAddRecipe(visible) {
     return {
         type: UI_SHOW_ADD_RECIPE,
         visible
     }
 }
 
-export const addCorpusClassification = (classification, url) => {
+export function addCorpusClassificationUrl({corpus, classification, url}) {
     return {
         type: ADD_CORPUS_CLASSIFICATION,
+        corpus,
         classification,
         url
     }
 }
 
-export const uiAddClassification = (classification) => {
+export function uiAddClassification({corpus, classification}) {
     return {
         type: ADD_CLASSIFICATION,
-        classification: classification
+        corpus,
+        classification
+    }
+}
+
+export function addClassification({corpus, classification}) {
+    return function(dispatch) {
+        dispatch({
+            type: ADD_CLASSIFICATION,
+            corpus,
+            classification
+        })
+        return dispatch(persistStateToLocalStorage())
+    }
+}
+
+export function uiAddCorpus({corpus, classifications}) {
+    return {
+        type: UI_ADD_CORPUS,
+        corpus,
+        classifications
+    }
+}
+
+export function addCorpus({corpus, classifications}) {
+    return function(dispatch) {
+        dispatch({
+            type: ADD_CORPUS,
+            corpus,
+            classifications
+        }) 
+        return dispatch(persistStateToLocalStorage())
+    }
+}
+
+export function uiRemoveCorpus({corpus}) {
+    return {
+        type: UI_REMOVE_CORPUS,
+        corpus
+    }
+}
+
+export function removeCorpus({corpus}) {
+    return function(dispatch) {
+        dispatch({
+            type: REMOVE_CORPUS,
+            corpus
+        })
+        return dispatch(persistStateToLocalStorage())
     }
 }
 
@@ -150,14 +207,14 @@ export function requestActiveUrl() {
     }
 }
 
-export const applyCorpus = (corpus) => {
+export function applyCorpus(corpus) {
     return {
         type: APPLY_CORPUS,
         corpus
     }
 }
 
-export const readCorpus = (corpusUrl) => {
+export function readCorpus(corpusUrl) {
     return (dispatch) => fetch(corpusUrl).then(
         result => result.json(),
         error => dispatch(reportError('Could not read corpus'))
@@ -167,7 +224,7 @@ export const readCorpus = (corpusUrl) => {
     )
 }
 
-export const changeMainTab = (index) => {
+export function changeMainTab(index) {
     return {
         type: MAIN_TAB,
         index
@@ -182,7 +239,7 @@ export function analyzeCurrentTab() {
 }
 
 // Recipe retrieval
-export const readRecipes = (server) => {
+export function readRecipes(server) {
     return fetch('http://' + server + '/wp-json/filterbubbler/v1/recipe').then(
         result => result.json(),
         error => dispatch(reportError('Could not fetch recipes'))
@@ -190,7 +247,7 @@ export const readRecipes = (server) => {
 }
 
 // Set whether a given recipe should be loaded locally
-export const uiLoadRecipe = ({server, recipe, load}) => {
+export function uiLoadRecipe({server, recipe, load}) {
     return {
         type: UI_LOAD_RECIPE,
         server,
@@ -199,7 +256,7 @@ export const uiLoadRecipe = ({server, recipe, load}) => {
     }
 }
 
-export const loadRecipe = ({server, recipe, load}) => {
+export function loadRecipe({server, recipe, load}) {
    return dispatch => {
         dispatch({
             type: LOAD_RECIPE,
@@ -217,14 +274,14 @@ export const loadRecipe = ({server, recipe, load}) => {
     }
 }
 
-export const uiAddServer = (server) => {
+export function uiAddServer(server) {
     return {
         type: UI_ADD_SERVER,
         server
     }
 }
 
-export const addServer = (server) => {
+export function addServer(server) {
     return dispatch => {
         dispatch({
             type: ADD_SERVER,
@@ -234,12 +291,26 @@ export const addServer = (server) => {
             recipes => dispatch(updateRecipes(server, recipes)),
             error => dispatch(reportError('Could not recipes'))
         ).then(
-            () => dispatch(updateCorporaFromRecipes()),
-            error => dispatch(reportError('Could not update corpora'))
-        ).then(
             () => dispatch(persistStateToLocalStorage()),
             error => dispatch(reportError('Could not persist to local storage'))
         )
+    }
+}
+
+export function uiRemoveServer(server) {
+    return {
+        type: UI_REMOVE_SERVER,
+        server
+    }
+}
+
+export function removeServer(server) {
+    return dispatch => {
+        dispatch({
+            type: REMOVE_SERVER,
+            server
+        })
+        return dispatch(persistStateToLocalStorage())
     }
 }
 
@@ -278,23 +349,36 @@ export function updateRecipes(server, recipes) {
     }
 }
 
+export function updateAppVersion(version) {
+    return {
+        type: UPDATE_APP_VERSION,
+        version
+    }
+}
+
 // Restore the application state from local storage
-export const restoreStateFromLocalStorage = () => {
+export function restoreStateFromLocalStorage() {
     return (dispatch, getState) => {
         return browser.storage.local.get(DBNAME).then(db => {
             console.log('Existing DB', db)
-            if (db[DBNAME]) {
-                console.log('Loaded classification DB from localstorage:', db)
-                return dispatch(applyRestoredState(db[DBNAME]))
+            if (db[DBNAME]['version'] != APP_VERSION) {
+               console.log('DB version mismatch') 
+               dispatch(updateAppVersion(APP_VERSION))
+               return dispatch(persistStateToLocalStorage())
             } else {
-                console.log('No pre-existing DB')
-                return dispatch(reportError('Could not fetch recipes'))
+                if ("undefined" !== typeof db[DBNAME]) {
+                    console.log('Loaded classification DB from localstorage:', db)
+                    return dispatch(applyRestoredState(db[DBNAME]))
+                } else {
+                    console.log('No pre-existing DB')
+                    return dispatch(reportError('Could not fetch recipes'))
+                }
             }
         })
     }
 }
 
-export const applyRestoredState = (restoredState) => {
+export function applyRestoredState(restoredState) {
     return {
         type: APPLY_RESTORED_STATE,
         state: restoredState
@@ -302,13 +386,13 @@ export const applyRestoredState = (restoredState) => {
 }
 
 // Persist the application state to local storage
-export const persistStateToLocalStorage = () => {
+export function persistStateToLocalStorage() {
     return (dispatch, getState) => {
         var db = {}
         db[DBNAME] = getState()
         return browser.storage.local.set(db).then(
             result => {
-                console.log('Stored successfully', result)
+                console.log('Stored successfully', db)
             }, 
             error => {
                 dispatch(reportError('Error storing DB', error))
@@ -316,4 +400,3 @@ export const persistStateToLocalStorage = () => {
         )
     }
 }
-

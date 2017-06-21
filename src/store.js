@@ -5,16 +5,17 @@ import {actions as formActions} from 'redux-form'
 import {actionTypes as formActionTypes} from 'redux-form'
 import thunk from 'redux-thunk'
 import {
-    ADD_CORPUS_CLASSIFICATION,
     MAIN_TAB,
-    ADD_CLASSIFICATION,
     CHANGE_CLASSIFICATION,
     UI_REQUEST_ACTIVE_URL,
     UI_SHOW_ADD_RECIPE,
     UI_ADD_SERVER,
     ANALYZE_CONTENT,
     UI_LOAD_RECIPE,
-    LOAD_RECIPE
+    LOAD_RECIPE,
+    UI_ADD_CORPUS,
+    UI_ADD_CLASSIFICATION,
+    UI_ADD_CORPUS_CLASSIFICATION,
 } from './constants'
 import {
     addCorpusClassification,
@@ -26,6 +27,7 @@ import {
     uiShowAddRecipe,
     restoreStateFromLocalStorage,
     loadRecipe,
+    addCorpus,
 } from './actions'
 
 const actions = {}
@@ -40,14 +42,19 @@ actions[formActionTypes.CHANGE] = (data) => { return { type: formActionTypes.CHA
 actions[formActionTypes.BLUR] = (data) => { return { type: formActionTypes.BLUR, ...data }; }
 actions[formActionTypes.FOCUS] = (data) => { return { type: formActionTypes.FOCUS, ...data }; }
 actions[formActionTypes.UPDATE_SYNC_ERRORS] = (data) => { return { type: formActionTypes.UPDATE_SYNC_ERRORS, ...data }; }
+
+// Misc app events
 actions[CHANGE_CLASSIFICATION] = (data) => { return { type: CHANGE_CLASSIFICATION, ...data }; }
 actions[UI_REQUEST_ACTIVE_URL] = (data) => { return requestActiveUrl(); }
-actions[ADD_CLASSIFICATION] = (data) => { return addClassification(data.classification); }
 actions[MAIN_TAB] = (data) => { return changeMainTab(data.index); }
-actions[ADD_CORPUS_CLASSIFICATION] = (data) => { return addCorpusClassification(data.classification, data.url) }
 actions[UI_SHOW_ADD_RECIPE] = (data) => { return uiShowAddRecipe(data.visible) }
 actions[UI_ADD_SERVER] = (data) => { return addServer(data.server) }
 actions[UI_LOAD_RECIPE] = loadRecipe
+
+// Corpora
+actions[UI_ADD_CORPUS] = addCorpus
+actions[UI_ADD_CLASSIFICATION] = addClassification
+actions[UI_ADD_CORPUS_CLASSIFICATION] = addCorpusClassification
 
 const store = createStore(
     reducers,

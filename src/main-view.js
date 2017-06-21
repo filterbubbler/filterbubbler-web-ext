@@ -38,7 +38,7 @@ class MainView extends Component {
             <div>
             <SwipeableViews index={mainTab}>
                 <div>
-                  <ClassificationPanel url={url} currentClassification={currentClassification} onSubmit={uiAddClassification} />
+                  <ClassificationPanel url={url} currentClassification={currentClassification} />
                 </div>
                 <div>
                     <CorpuraPanel />

@@ -5,6 +5,7 @@ import DBNAME from 'constants'
 
 var classifier = bayes();
 
+/*
 browser.storage.local.get(DBNAME).then(function(existingdb) {
     console.log('Existing DB', existingdb);
     if (existingdb[DBNAME]) {
@@ -14,6 +15,7 @@ browser.storage.local.get(DBNAME).then(function(existingdb) {
         console.log('No pre-existing DB');
     }
 });
+*/
 
 const analyze = (text) => {
     return classifier.categorize(text);
@@ -24,11 +26,13 @@ const classify = (text, tag) => {
     classifier.learn(text, tag);
     var db = {};
     db[DBNAME] = classifier.toJson();
+    /*
     browser.storage.local.set(db).then(function(result) {
         console.log('Stored successfully');
     }, function(error) {
         console.log('Error storing DB');
     });
+    */
 }
 export { classify }
 

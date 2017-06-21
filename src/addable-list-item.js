@@ -12,6 +12,7 @@ class AddableListItem extends React.Component {
             addText: props.addText,
             hintText: props.hintText,
             callback: props.callback,
+            nestedLevel: props.nestedLevel,
             value: '',
             error: ''
         }
@@ -40,13 +41,15 @@ class AddableListItem extends React.Component {
     }
 
     render() {
-        const { addText, hintText, value, adding } = this.state
+        const { nestedLevel, addText, hintText, value, adding } = this.state
 
         return adding ?
             <ListItem
+                nestedLevel={nestedLevel}
                 leftIcon={<AddIcon />}
                 key="add"
                 disabled={true}
+                style={{height: 16}}
                 primaryText={
                     <TextField
                         value={value}
@@ -60,6 +63,7 @@ class AddableListItem extends React.Component {
             />
             :
             <ListItem
+                nestedLevel={nestedLevel}
                 leftIcon={<AddIcon />}
                 key="prepare-add"
                 primaryText={addText}

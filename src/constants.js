@@ -1,6 +1,4 @@
 // Action tokens
-export const ADD_CORPUS = 'ADD_CORPUS'
-export const ADD_CLASSIFICATION = 'ADD_CLASSIFICATION'
 export const CHANGE_CLASSIFICATION = 'CHANGE_CLASSIFICATION'
 export const ADD_SERVER = 'ADD_SERVER'
 export const UI_ADD_SERVER = 'UI_ADD_SERVER'
@@ -17,6 +15,14 @@ export const UI_SHOW_ADD_RECIPE = 'UI_SHOW_ADD_RECIPE'
 export const APPLY_RESTORED_STATE = 'APPLY_RESTORED_STATE'
 export const UI_LOAD_RECIPE = 'UI_LOAD_RECIPE'
 export const LOAD_RECIPE = 'LOAD_RECIPE'
+export const UPDATE_APP_VERSION = 'UPDATE_APP_VERSION'
+
+export const ADD_CORPUS = 'ADD_CORPUS'
+export const UI_ADD_CORPUS = 'UI_ADD_CORPUS'
+export const REMOVE_CORPUS = 'REMOVE_CORPUS'
+export const UI_REMOVE_CORPUS = 'UI_REMOVE_CORPUS'
+export const ADD_CLASSIFICATION = 'ADD_CLASSIFICATION'
+export const UI_ADD_CLASSIFICATION = 'UI_ADD_CLASSIFICATION'
 export const APPLY_CORPUS = 'APPLY_CORPUS'
 export const APPLY_CORPORA = 'APPLY_CORPORA'
 
@@ -25,4 +31,4 @@ export const COULD_NOT_FETCH_TAB_TEXT = 'Could not fetch text from the active ta
 
 // Misc
 export const DBNAME = 'FilterBubblerDB'
-
+export const APP_VERSION = '0.0.1'
