@@ -19,6 +19,8 @@ import AddableListItem from 'addable-list-item'
 import {
     uiAddCorpus,
     uiAddClassification,
+    uiAddClassificationUrl,
+    uiRemoveClassificationUrl,
     uiRemoveCorpus,
 } from 'actions'
 
@@ -35,31 +37,14 @@ class CorpuraPanel extends React.Component {
             removeCorpus,
             addCorpus,
             addClassification,
+            addClassificationUrl,
+            removeClassificationUrl,
             url,
             corpora,
             pristine,
             reset,
             submitting,
         } = this.props
-
-        const iconButtonElement = (
-          <IconButton
-            touch={true}
-            tooltip="more"
-            tooltipPosition="bottom-left"
-          >
-            <MoreVertIcon color={grey400} />
-          </IconButton>
-        );
-
-        const rightIconMenu = (
-            <IconMenu iconButtonElement={iconButtonElement}>
-                <MenuItem>Add classification</MenuItem>
-                <MenuItem>Remove classification</MenuItem>
-            </IconMenu>
-        )
-
-        let newClassification = ''
 
         return (
             <List className="corporaList">
@@ -74,11 +59,20 @@ class CorpuraPanel extends React.Component {
                       nestedItems={[
                         Object.keys(corpora[corpus].classifications).map((classification, index) => 
                             <ListItem
-                                leftCheckbox={<Checkbox checked={false} />}
+                                leftCheckbox={<Checkbox 
+                                    checked={corpora[corpus].classifications[classification].includes(url)} 
+                                    onCheck={
+                                        () => { 
+                                            corpora[corpus].classifications[classification].includes(url) ?
+                                            removeClassificationUrl(corpus, classification, url) :
+                                            addClassificationUrl(corpus, classification, url) 
+                                        }
+                                    }
+                                    />}
                                 key={index}
                                 primaryText={classification}
                             />),
-                        <AddableListItem addText="Add classification" hintText="Classification label" callback={(name) => this.addClassification(corpus, name)} />,
+                        <AddableListItem addText="Add classification" hintText="Classification label" callback={(name) => addClassification(corpus, name)} />,
                         <ListItem
                             leftIcon={<TrashIcon />}
                             key={'remove-' + corpus}
@@ -102,7 +96,13 @@ function mapDispatchToProps(dispatch) {
             dispatch(uiRemoveCorpus({corpus}))
         },
         addClassification: (corpus, classification) => {
-            dispatch(uiAddClassiciation(corpus, classification))
+            dispatch(uiAddClassification({corpus, classification}))
+        },
+        addClassificationUrl: (corpus, classification, url) => {
+            dispatch(uiAddClassificationUrl({corpus, classification, url}))
+        },
+        removeClassificationUrl: (corpus, classification, url) => {
+            dispatch(uiRemoveClassificationUrl({corpus, classification, url}))
         },
     }
 }

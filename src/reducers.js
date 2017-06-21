@@ -15,6 +15,8 @@ import {
     CHANGE_CLASSIFICATION,
     ADD_CORPUS,
     ADD_CLASSIFICATION,
+    ADD_CLASSIFICATION_URL,
+    REMOVE_CLASSIFICATION_URL,
     ADD_CORPUS_CLASSIFICATION,
     ACTIVE_URL,
     LOAD_RECIPE,
@@ -62,6 +64,15 @@ const corpora = (state = initialState.corpora, action) => {
             return action.corpora
         case ADD_CLASSIFICATION:
             newState[action.corpus].classifications[action.classification] = []
+            return newState
+        case ADD_CLASSIFICATION_URL:
+            newState[action.corpus].classifications[action.classification].push(action.url)
+            return newState
+        case REMOVE_CLASSIFICATION_URL:
+            let cArray = newState[action.corpus].classifications[action.classification]
+            if (cArray.includes(action.url)) {
+                cArray.splice(cArray.indexOf(action.url),1)
+            }
             return newState
         case APPLY_RESTORED_STATE:
             return action.state.corpora ? action.state.corpora : state

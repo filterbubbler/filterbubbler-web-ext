@@ -29,6 +29,10 @@ import {
     ADD_CORPUS,
     UI_ADD_CLASSIFICATION,
     ADD_CLASSIFICATION,
+    UI_ADD_CLASSIFICATION_URL,
+    ADD_CLASSIFICATION_URL,
+    UI_REMOVE_CLASSIFICATION_URL,
+    REMOVE_CLASSIFICATION_URL,
     ADD_CORPUS_CLASSIFICATION,
     CHANGE_CLASSIFICATION,
 } from './constants'
@@ -52,18 +56,51 @@ export function uiShowAddRecipe(visible) {
     }
 }
 
-export function addCorpusClassificationUrl({corpus, classification, url}) {
+export function uiAddClassificationUrl({corpus, classification, url}) {
     return {
-        type: ADD_CORPUS_CLASSIFICATION,
+        type: UI_ADD_CLASSIFICATION_URL,
         corpus,
         classification,
         url
     }
 }
 
+export function addClassificationUrl({corpus, classification, url}) {
+    return function(dispatch) {
+        dispatch({
+            type: ADD_CLASSIFICATION_URL,
+            corpus,
+            classification,
+            url
+        })
+        return dispatch(persistStateToLocalStorage())
+    }
+}
+
+export function uiRemoveClassificationUrl({corpus, classification, url}) {
+    return {
+        type: UI_REMOVE_CLASSIFICATION_URL,
+        corpus,
+        classification,
+        url
+    }
+}
+
+export function removeClassificationUrl({corpus, classification, url}) {
+    return function(dispatch) {
+        dispatch({
+            type: REMOVE_CLASSIFICATION_URL,
+            corpus,
+            classification,
+            url
+        })
+        return dispatch(persistStateToLocalStorage())
+    }
+}
+
 export function uiAddClassification({corpus, classification}) {
     return {
-        type: ADD_CLASSIFICATION,
+        type: UI_ADD_CLASSIFICATION,
         corpus,
         classification
     }

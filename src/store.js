@@ -15,6 +15,8 @@ import {
     LOAD_RECIPE,
     UI_ADD_CORPUS,
     UI_ADD_CLASSIFICATION,
+    UI_ADD_CLASSIFICATION_URL,
+    UI_REMOVE_CLASSIFICATION_URL,
     UI_ADD_CORPUS_CLASSIFICATION,
 } from './constants'
 import {
@@ -22,6 +24,8 @@ import {
     changeMainTab,
     addServer,
     addClassification,
+    addClassificationUrl,
+    removeClassificationUrl,
     requestActiveUrl,
     readRecipes,
     uiShowAddRecipe,
@@ -55,6 +59,8 @@ actions[UI_LOAD_RECIPE] = loadRecipe
 actions[UI_ADD_CORPUS] = addCorpus
 actions[UI_ADD_CLASSIFICATION] = addClassification
 actions[UI_ADD_CORPUS_CLASSIFICATION] = addCorpusClassification
+actions[UI_ADD_CLASSIFICATION_URL] = addClassificationUrl
+actions[UI_REMOVE_CLASSIFICATION_URL] = removeClassificationUrl
 
 const store = createStore(
     reducers,
