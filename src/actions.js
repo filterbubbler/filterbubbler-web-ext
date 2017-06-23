@@ -21,6 +21,8 @@ import {
     UI_ADD_RECIPE,
     REMOVE_RECIPE,
     UI_REMOVE_RECIPE,
+    UPDATE_RECIPE,
+    UI_UPDATE_RECIPE,
     UPDATE_RECIPES,
     UI_LOAD_RECIPE,
     LOAD_RECIPE,
@@ -90,6 +92,31 @@ export function removeRecipe({recipe}) {
         dispatch({
             type: REMOVE_RECIPE,
             recipe
+        })
+        return dispatch(persistStateToLocalStorage())
+    }
+}
+
+export function uiUpdateRecipe({recipe, source, sink, classifier, corpus}) {
+    return {
+        type: UI_UPDATE_RECIPE,
+        recipe,
+        source,
+        sink,
+        classifier,
+        corpus,
+    }
+}
+
+export function updateRecipe({recipe, source, sink, classifier, corpus}) {
+    return function (dispatch) {
+        dispatch({
+            type: UPDATE_RECIPE,
+            recipe,
+            source,
+            sink,
+            classifier,
+            corpus,
         })
         return dispatch(persistStateToLocalStorage())
     }

@@ -22,6 +22,7 @@ import {
     LOAD_RECIPE,
     ADD_RECIPE,
     REMOVE_RECIPE,
+    UPDATE_RECIPE,
     UI_LOAD_RECIPE,
     APPLY_RESTORED_STATE
 } from './constants';
@@ -132,6 +133,15 @@ const recipes = (state = initialState.recipes, action) => {
                 source: 'DEFAULT',
                 sink: 'DEFAULT',
                 classifier: 'BAYES',
+            }
+            return newState
+        case UPDATE_RECIPE:
+            newState[action.recipe] = {
+                recipe: action.recipe,
+                source: action.source,
+                sink: action.sink,
+                classifier: action.classifier,
+                corpus: action.corpus,
             }
             return newState
         case REMOVE_RECIPE:
