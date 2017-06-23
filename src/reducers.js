@@ -20,6 +20,8 @@ import {
     ADD_CORPUS_CLASSIFICATION,
     ACTIVE_URL,
     LOAD_RECIPE,
+    ADD_RECIPE,
+    REMOVE_RECIPE,
     UI_LOAD_RECIPE,
     APPLY_RESTORED_STATE
 } from './constants';
@@ -31,11 +33,20 @@ const initialState = {
     version: '_NA_',
     classifierStatus: '',
     currentClassification: '',
+    classifiers: {
+        'BAYES': { name: 'Naive Bayesian' }
+    },
+    sources: {
+        'DEFAULT': { name: 'Current page' }
+    },
+    sinks: {
+        'DEFAULT': { name: 'Extension drop-down' }
+    },
     servers: [],
     currentServer: '',
     classifications: [],
     corpora: {},
-    recipes: [],
+    recipes: {},
     addRecipeDialogOpen: false,
     repositories: [],
     ui: {
@@ -113,20 +124,18 @@ function ui(state = initialState.ui, action) {
 }
 
 const recipes = (state = initialState.recipes, action) => {
+    let newState = {...state}
     switch (action.type) {
-        case LOAD_RECIPE:
-            let newState = [...state]
-            let existing = newState.find(recipe => recipe.name == action.recipe.name)
-            console.log('Recipe state', newState, existing)
-            if (action.load && !existing) {
-                console.log('Add ', action.recipe.name)
-                newState.push(action.recipe)
+        case ADD_RECIPE:
+            newState[action.recipe] = {
+                recipe: action.recipe,
+                source: 'DEFAULT',
+                sink: 'DEFAULT',
+                classifier: 'BAYES',
             }
-            if (!action.load && existing) {
-                console.log('Remove ' + existing.name + ' at ' + newState.indexOf(existing))
-                newState.splice(newState.indexOf(existing), 1)
-            }
-            console.log('New recipe state', newState)
+            return newState
+        case REMOVE_RECIPE:
+            delete newState[action.recipe]
             return newState
         case APPLY_RESTORED_STATE:
             return action.state.recipes ? action.state.recipes : state
@@ -202,12 +211,27 @@ const version = (state = initialState.version, action) => {
     }
 }
 
+const sinks = (state = initialState.sinks, action) => {
+    return state
+}
+
+const sources = (state = initialState.sources, action) => {
+    return state
+}
+
+const classifiers = (state = initialState.classifiers, action) => {
+    return state
+}
+
 export default combineReducers({
     url: urls,
     servers: servers,
     recipes: recipes,
     corpora: corpora,
     version: version,
+    sinks: sinks,
+    sources: sources,
+    classifiers: classifiers,
     addRecipeDialogOpen: addRecipeDialogOpen,
     currentServer: currentServer,
     currentClassification: classify,

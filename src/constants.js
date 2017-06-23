@@ -1,7 +1,9 @@
-// Action tokens
+// General app actions
+export const DBNAME = 'FilterBubblerDB'
+export const UPDATE_APP_VERSION = 'UPDATE_APP_VERSION'
+export const APP_VERSION = '0.0.1'
+
 export const CHANGE_CLASSIFICATION = 'CHANGE_CLASSIFICATION'
-export const ADD_SERVER = 'ADD_SERVER'
-export const UI_ADD_SERVER = 'UI_ADD_SERVER'
 export const ANALYZE_CONTENT = 'ANALYZE_CONTENT'
 export const ACTIVE_URL = 'ACTIVE_URL'
 export const UI_REQUEST_ACTIVE_URL = 'UI_REQUEST_ACTIVE_URL'
@@ -9,14 +11,24 @@ export const REQUEST_ACTIVE_TAB_TEXT = 'REQUEST_ACTIVE_TAB_TEXT'
 export const REPORT_ERROR = 'REPORT_ERROR'
 export const SET_CONTENT = 'SET_CONTENT'
 export const MAIN_TAB = 'MAIN_TAB'
+
+// Servers
+export const ADD_SERVER = 'ADD_SERVER'
+export const UI_ADD_SERVER = 'UI_ADD_SERVER'
+
+// Recipes
+export const ADD_RECIPE = 'ADD_RECIPE'
+export const UI_ADD_RECIPE = 'UI_ADD_RECIPE'
+export const REMOVE_RECIPE = 'REMOVE_RECIPE'
+export const UI_REMOVE_RECIPE = 'UI_REMOVE_RECIPE'
+export const LOAD_RECIPE = 'LOAD_RECIPE'
 export const UPDATE_RECIPES = 'UPDATE_RECIPES'
 export const ADD_CORPUS_CLASSIFICATION = 'ADD_CORPUS_CLASSIFICATION'
 export const UI_SHOW_ADD_RECIPE = 'UI_SHOW_ADD_RECIPE'
 export const APPLY_RESTORED_STATE = 'APPLY_RESTORED_STATE'
 export const UI_LOAD_RECIPE = 'UI_LOAD_RECIPE'
-export const LOAD_RECIPE = 'LOAD_RECIPE'
-export const UPDATE_APP_VERSION = 'UPDATE_APP_VERSION'
 
+// Corpora and classifications
 export const ADD_CORPUS = 'ADD_CORPUS'
 export const UI_ADD_CORPUS = 'UI_ADD_CORPUS'
 export const REMOVE_CORPUS = 'REMOVE_CORPUS'
@@ -32,7 +44,3 @@ export const APPLY_CORPORA = 'APPLY_CORPORA'
 
 // UI Text
 export const COULD_NOT_FETCH_TAB_TEXT = 'Could not fetch text from the active tab'
-
-// Misc
-export const DBNAME = 'FilterBubblerDB'
-export const APP_VERSION = '0.0.1'

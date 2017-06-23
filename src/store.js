@@ -13,6 +13,8 @@ import {
     ANALYZE_CONTENT,
     UI_LOAD_RECIPE,
     LOAD_RECIPE,
+    UI_ADD_RECIPE,
+    UI_REMOVE_RECIPE,
     UI_ADD_CORPUS,
     UI_ADD_CLASSIFICATION,
     UI_ADD_CLASSIFICATION_URL,
@@ -27,6 +29,8 @@ import {
     addClassificationUrl,
     removeClassificationUrl,
     requestActiveUrl,
+    addRecipe,
+    removeRecipe,
     readRecipes,
     uiShowAddRecipe,
     restoreStateFromLocalStorage,
@@ -61,6 +65,10 @@ actions[UI_ADD_CLASSIFICATION] = addClassification
 actions[UI_ADD_CORPUS_CLASSIFICATION] = addCorpusClassification
 actions[UI_ADD_CLASSIFICATION_URL] = addClassificationUrl
 actions[UI_REMOVE_CLASSIFICATION_URL] = removeClassificationUrl
+
+// Recipes
+actions[UI_ADD_RECIPE] = addRecipe
+actions[UI_REMOVE_RECIPE] = removeRecipe
 
 const store = createStore(
     reducers,

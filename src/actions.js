@@ -16,13 +16,18 @@ import {
     REQUEST_ACTIVE_TAB_TEXT,
     COULD_NOT_FETCH_TAB_TEXT,
     MAIN_TAB,
+
+    ADD_RECIPE,
+    UI_ADD_RECIPE,
+    REMOVE_RECIPE,
+    UI_REMOVE_RECIPE,
     UPDATE_RECIPES,
     UI_LOAD_RECIPE,
     LOAD_RECIPE,
-    APPLY_CORPUS,
-    APPLY_CORPORA,
     UI_SHOW_ADD_RECIPE,
 
+    APPLY_CORPUS,
+    APPLY_CORPORA,
     UI_REMOVE_CORPUS,
     REMOVE_CORPUS,
     UI_ADD_CORPUS,
@@ -53,6 +58,40 @@ export function uiShowAddRecipe(visible) {
     return {
         type: UI_SHOW_ADD_RECIPE,
         visible
+    }
+}
+
+export function uiAddRecipe({recipe}) {
+    return {
+        type: UI_ADD_RECIPE,
+        recipe
+    }
+}
+
+export function addRecipe({recipe}) {
+    return function (dispatch) {
+        dispatch({
+            type: ADD_RECIPE,
+            recipe
+        })
+        return dispatch(persistStateToLocalStorage())
+    }
+}
+
+export function uiRemoveRecipe({recipe}) {
+    return {
+        type: UI_REMOVE_RECIPE,
+        recipe
+    }
+}
+
+export function removeRecipe({recipe}) {
+    return function (dispatch) {
+        dispatch({
+            type: REMOVE_RECIPE,
+            recipe
+        })
+        return dispatch(persistStateToLocalStorage())
     }
 }
 
@@ -397,8 +436,7 @@ export function updateAppVersion(version) {
 export function restoreStateFromLocalStorage() {
     return (dispatch, getState) => {
         return browser.storage.local.get(DBNAME).then(db => {
-            console.log('Existing DB', db)
-            if (db[DBNAME]['version'] != APP_VERSION) {
+            if (db[DBNAME] && db[DBNAME].version && db[DBNAME].version != APP_VERSION) {
                console.log('DB version mismatch') 
                dispatch(updateAppVersion(APP_VERSION))
                return dispatch(persistStateToLocalStorage())
@@ -408,7 +446,8 @@ export function restoreStateFromLocalStorage() {
                     return dispatch(applyRestoredState(db[DBNAME]))
                 } else {
                     console.log('No pre-existing DB')
-                    return dispatch(reportError('Could not fetch recipes'))
+                    dispatch(updateAppVersion(APP_VERSION))
+                    return dispatch(persistStateToLocalStorage())
                 }
             }
         })

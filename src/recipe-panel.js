@@ -15,10 +15,11 @@ import RaisedButton from 'material-ui/RaisedButton'
 import FlatButton from 'material-ui/FlatButton'
 import Dialog from 'material-ui/Dialog'
 import AutoComplete from 'material-ui/AutoComplete'
-import DropDownMenu from 'material-ui/DropDownMenu'
+import SelectField from 'material-ui/SelectField'
 import * as actions from 'actions'
-import Paper from 'material-ui/Paper';
+import Paper from 'material-ui/Paper'
 import AddableListItem from 'addable-list-item'
+import {uiAddRecipe} from 'actions'
 
 class RecipePanel extends React.Component {
     constructor(props) {
@@ -28,98 +29,80 @@ class RecipePanel extends React.Component {
         }
     }
 
-    addRecipe(recipeName) {
-        console.log('Add recipe ' + recipeName)
-    }
-
     render() {
-        const {addServer, uiShowAddRecipe, panelOpen, recipes, servers, currentServer} = this.props
-
-        const recipeDialogStyle = {
-            width: '100%',
-            maxWidth: 'none',
-            height: '80vh',
-            transform: 'translate(0, 10px)'
-        };
-
-        const iconButtonElement = (
-          <IconButton
-            touch={true}
-            tooltip="more"
-            tooltipPosition="bottom-left"
-          >
-            <MoreVertIcon color={grey400} />
-          </IconButton>
-        );
-
-        const rightIconMenu = (
-            <IconMenu iconButtonElement={iconButtonElement}>
-                <MenuItem>Add classification</MenuItem>
-                <MenuItem>Remove classification</MenuItem>
-            </IconMenu>
-        )
-
-        const dialogActions = [
-          <FlatButton
-            label="Cancel"
-            onTouchTap={() => uiShowAddRecipe(false)}
-          />,
-          <FlatButton
-            label="Submit"
-            primary={true}
-            onTouchTap={() => uiShowAddRecipe(false)}
-          />,
-        ]
-
-        const test = () => {
-            console.log('click')
-        }
-
-        let newServer = currentServer
+        const {
+            addRecipe,
+            recipes,
+            corpora,
+            classifiers,
+            sources,
+            sinks,
+        } = this.props
 
         return (
             <div>
                 <List>
                     <Subheader>Recipes</Subheader>
-                    {recipes.map(recipe => 
-                        <ListItem key={recipe.name} primaryText={recipe.name} nestedItems={[
-                            <Paper>
-                                <h2>Test</h2>
-                            </Paper>,
-                            <ListItem
-                                key={recipe.name + '-classifier'}
-                                primaryText="Classifier: Bayes"
-                            />,
-                            <ListItem
-                                key={recipe.name + '-source'}
-                                primaryText="Source: Default"
-                            />,
-                            <ListItem
-                                key={recipe.name + '-sink'}
-                                primaryText="Sink: Default"
-                            />,
-                            <ListItem
-                                key={recipe.name + '-corpora'}
-                                primaryText="Corpora: Clowns"
-                            />
+                    {Object.keys(recipes).map(recipe => 
+                        <ListItem key={recipe} primaryText={recipe} nestedItems={[
+                            <div style={{'padding-left': 30, 'margin-top': -20}}>
+                                <SelectField 
+                                    floatingLabelText="Classifier"
+                                    value={recipes[recipe].classifier}
+                                    onChange={() => { console.log('Change classifier')}}>
+                                    {Object.keys(classifiers).map(cname =>  
+                                        <MenuItem value={cname} primaryText={classifiers[cname].name} />
+                                    )}
+                                </SelectField>
+                                <SelectField 
+                                    floatingLabelText="Source"
+                                    value={recipes[recipe].source}
+                                    onChange={() => {console.log('Change source')}}>
+                                    {Object.keys(sources).map(sname =>  
+                                        <MenuItem value={sname} primaryText={sources[sname].name} />
+                                    )}
+                                </SelectField>
+                                <SelectField 
+                                    floatingLabelText="Sink"
+                                    value={recipes[recipe].sink}
+                                    onChange={() => { console.log('Change sink')}}>
+                                    {Object.keys(sinks).map(sname =>  
+                                        <MenuItem value={sname} primaryText={sinks[sname].name} />
+                                    )}
+                                </SelectField>
+                                <SelectField 
+                                    floatingLabelText="Corpus"
+                                    value={recipes[recipe].corpus}
+                                    onChange={() => { console.log('Change corpus')}}>
+                                    {Object.keys(corpora).map(cname =>  
+                                        <MenuItem value={cname} primaryText={cname} />
+                                    )}
+                                </SelectField>
+                            </div>
                         ]} />
                     )}
-                    <AddableListItem addText="Add recipe" hintText="Recipe name" callback={(name) => this.addRecipe(name)} />
+                    <AddableListItem addText="Add recipe" hintText="Recipe name" callback={(recipe) => addRecipe({recipe})} />
                 </List>
             </div>
         )
     }
 }
 
+function mapDispatchToProps(dispatch) {
+    return {
+        addRecipe: ({recipe}) => { dispatch(uiAddRecipe({recipe})) }
+    }
+}
+
 RecipePanel = connect(
     state => ({
-        servers: state.servers,
-        currentServer: state.currentServer,
-        serverRecipes: state.serverRecipes,
         recipes: state.recipes,
-        panelOpen: state.addRecipeDialogOpen
+        sources: state.sources,
+        sinks: state.sinks,
+        corpora: state.corpora,
+        classifiers: state.classifiers,
     }),
-    actions
+    mapDispatchToProps
 )(RecipePanel)
 
 export default RecipePanel
