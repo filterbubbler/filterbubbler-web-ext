@@ -1,5 +1,7 @@
 import {combineReducers} from 'redux';
-import { reducer as bayesReducer } from 'bayes-classifier';
+import { reducer as bayesReducer } from 'bayes-classifier'
+import { reducer as formReducer } from 'redux-form'
+import Recipe from 'recipe'
 import { 
     UPDATE_RECIPES,
     UPDATE_APP_VERSION,
@@ -9,7 +11,7 @@ import {
     UI_REQUEST_ACTIVE_URL,
     UI_SHOW_ADD_RECIPE,
     REQUEST_ACTIVE_TAB_TEXT,
-    SET_CONTENT,
+    UPDATE_CONTENT,
     APPLY_CORPUS,
     APPLY_CORPORA,
     CHANGE_CLASSIFICATION,
@@ -26,14 +28,13 @@ import {
     UI_LOAD_RECIPE,
     APPLY_RESTORED_STATE
 } from './constants';
-import { reducer as formReducer } from 'redux-form';
 
 const initialState = {
     url: '',
     content: '',
-    version: '_NA_',
+    version: '',
     classifierStatus: '',
-    currentClassification: '',
+    classifications : {},
     classifiers: {
         'BAYES': { name: 'Naive Bayesian' }
     },
@@ -45,19 +46,22 @@ const initialState = {
     },
     servers: [],
     currentServer: '',
-    classifications: [],
     corpora: {},
     recipes: {},
-    addRecipeDialogOpen: false,
     repositories: [],
     ui: {
         classification: ''
     }
 }
 
-function classifications(state = initialState.classifications, action) {
-//    console.log('REDUCER', action)
-    return state;
+const classifications = (state = initialState.classifications, action) => {
+    let newState = {...state}
+    switch (action.type) {
+        case CHANGE_CLASSIFICATION:
+            newState[action.recipe] = action.classification
+            return newState
+    }
+    return newState
 }
 
 const corpora = (state = initialState.corpora, action) => {
@@ -94,7 +98,11 @@ const corpora = (state = initialState.corpora, action) => {
 }
 
 function content(state = initialState.content, action) {
+    let newState = Object.assign({}, state)
     switch (action.type) {
+        case UPDATE_CONTENT:
+            newState = action.content
+            return newState
         default:
             return state
     }
@@ -106,15 +114,6 @@ function urls(state = initialState.url, action) {
     switch (action.type) {
         case ACTIVE_URL:
             return (action.url != undefined) ? action.url : state
-        default:
-            return state
-    }
-}
-
-function classify(state = initialState.currentClassification, action) {
-    switch (action.type) {
-        case CHANGE_CLASSIFICATION:
-            return action.classification
         default:
             return state
     }
@@ -201,15 +200,6 @@ const currentServer = (state = initialState.currentServer, action) => {
     }
 }
 
-const addRecipeDialogOpen = (state = initialState.addRecipeDialogOpen, action) => {
-    switch (action.type) {
-        case UI_SHOW_ADD_RECIPE:
-            return action.visible
-        default:
-            return state
-    }
-}
-
 const version = (state = initialState.version, action) => {
     switch (action.type) {
         case UPDATE_APP_VERSION:
@@ -242,9 +232,7 @@ export default combineReducers({
     sinks: sinks,
     sources: sources,
     classifiers: classifiers,
-    addRecipeDialogOpen: addRecipeDialogOpen,
     currentServer: currentServer,
-    currentClassification: classify,
     classifications: classifications,
     content: content,
     form: formReducer,

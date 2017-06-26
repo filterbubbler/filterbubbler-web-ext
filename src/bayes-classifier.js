@@ -8,19 +8,25 @@ class BayesClassifier {
     }
 
     toJson() {
-        return classifier.toJson()
+        return this.classifier.toJson()
     }
 
     fromJson(json) {
-        classifier.fromJson(json)
+        this.classifier.fromJson(json)
     }
 
-    analyze(text) {
-        return classifier.categorize(text)
+    analyze(content) {
+        let classification = 'None'
+        if (content) {
+            console.log('ANALYZING', content)
+            classification = this.classifier.categorize(content.replace(/<[^>]+>/g, ''))
+            console.log('CLASSIFIED', classification)
+        }
+        return classification
     }
 
-    classify(text, tag) {
-        classifier.learn(text, tag)
+    classify(content, label) {
+        this.classifier.learn(content.replace(/<[^>]+>/g, ''), label)
     }
 }
 

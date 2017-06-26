@@ -1,5 +1,4 @@
-import browser from 'webextension-polyfill';
-import { analyze, classify } from 'bayes-classifier'
+import browser from 'webextension-polyfill'
 import {
     DBNAME,
     APP_VERSION,
@@ -12,7 +11,8 @@ import {
     REPORT_ERROR,
     UI_REQUEST_ACTIVE_URL,
     ANALYZE_CONTENT,
-    SET_CONTENT,
+    UPDATE_CONTENT,
+    UI_UPDATE_CONTENT,
     REQUEST_ACTIVE_TAB_TEXT,
     COULD_NOT_FETCH_TAB_TEXT,
     MAIN_TAB,
@@ -43,18 +43,6 @@ import {
     ADD_CORPUS_CLASSIFICATION,
     CHANGE_CLASSIFICATION,
 } from './constants'
-
-export function reclassify(form) {
-    return function (dispatch) {
-        fetchActiveTabContent().then(
-            content => {
-                console.log('CLASSIFY', form.newClassification, content)
-                classify(content, form.newClassification)
-                dispatch(requestActiveTabContent())
-            }
-        )
-    }
-}
 
 export function uiShowAddRecipe(visible) {
     return {
@@ -219,19 +207,11 @@ export function removeCorpus({corpus}) {
     }
 }
 
-export function changeClassification(classification) {
-    classification = classification ? classification : 'None'
-    console.log('Change classification', classification);
+export function changeClassification(recipe, classification) {
     return {
         type: CHANGE_CLASSIFICATION,
+        recipe: recipe,
         classification: classification
-    }
-}
-
-export function setContent(content) {
-    return {
-        type: SET_CONTENT,
-        content
     }
 }
 
@@ -260,6 +240,7 @@ function fetchActiveTabContent() {
             return response.text
         },
         error => {
+            console.log('Error fetching tab content', error)
             return 'error sending'
         }
     )
@@ -269,14 +250,12 @@ export function requestActiveTabContent() {
     return function (dispatch) {
         fetchActiveTabContent().then(
             content => {
-                let classification = analyze(content);
-                console.log('Classification', classification);
-                dispatch(changeClassification(classification));
+                dispatch(updateContent({content}))
                 return Promise.resolve()
             },
             error => {
                 console.log('Error occurred', error)
-                dispatch(reportError('Could not fetch tab content'));
+                dispatch(reportError('Could not fetch tab content'))
                 return Promise.resolve()
             }
         )
@@ -334,11 +313,18 @@ export function changeMainTab(index) {
     }
 }
 
-export function analyzeCurrentTab() {
+export function uiUpdateContent({content}) {
     return {
-        type: ANALYZE_CONTENT,
+        type: UI_UPDATE_CONTENT,
         content
     };
+}
+
+export function updateContent({content}) {
+    return {
+        type: UPDATE_CONTENT,
+        content
+    }
 }
 
 // Recipe retrieval
@@ -437,8 +423,6 @@ export function updateCorporaFromRecipes() {
                     error => dispatch(reportError('Could not read corpus', corpus))
                 )
             })
-
-        console.log('CORPORA', activeCorpora)
 
         return Promise.all(activeCorpora)
     }

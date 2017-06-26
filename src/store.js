@@ -13,6 +13,7 @@ import {
     ANALYZE_CONTENT,
     UI_LOAD_RECIPE,
     LOAD_RECIPE,
+    UI_UPDATE_CONTENT,
     UI_ADD_RECIPE,
     UI_UPDATE_RECIPE,
     UI_REMOVE_RECIPE,
@@ -33,6 +34,7 @@ import {
     addRecipe,
     removeRecipe,
     updateRecipe,
+    updateContent,
     readRecipes,
     uiShowAddRecipe,
     restoreStateFromLocalStorage,
@@ -60,6 +62,7 @@ actions[MAIN_TAB] = (data) => { return changeMainTab(data.index); }
 actions[UI_SHOW_ADD_RECIPE] = (data) => { return uiShowAddRecipe(data.visible) }
 actions[UI_ADD_SERVER] = (data) => { return addServer(data.server) }
 actions[UI_LOAD_RECIPE] = loadRecipe
+actions[UI_UPDATE_CONTENT] = updateContent
 
 // Corpora
 actions[UI_ADD_CORPUS] = addCorpus

@@ -11,6 +11,8 @@ export const REQUEST_ACTIVE_TAB_TEXT = 'REQUEST_ACTIVE_TAB_TEXT'
 export const REPORT_ERROR = 'REPORT_ERROR'
 export const SET_CONTENT = 'SET_CONTENT'
 export const MAIN_TAB = 'MAIN_TAB'
+export const UI_UPDATE_CONTENT = 'UI_UPDATE_CONTENT'
+export const UPDATE_CONTENT = 'UPDATE_CONTENT'
 
 // Servers
 export const ADD_SERVER = 'ADD_SERVER'
