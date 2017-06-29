@@ -10,7 +10,20 @@
     margin-right: 10px;
 }
 
+.add-recipe {
+    margin-top: 10px;
+}
+
+.recipe-dialog {
+    width: 100%;
+    max-width: none;
+}
+
 body {
     padding: 0;
     margin: 0;
+}
+
+.corporaList .addableList {
+    margin-left: 18px;
 }

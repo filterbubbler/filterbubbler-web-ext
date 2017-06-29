@@ -1,40 +1,33 @@
 import bayes from 'bayes';
-import browser from 'webextension-polyfill';
-//import changeClassification from './actions';
 
-var DBNAME = 'FilterBubblerDB';
-
-var classifier = bayes();
-
-browser.storage.local.get(DBNAME).then(function(existingdb) {
-    console.log('Existing DB', existingdb);
-    if (existingdb[DBNAME]) {
-        console.log('Loaded classification DB from localstorage:', existingdb);
-        classifier = bayes.fromJson(existingdb[DBNAME]);
-    } else {
-        console.log('No pre-existing DB');
+class BayesClassifier {
+    constructor(props) {
+        this.props = props
+        this.name = 'BAYES'
+        this.classifier = bayes()
     }
-});
 
-const analyze = (text) => {
-    return classifier.categorize(text);
-}
-export { analyze }
+    toJson() {
+        return this.classifier.toJson()
+    }
 
-const classify = (text, tag) => {
-    classifier.learn(text, tag);
-    var db = {};
-    db[DBNAME] = classifier.toJson();
-    browser.storage.local.set(db).then(function(result) {
-        console.log('Stored successfully');
-    }, function(error) {
-        console.log('Error storing DB');
-    });
-}
-export { classify }
+    fromJson(json) {
+        this.classifier.fromJson(json)
+    }
 
-const reducer = (state = 'None', action) => {
-    console.log('BAYES REDUCER', action)
-    return state
+    analyze(content) {
+        let classification = 'None'
+        if (content) {
+            console.log('ANALYZING', content)
+            classification = this.classifier.categorize(content.replace(/<[^>]+>/g, ''))
+            console.log('CLASSIFIED', classification)
+        }
+        return classification
+    }
+
+    classify(content, label) {
+        this.classifier.learn(content.replace(/<[^>]+>/g, ''), label)
+    }
 }
-export default reducer;
+
+export default BayesClassifier

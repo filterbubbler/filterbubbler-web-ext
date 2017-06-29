@@ -38,7 +38,7 @@ class MainView extends Component {
             <div>
             <SwipeableViews index={mainTab}>
                 <div>
-                  <ClassificationPanel url={url} currentClassification={currentClassification} onSubmit={uiAddClassification} />
+                  <ClassificationPanel url={url} currentClassification={currentClassification} />
                 </div>
                 <div>
                     <CorpuraPanel />
@@ -53,7 +53,7 @@ class MainView extends Component {
 
               <BottomNavigation selectedIndex={mainTab}>
                 <div onTouchTap={() => changeMainTab(0)}><BottomNavigationItem label="Matches" icon={matchesIcon} /></div>
-                <div onTouchTap={() => changeMainTab(1)}><BottomNavigationItem icon={dashboardIcon} label="Corpura" /></div>
+                <div onTouchTap={() => changeMainTab(1)}><BottomNavigationItem icon={dashboardIcon} label="Corpora" /></div>
                 <div onTouchTap={() => changeMainTab(2)}><BottomNavigationItem icon={cloudIcon} label="Recipes" /></div>
                 <div onTouchTap={() => changeMainTab(3)}><BottomNavigationItem icon={settingsIcon} label="Settings" /></div>
               </BottomNavigation>
