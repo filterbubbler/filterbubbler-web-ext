@@ -5,11 +5,8 @@ import Subheader from 'material-ui/Subheader'
 import LinearProgress from 'material-ui/LinearProgress'
 import {grey400, darkBlack, lightBlack} from 'material-ui/styles/colors'
 import IconButton from 'material-ui/IconButton'
-import MoreVertIcon from 'material-ui/svg-icons/navigation/more-vert'
-import IconMenu from 'material-ui/IconMenu'
 import AddIcon from 'material-ui/svg-icons/content/add'
 import FolderIcon from 'material-ui/svg-icons/file/folder'
-import MenuItem from 'material-ui/MenuItem'
 import ActionGrade from 'material-ui/svg-icons/action/grade'
 import TrashIcon from 'material-ui/svg-icons/action/delete'
 import AutoComplete from 'material-ui/AutoComplete'
@@ -20,6 +17,7 @@ import {
     uiAddCorpus,
     uiAddClassification,
     uiAddClassificationUrl,
+    uiRemoveClassification,
     uiRemoveClassificationUrl,
     uiRemoveCorpus,
 } from 'actions'
@@ -37,6 +35,7 @@ class CorpuraPanel extends React.Component {
             removeCorpus,
             addCorpus,
             addClassification,
+            removeClassification,
             addClassificationUrl,
             removeClassificationUrl,
             url,
@@ -71,13 +70,18 @@ class CorpuraPanel extends React.Component {
                                     />}
                                 key={index}
                                 primaryText={classification}
+                                rightIconButton={
+                                    <IconButton touch={true} onTouchTap={() => removeClassification(corpus, classification)}>
+                                        <TrashIcon />
+                                    </IconButton>
+                                }
                             />),
                         <AddableListItem addText="Add classification" hintText="Classification label" callback={(name) => addClassification(corpus, name)} />,
                         <ListItem
                             leftIcon={<TrashIcon />}
                             key={'remove-' + corpus}
                             primaryText='Remove corpus'
-                            onTouchTap={removeCorpus}
+                            onTouchTap={() => removeCorpus(corpus)}
                         />
                       ]}/>
                 })}
@@ -97,6 +101,10 @@ function mapDispatchToProps(dispatch) {
         },
         addClassification: (corpus, classification) => {
             dispatch(uiAddClassification({corpus, classification}))
+        },
+        removeClassification: (corpus, classification) => {
+            console.log('REMOVE CLASSIFICATION', corpus, classification)
+            dispatch(uiRemoveClassification({corpus, classification}))
         },
         addClassificationUrl: (corpus, classification, url) => {
             dispatch(uiAddClassificationUrl({corpus, classification, url}))

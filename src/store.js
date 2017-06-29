@@ -18,7 +18,9 @@ import {
     UI_UPDATE_RECIPE,
     UI_REMOVE_RECIPE,
     UI_ADD_CORPUS,
+    UI_REMOVE_CORPUS,
     UI_ADD_CLASSIFICATION,
+    UI_REMOVE_CLASSIFICATION,
     UI_ADD_CLASSIFICATION_URL,
     UI_REMOVE_CLASSIFICATION_URL,
     UI_ADD_CORPUS_CLASSIFICATION,
@@ -28,6 +30,7 @@ import {
     changeMainTab,
     addServer,
     addClassification,
+    removeClassification,
     addClassificationUrl,
     removeClassificationUrl,
     requestActiveUrl,
@@ -40,6 +43,7 @@ import {
     restoreStateFromLocalStorage,
     loadRecipe,
     addCorpus,
+    removeCorpus,
 } from './actions'
 
 const actions = {}
@@ -59,14 +63,15 @@ actions[formActionTypes.UPDATE_SYNC_ERRORS] = (data) => { return { type: formAct
 actions[CHANGE_CLASSIFICATION] = (data) => { return { type: CHANGE_CLASSIFICATION, ...data }; }
 actions[UI_REQUEST_ACTIVE_URL] = (data) => { return requestActiveUrl(); }
 actions[MAIN_TAB] = (data) => { return changeMainTab(data.index); }
-actions[UI_SHOW_ADD_RECIPE] = (data) => { return uiShowAddRecipe(data.visible) }
 actions[UI_ADD_SERVER] = (data) => { return addServer(data.server) }
 actions[UI_LOAD_RECIPE] = loadRecipe
 actions[UI_UPDATE_CONTENT] = updateContent
 
 // Corpora
 actions[UI_ADD_CORPUS] = addCorpus
+actions[UI_REMOVE_CORPUS] = removeCorpus
 actions[UI_ADD_CLASSIFICATION] = addClassification
+actions[UI_REMOVE_CLASSIFICATION] = removeClassification
 actions[UI_ADD_CORPUS_CLASSIFICATION] = addCorpusClassification
 actions[UI_ADD_CLASSIFICATION_URL] = addClassificationUrl
 actions[UI_REMOVE_CLASSIFICATION_URL] = removeClassificationUrl

@@ -36,6 +36,8 @@ import {
     ADD_CORPUS,
     UI_ADD_CLASSIFICATION,
     ADD_CLASSIFICATION,
+    UI_REMOVE_CLASSIFICATION,
+    REMOVE_CLASSIFICATION,
     UI_ADD_CLASSIFICATION_URL,
     ADD_CLASSIFICATION_URL,
     UI_REMOVE_CLASSIFICATION_URL,
@@ -164,6 +166,25 @@ export function addClassification({corpus, classification}) {
     return function(dispatch) {
         dispatch({
             type: ADD_CLASSIFICATION,
+            corpus,
+            classification
+        })
+        return dispatch(persistStateToLocalStorage())
+    }
+}
+
+export function uiRemoveClassification({corpus, classification}) {
+    return {
+        type: UI_REMOVE_CLASSIFICATION,
+        corpus,
+        classification
+    }
+}
+
+export function removeClassification({corpus, classification}) {
+    return function(dispatch) {
+        dispatch({
+            type: REMOVE_CLASSIFICATION,
             corpus,
             classification
         })

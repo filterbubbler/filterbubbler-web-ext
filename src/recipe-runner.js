@@ -47,7 +47,6 @@ class RecipeRunner {
                results.push([recipe, this.recipes[recipe].analyze(content)])
             })
         }
-        console.log('RESULTS', results)
         return results
     }
 

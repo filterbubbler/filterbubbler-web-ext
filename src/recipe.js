@@ -35,7 +35,6 @@ class Recipe {
     _retrain(items) {
         let next = items.pop(1)
         let classifier = this.state.classifier
-        console.log('RETRAIN', next)
         if (classifier) {
             fetch(next[1]).then(
                 response => {
