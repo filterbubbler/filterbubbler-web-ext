@@ -8,8 +8,12 @@ import MenuItem from 'material-ui/MenuItem'
 import Toggle from 'material-ui/Toggle'
 import SelectField from 'material-ui/SelectField'
 import AddableListItem from 'addable-list-item'
+import IconButton from 'material-ui/IconButton'
+import UploadIcon from 'material-ui/svg-icons/file/file-upload'
+import TrashIcon from 'material-ui/svg-icons/action/delete'
 import {uiAddRecipe, uiUpdateRecipe} from 'actions'
 
+// Panel list items
 class RecipeListItem extends React.Component {
     render() {
         const {
@@ -17,7 +21,9 @@ class RecipeListItem extends React.Component {
             corpus,
             sink,
             source,
+            uploadRecipe,
             updateRecipe,
+            removeRecipe,
             corpora,
             classifiers,
             sources,
@@ -32,7 +38,7 @@ class RecipeListItem extends React.Component {
                 primaryText={recipe}
                 primaryTogglesNestedList={true}
                 nestedItems={[
-                <div style={{'padding-left': 30, 'margin-top': -20}}>
+                <div style={{'padding-left': 40, 'margin-top': -20}}>
                     <SelectField 
                         floatingLabelText="Classifier"
                         value={classifier}
@@ -46,7 +52,7 @@ class RecipeListItem extends React.Component {
                         value={source}
                         onChange={(ev, key, source) => updateRecipe({recipe, classifier, source, sink, corpus})}>
                         {Object.keys(sources).map(sname =>  
-                            <MenuItem value={sname} primaryText={sources[sname].name} />
+                            <MenuItem key={sname} value={sname} primaryText={sources[sname].name} />
                         )}
                     </SelectField>
                     <SelectField 
@@ -54,7 +60,7 @@ class RecipeListItem extends React.Component {
                         value={sink}
                         onChange={(ev, key, sink) => updateRecipe({recipe, classifier, source, sink, corpus})}>
                         {Object.keys(sinks).map(sname =>  
-                            <MenuItem value={sname} primaryText={sinks[sname].name} />
+                            <MenuItem key={sname} value={sname} primaryText={sinks[sname].name} />
                         )}
                     </SelectField>
                     <SelectField 
@@ -62,10 +68,20 @@ class RecipeListItem extends React.Component {
                         value={corpus}
                         onChange={(ev, key, corpus) => updateRecipe({recipe, classifier, source, sink, corpus})}>
                         {Object.keys(corpora).map(cname =>  
-                            <MenuItem value={cname} primaryText={cname} />
+                            <MenuItem key={cname} value={cname} primaryText={cname} />
                         )}
                     </SelectField>
-                </div>
+                </div>,
+                <ListItem primaryText="Upload recipe" 
+                    key={"upload-recipe-" + recipe}
+                    leftIcon={<UploadIcon />}
+                    onTouchTap={() => uploadRecipe(recipe)}
+                />,
+                <ListItem primaryText="Remove recipe" 
+                    key={"remove-recipe-" + recipe}
+                    leftIcon={<TrashIcon />}
+                    onTouchTap={() => removeRecipe(recipe)}
+                />
             ]} />
         )
     }
@@ -80,6 +96,15 @@ RecipeListItem = connect(
     })
 )(RecipeListItem)
 
+// Panel dialog
+class RecipePanelDialog extends React.Component {
+}
+RecipePanelDialog = connect(
+    state => ({
+    })
+)(RecipePanelDialog)
+
+// Main Recipe panel
 class RecipePanel extends React.Component {
     constructor(props) {
         super(props)
@@ -97,6 +122,8 @@ class RecipePanel extends React.Component {
             sources,
             sinks,
             updateRecipe,
+            uploadRecipe,
+            removeRecipe,
         } = this.props
 
         return (
@@ -111,9 +138,11 @@ class RecipePanel extends React.Component {
                             sink={recipes[recipe].sink}
                             classifier={recipes[recipe].classifier}
                             updateRecipe={updateRecipe}
+                            uploadRecipe={uploadRecipe}
+                            removeRecipe={removeRecipe}
                             />
                     )}
-                    <AddableListItem addText="Add recipe" hintText="Recipe name" callback={(recipe) => addRecipe({recipe})} />
+                   <AddableListItem addText="Add recipe" hintText="Recipe name" callback={(recipe) => addRecipe({recipe})} />
                 </List>
             </div>
         )
@@ -123,7 +152,9 @@ class RecipePanel extends React.Component {
 function mapDispatchToProps(dispatch) {
     return {
         addRecipe: ({recipe}) => { dispatch(uiAddRecipe({recipe})) },
-        updateRecipe: ({recipe, source, sink, classifier, corpus}) => { dispatch(uiUpdateRecipe({recipe, source, sink, classifier, corpus})) }
+        updateRecipe: ({recipe, source, sink, classifier, corpus}) => { dispatch(uiUpdateRecipe({recipe, source, sink, classifier, corpus})) },
+        uploadRecipe: (recipe) => { console.log("Upload a recipe", recipe) },
+        removeRecipe: (recipe) => { console.log("Remove a recipe", recipe) },
     }
 }
 
