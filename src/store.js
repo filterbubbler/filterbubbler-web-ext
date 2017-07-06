@@ -13,6 +13,7 @@ import {
     ANALYZE_CONTENT,
     UI_LOAD_RECIPE,
     LOAD_RECIPE,
+    UI_UPLOAD_RECIPE,
     UI_UPDATE_CONTENT,
     UI_ADD_RECIPE,
     UI_UPDATE_RECIPE,
@@ -42,6 +43,7 @@ import {
     uiShowAddRecipe,
     restoreStateFromLocalStorage,
     loadRecipe,
+    uploadRecipe,
     addCorpus,
     removeCorpus,
 } from './actions'
@@ -80,6 +82,7 @@ actions[UI_REMOVE_CLASSIFICATION_URL] = removeClassificationUrl
 actions[UI_ADD_RECIPE] = addRecipe
 actions[UI_UPDATE_RECIPE] = updateRecipe
 actions[UI_REMOVE_RECIPE] = removeRecipe
+actions[UI_UPLOAD_RECIPE] = uploadRecipe
 
 const store = createStore(
     reducers,

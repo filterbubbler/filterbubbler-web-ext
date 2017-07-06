@@ -31,6 +31,8 @@ export const APPLY_RESTORED_STATE = 'APPLY_RESTORED_STATE'
 export const UI_LOAD_RECIPE = 'UI_LOAD_RECIPE'
 export const UPDATE_RECIPE = 'UPDATE_RECIPE'
 export const UI_UPDATE_RECIPE = 'UI_UPDATE_RECIPE'
+export const UI_UPLOAD_RECIPE = 'UI_UPLOAD_RECIPE'
+export const UPLOAD_RECIPE = 'UPLOAD_RECIPE'
 
 // Corpora and classifications
 export const ADD_CORPUS = 'ADD_CORPUS'

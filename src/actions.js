@@ -26,7 +26,7 @@ import {
     UPDATE_RECIPES,
     UI_LOAD_RECIPE,
     LOAD_RECIPE,
-    UI_SHOW_ADD_RECIPE,
+    UI_UPLOAD_RECIPE,
 
     APPLY_CORPUS,
     APPLY_CORPORA,
@@ -45,13 +45,6 @@ import {
     ADD_CORPUS_CLASSIFICATION,
     CHANGE_CLASSIFICATION,
 } from './constants'
-
-export function uiShowAddRecipe(visible) {
-    return {
-        type: UI_SHOW_ADD_RECIPE,
-        visible
-    }
-}
 
 export function uiAddRecipe({recipe}) {
     return {
@@ -380,6 +373,30 @@ export function loadRecipe({server, recipe, load}) {
         ).then(
             () => dispatch(persistStateToLocalStorage()),
             error => dispatch(reportError('Could not apply corpora'))
+        )
+    }
+}
+
+export function uiUploadRecipe({server, recipe}) {
+    return {
+        type: UI_UPLOAD_RECIPE,
+        server,
+        recipe
+    }
+}
+
+export function uploadRecipe({server, recipe}) {
+    return (dispatch, getState) => {
+        const recipes = getState().recipes
+        return fetch('http://' + server + '/wp-json/filterbubbler/v1/recipe', {
+            method: 'POST',
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            }),
+            body: JSON.stringify(recipes[recipe])
+        }).then(
+            result => {console.log('UPLOAD RESULT', result)},
+            error => dispatch(reportError('Could not upload recipe'))
         )
     }
 }
