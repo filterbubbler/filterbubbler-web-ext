@@ -98,7 +98,7 @@ function mapDispatchToProps(dispatch) {
             dispatch(uiRemoveServer(server))
         },
         readRecipe: ({server, recipe}) => {
-            dispatch(uiReadRecipe({server, recipe}))
+            dispatch(uiReadRecipe({server, recipe: recipe.toLowerCase().replace(' ','-')}))
         }
     }
 }

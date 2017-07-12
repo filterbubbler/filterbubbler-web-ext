@@ -380,7 +380,13 @@ export function readRecipe({server, recipe}) {
             result => result.json(),
             error => dispatch(reportError('Could not read recipe'))
         ).then(
-            recipe => dispatch(applyRecipe({recipe})),
+            recipe => dispatch(updateRecipe({
+                recipe: recipe.name,
+                corpus: recipe.corpora,
+                source: recipe.source,
+                sink: recipe.sink,
+                classifier: recipe.classifier,
+            })),
             error => dispatch(reportError('Could not convert recipe JSON'))
         ).then(
             () => dispatch(persistStateToLocalStorage()),
