@@ -28,7 +28,7 @@ class Recipe {
                     items.push([label, url])
                 })
             })
-            this._retrain(items)
+            if (items.length > 0) this._retrain(items)
         }
     }
 

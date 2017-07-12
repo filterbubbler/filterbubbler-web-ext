@@ -13,7 +13,7 @@ import AddableListItem from 'addable-list-item'
 import IconButton from 'material-ui/IconButton'
 import UploadIcon from 'material-ui/svg-icons/file/file-upload'
 import TrashIcon from 'material-ui/svg-icons/action/delete'
-import {uiAddRecipe, uiUpdateRecipe, uiUploadRecipe} from 'actions'
+import {uiAddRecipe, uiRemoveRecipe, uiUpdateRecipe, uiUploadRecipe} from 'actions'
 
 // Panel list items
 class RecipeListItem extends React.Component {
@@ -188,7 +188,7 @@ class RecipePanel extends React.Component {
         return (
             <div>
                 <RecipePanelDialog ref={(ref) => this.dialog = ref} uploadRecipe={uploadRecipe} servers={servers} />
-                <List>
+                <List style={{'overflow-y': 'scroll', height: '400px'}}>
                     <Subheader>Recipes</Subheader>
                     {Object.keys(recipes).map(recipe => 
                         <RecipeListItem
@@ -214,7 +214,7 @@ function mapDispatchToProps(dispatch) {
         addRecipe: ({recipe}) => { dispatch(uiAddRecipe({recipe})) },
         updateRecipe: ({recipe, source, sink, classifier, corpus}) => { dispatch(uiUpdateRecipe({recipe, source, sink, classifier, corpus})) },
         uploadRecipe: (recipe, server) => { dispatch(uiUploadRecipe({recipe, server})) },
-        removeRecipe: (recipe) => { console.log("Remove a recipe", recipe) },
+        removeRecipe: (recipe) => { dispatch(uiRemoveRecipe({recipe})) },
     }
 }
 
