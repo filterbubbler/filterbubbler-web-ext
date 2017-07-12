@@ -7,6 +7,8 @@ import {
     UPDATE_CORPUS,
     ADD_SERVER,
     UI_ADD_SERVER,
+    REMOVE_SERVER,
+    UI_REMOVE_SERVER,
     ACTIVE_URL,
     REPORT_ERROR,
     UI_REQUEST_ACTIVE_URL,
@@ -24,12 +26,13 @@ import {
     UPDATE_RECIPE,
     UI_UPDATE_RECIPE,
     UPDATE_RECIPES,
-    UI_LOAD_RECIPE,
-    LOAD_RECIPE,
-    UI_SHOW_ADD_RECIPE,
+    UI_READ_RECIPE,
+    READ_RECIPE,
+    UI_UPLOAD_RECIPE,
 
     APPLY_CORPUS,
     APPLY_CORPORA,
+    UPDATE_CORPORA,
     UI_REMOVE_CORPUS,
     REMOVE_CORPUS,
     UI_ADD_CORPUS,
@@ -45,13 +48,6 @@ import {
     ADD_CORPUS_CLASSIFICATION,
     CHANGE_CLASSIFICATION,
 } from './constants'
-
-export function uiShowAddRecipe(visible) {
-    return {
-        type: UI_SHOW_ADD_RECIPE,
-        visible
-    }
-}
 
 export function uiAddRecipe({recipe}) {
     return {
@@ -324,6 +320,9 @@ export function readCorpus(corpusUrl) {
     ).then(
         corpus => dispatch(applyCorpus({ ...corpus, url: corpusUrl})),
         error => dispatch(reportError('Could not decode json'))
+    ).then(
+        () => dispatch(persistStateToLocalStorage()),
+        error => dispatch(reportError('Error applying corpus'))
     )
 }
 
@@ -348,38 +347,74 @@ export function updateContent({content}) {
     }
 }
 
-// Recipe retrieval
+// Read the list of available recipes from a server
 export function readRecipes(server) {
-    return fetch('http://' + server + '/wp-json/filterbubbler/v1/recipe').then(
+    return fetch(server + '/wp-json/filterbubbler/v1/recipe').then(
         result => result.json(),
         error => dispatch(reportError('Could not fetch recipes'))
     )
 }
 
-// Set whether a given recipe should be loaded locally
-export function uiLoadRecipe({server, recipe, load}) {
-    return {
-        type: UI_LOAD_RECIPE,
-        server,
-        recipe,
-        load
+// Corpora retrieval
+export function readCorpora(server) {
+    return function(dispatch) {
+        return fetch(server + '/wp-json/filterbubbler/v1/corpus').then(
+            result => result.json(),
+            error => dispatch(reportError('Could not fetch corpora'))
+        )
     }
 }
 
-export function loadRecipe({server, recipe, load}) {
-   return dispatch => {
-        dispatch({
-            type: LOAD_RECIPE,
-            server, 
-            recipe, 
-            load
-        })
-        return dispatch(updateCorporaFromRecipes()).then(
-            corpora => dispatch(applyCorpora({corpora})),
-            error => dispatch(reportError('Could not update corpora from recipes'))
+// Fetch a remote recipe local
+export function uiReadRecipe({server, recipe}) {
+    return {
+        type: UI_READ_RECIPE,
+        server,
+        recipe
+    }
+}
+
+export function readRecipe({server, recipe}) {
+    return dispatch => {
+        return fetch(server + '/wp-json/filterbubbler/v1/recipe/' + recipe).then(
+            result => result.json(),
+            error => dispatch(reportError('Could not read recipe'))
+        ).then(
+            recipe => dispatch(updateRecipe({
+                recipe: recipe.name,
+                corpus: recipe.corpora,
+                source: recipe.source,
+                sink: recipe.sink,
+                classifier: recipe.classifier,
+            })),
+            error => dispatch(reportError('Could not convert recipe JSON'))
         ).then(
             () => dispatch(persistStateToLocalStorage()),
             error => dispatch(reportError('Could not apply corpora'))
+        )
+    }
+}
+
+export function uiUploadRecipe({server, recipe}) {
+    return {
+        type: UI_UPLOAD_RECIPE,
+        server,
+        recipe
+    }
+}
+
+export function uploadRecipe({server, recipe}) {
+    return (dispatch, getState) => {
+        const recipes = getState().recipes
+        return fetch(server + '/wp-json/filterbubbler/v1/recipe', {
+            method: 'POST',
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            }),
+            body: JSON.stringify(recipes[recipe])
+        }).then(
+            result => {console.log('UPLOAD RESULT', result)},
+            error => dispatch(reportError('Could not upload recipe'))
         )
     }
 }
@@ -399,10 +434,16 @@ export function addServer(server) {
         })
         return readRecipes(server).then(
             recipes => dispatch(updateRecipes(server, recipes)),
-            error => dispatch(reportError('Could not recipes'))
+            error => dispatch(reportError('Could not read recipes'))
+        ).then(
+            () => readCorpora(server),
+            error => dispatch(reportError('Could not update recipes'))
+        ).then(
+            corpora => dispatch(updateCorpora({server, corpora})),
+            error => dispatch(reportError('Could not read corpora'))
         ).then(
             () => dispatch(persistStateToLocalStorage()),
-            error => dispatch(reportError('Could not persist to local storage'))
+            error => dispatch(reportError('Could not update corpora'))
         )
     }
 }
@@ -431,21 +472,14 @@ export function applyCorpora({ corpora }) {
     }
 }
 
-export function updateCorporaFromRecipes() {
+export function updateCorpora({ server, corpora }) {
     return (dispatch, getState) => {
-        let activeCorpora = getState().servers
-            .map(server => server.recipes)
-            .reduce((acc, cur) => acc.concat(cur), [])
-            .reduce((acc, cur) => cur.load ? acc.concat(cur) : acc, [])
-            .reduce((acc, cur) => acc.concat(cur.corpora.filter(corpus => !acc.includes(corpus))), [])
-            .map(corpus => {
-                return fetch(corpus).then(
-                    body => body.json(),
-                    error => dispatch(reportError('Could not read corpus', corpus))
-                )
-            })
-
-        return Promise.all(activeCorpora)
+        dispatch({
+            type: UPDATE_CORPORA,
+            server,
+            corpora
+        })
+        return dispatch(persistStateToLocalStorage())
     }
 }
 

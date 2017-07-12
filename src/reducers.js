@@ -8,12 +8,14 @@ import {
     APP_VERSION,
     MAIN_TAB,
     ADD_SERVER,
+    REMOVE_SERVER,
     UI_REQUEST_ACTIVE_URL,
     UI_SHOW_ADD_RECIPE,
     REQUEST_ACTIVE_TAB_TEXT,
     UPDATE_CONTENT,
     APPLY_CORPUS,
     APPLY_CORPORA,
+    UPDATE_CORPORA,
     CHANGE_CLASSIFICATION,
     ADD_CORPUS,
     REMOVE_CORPUS,
@@ -171,11 +173,12 @@ const tabs = (state = 0, action) => {
 }
 
 const servers = (state = initialState.servers, action) => {
+    let newState
     switch (action.type) {
         case UPDATE_RECIPES:
-            let newState = [...state]
+            newState = [...state]
             newState = newState.map(server => {
-                server.recipes = (server.url == action.url) ? server.recipes : action.recipes
+                server.recipes = (server.url == action.server) ? action.recipes : server.recipes
                 return server
             })
             return newState
@@ -190,10 +193,21 @@ const servers = (state = initialState.servers, action) => {
                 } :
                 server
             })
+        case UPDATE_CORPORA:
+            newState = [...state].map(server => {
+                if (server.url == action.server.url) {
+                    server.corpora = action.corpora
+                }
+                return server
+            })
+            return newState
         case APPLY_RESTORED_STATE:
             return action.state.servers ? action.state.servers : state
         case ADD_SERVER:
             return [...state, { url: action.server, recipes: [], status: '' }]
+        case REMOVE_SERVER:
+            newState = [...state].filter(server => {if (server.url != action.server.server) return server})
+            return newState
         default:
             return state
     }

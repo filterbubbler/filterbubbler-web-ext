@@ -1,16 +1,14 @@
 import React from 'react'
-import Checkbox from 'material-ui/Checkbox'
 import {connect} from 'react-redux'
-import {RaisedButton} from 'material-ui'
 import {List, ListItem} from 'material-ui/List'
-import Toggle from 'material-ui/Toggle';
 import Subheader from 'material-ui/Subheader';
-import TextField from 'material-ui/TextField';
-import IconButton from 'material-ui/IconButton';
-import Paper from 'material-ui/Paper';
-import CloudDownloadIcon from 'material-ui/svg-icons/file/cloud-download'
+import DownloadIcon from 'material-ui/svg-icons/file/file-download'
+import TrashIcon from 'material-ui/svg-icons/action/delete'
 import AddIcon from 'material-ui/svg-icons/content/add'
-import {uiAddServer, uiLoadRecipe} from 'actions'
+import FolderIcon from 'material-ui/svg-icons/file/folder'
+import ComputerIcon from 'material-ui/svg-icons/hardware/computer'
+import DescriptionIcon from 'material-ui/svg-icons/action/description'
+import {uiAddServer, uiReadRecipe, uiRemoveServer} from 'actions'
 import AddableListItem from 'addable-list-item'
 
 class SettingsPanel extends React.Component {
@@ -28,7 +26,7 @@ class SettingsPanel extends React.Component {
     }
 
     render() {
-        const {servers, currentServer, addServer, loadRecipe} = this.props
+        const {servers, removeServer, currentServer, addServer, readRecipe} = this.props
 
         const {newServer, serverError} = this.state
 
@@ -40,22 +38,46 @@ class SettingsPanel extends React.Component {
                     servers.map(server => 
                         <ListItem 
                             key={server.url} 
+                            leftIcon={<ComputerIcon />}
                             primaryText={server.url} 
                             initiallyOpen={false}
                             primaryTogglesNestedList={true}
-                            nestedItems={[server.recipes.map((recipe, index) => 
+                            nestedItems={[
                                 <ListItem
-                                    key={index}
-                                    primaryText={recipe.name}
-                                    rightIcon={<CloudDownloadIcon />}
-                                />
-                            ),
+                                    key={'recipes-' + server.url}
+                                    leftIcon={<FolderIcon />}
+                                    primaryText="Recipes"
+                                    primaryTogglesNestedList={true}
+                                    nestedItems={server.recipes ? [server.recipes.map((recipe, index) => 
+                                        <ListItem
+                                            key={index}
+                                            leftIcon={<DescriptionIcon />}
+                                            primaryText={recipe.name}
+                                            rightIcon={<DownloadIcon />}
+                                            onTouchTap={() => readRecipe({server: server.url, recipe: recipe.name})}
+                                        />)] : []}
+                                />,
+                                <ListItem
+                                    key={'corpora-' + server.url}
+                                    leftIcon={<FolderIcon />}
+                                    primaryText="Corpora"
+                                    primaryTogglesNestedList={true}
+                                    nestedItems={server.corpora ? [server.corpora.map((corpus, index) => 
+                                        <ListItem
+                                            key={index}
+                                            leftIcon={<DescriptionIcon />}
+                                            primaryText={corpus.description}
+                                            rightIcon={<DownloadIcon />}
+                                        />)] : []}
+                                />,
                                 <ListItem
                                     key={'delete-server-' + server.url}
+                                    leftIcon={<TrashIcon />}
                                     primaryText="Disconnect server"
-                                    onTouchTap={() => this.removeServer(server.url)}
+                                    onTouchTap={() => removeServer(server.url)}
                                 />
-                            ]} />
+                            ]} 
+                        />
                     )
                 :(
                     <ListItem key="NONE" primaryText="You have not added any servers" />
@@ -75,8 +97,8 @@ function mapDispatchToProps(dispatch) {
         removeServer: (server) => {
             dispatch(uiRemoveServer(server))
         },
-        loadRecipe: (server, recipe, load) => {
-            dispatch(uiLoadRecipe({server, recipe, load}))
+        readRecipe: ({server, recipe}) => {
+            dispatch(uiReadRecipe({server, recipe: recipe.toLowerCase().replace(' ','-')}))
         }
     }
 }

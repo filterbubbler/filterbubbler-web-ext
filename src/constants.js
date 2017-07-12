@@ -17,6 +17,8 @@ export const UPDATE_CONTENT = 'UPDATE_CONTENT'
 // Servers
 export const ADD_SERVER = 'ADD_SERVER'
 export const UI_ADD_SERVER = 'UI_ADD_SERVER'
+export const REMOVE_SERVER = 'REMOVE_SERVER'
+export const UI_REMOVE_SERVER = 'UI_REMOVE_SERVER'
 
 // Recipes
 export const ADD_RECIPE = 'ADD_RECIPE'
@@ -31,6 +33,8 @@ export const APPLY_RESTORED_STATE = 'APPLY_RESTORED_STATE'
 export const UI_LOAD_RECIPE = 'UI_LOAD_RECIPE'
 export const UPDATE_RECIPE = 'UPDATE_RECIPE'
 export const UI_UPDATE_RECIPE = 'UI_UPDATE_RECIPE'
+export const UI_UPLOAD_RECIPE = 'UI_UPLOAD_RECIPE'
+export const UPLOAD_RECIPE = 'UPLOAD_RECIPE'
 
 // Corpora and classifications
 export const ADD_CORPUS = 'ADD_CORPUS'
@@ -47,6 +51,7 @@ export const REMOVE_CLASSIFICATION_URL = 'REMOVE_CLASSIFICATION_URL'
 export const UI_REMOVE_CLASSIFICATION_URL = 'UI_REMOVE_CLASSIFICATION_URL'
 export const APPLY_CORPUS = 'APPLY_CORPUS'
 export const APPLY_CORPORA = 'APPLY_CORPORA'
+export const UPDATE_CORPORA = 'UPDATE_CORPORA'
 
 // UI Text
 export const COULD_NOT_FETCH_TAB_TEXT = 'Could not fetch text from the active tab'

@@ -46,7 +46,7 @@ class CorpuraPanel extends React.Component {
         } = this.props
 
         return (
-            <List className="corporaList">
+            <List className="corporaList" style={{'overflow-y': 'scroll', height: '400px'}}>
                 <Subheader>Corpora</Subheader>
                 {Object.keys(corpora).map(corpus => {
                     return <ListItem

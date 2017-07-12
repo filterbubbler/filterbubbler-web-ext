@@ -10,11 +10,14 @@ import {
     UI_REQUEST_ACTIVE_URL,
     UI_SHOW_ADD_RECIPE,
     UI_ADD_SERVER,
+    UI_REMOVE_SERVER,
     ANALYZE_CONTENT,
     UI_LOAD_RECIPE,
     LOAD_RECIPE,
+    UI_UPLOAD_RECIPE,
     UI_UPDATE_CONTENT,
     UI_ADD_RECIPE,
+    UI_READ_RECIPE,
     UI_UPDATE_RECIPE,
     UI_REMOVE_RECIPE,
     UI_ADD_CORPUS,
@@ -29,12 +32,14 @@ import {
     addCorpusClassification,
     changeMainTab,
     addServer,
+    removeServer,
     addClassification,
     removeClassification,
     addClassificationUrl,
     removeClassificationUrl,
     requestActiveUrl,
     addRecipe,
+    readRecipe,
     removeRecipe,
     updateRecipe,
     updateContent,
@@ -42,6 +47,7 @@ import {
     uiShowAddRecipe,
     restoreStateFromLocalStorage,
     loadRecipe,
+    uploadRecipe,
     addCorpus,
     removeCorpus,
 } from './actions'
@@ -78,8 +84,13 @@ actions[UI_REMOVE_CLASSIFICATION_URL] = removeClassificationUrl
 
 // Recipes
 actions[UI_ADD_RECIPE] = addRecipe
+actions[UI_READ_RECIPE] = readRecipe
 actions[UI_UPDATE_RECIPE] = updateRecipe
 actions[UI_REMOVE_RECIPE] = removeRecipe
+actions[UI_UPLOAD_RECIPE] = uploadRecipe
+
+// Servers
+actions[UI_REMOVE_SERVER] = removeServer
 
 const store = createStore(
     reducers,
