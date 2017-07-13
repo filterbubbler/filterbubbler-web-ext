@@ -1,5 +1,9 @@
 import React from 'react'
 import {connect} from 'react-redux'
+import Dialog from 'material-ui/Dialog'
+import FlatButton from 'material-ui/FlatButton'
+import MenuItem from 'material-ui/MenuItem'
+import SelectField from 'material-ui/SelectField'
 import {List, ListItem} from 'material-ui/List'
 import Subheader from 'material-ui/Subheader'
 import LinearProgress from 'material-ui/LinearProgress'
@@ -9,6 +13,7 @@ import AddIcon from 'material-ui/svg-icons/content/add'
 import FolderIcon from 'material-ui/svg-icons/file/folder'
 import ActionGrade from 'material-ui/svg-icons/action/grade'
 import TrashIcon from 'material-ui/svg-icons/action/delete'
+import UploadIcon from 'material-ui/svg-icons/file/file-upload'
 import AutoComplete from 'material-ui/AutoComplete'
 import Checkbox from 'material-ui/Checkbox'
 import TextField from 'material-ui/TextField'
@@ -22,12 +27,80 @@ import {
     uiRemoveCorpus,
 } from 'actions'
 
+// Panel dialog
+class CorporaUploadDialog extends React.Component {
+    constructor(props) {
+        super(props)
+
+        this.state = {
+            open: false,
+            recipe: ''
+        }
+    }
+
+    open(recipe) {
+        console.log('RECIPE', recipe)
+        this.setState({open: true, recipe})
+    }
+
+    close() {
+        this.setState({open: false})
+    }
+
+    setServer(server) {
+        this.setState({server})
+    }
+
+    doUpload() {
+        this.props.uploadCorpus(this.state.recipe, this.state.server.url)
+        this.setState({open: false})
+    }
+
+    render() {
+        const { servers } = this.props
+
+        return (
+            <Dialog
+                title="Upload corpus"
+                actions={[
+                    <FlatButton label="Cancel" primary={true} onTouchTap={() => this.close()} />,
+                    <FlatButton label="Upload" onTouchTap={() => this.doUpload()} />
+                ]}
+                modal={false}
+                open={this.state.open}
+                onRequestClose={this.handleClose}
+                contentStyle={{width: '90%'}}
+            >
+                Push <strong>{this.state.recipe}</strong> to:
+
+                <SelectField 
+                    floatingLabelText="Server"
+                    value={this.state.server}
+                    onChange={(ev, key, server) => this.setServer(server)}>
+                    {this.props.servers.map(server =>  
+                        <MenuItem value={server} primaryText={server.url} />
+                    )}
+                </SelectField>
+            </Dialog>
+        )
+    }
+}
+
+
 class CorpuraPanel extends React.Component {
     constructor(props) {
         super(props)
 
         this.state = {
         }
+    }
+
+    hideUploadDialog = () => {
+        this.dialog.close()
+    }
+
+    showUploadDialog = (recipe) => {
+        this.dialog.open(recipe)
     }
 
     render() {
@@ -38,6 +111,8 @@ class CorpuraPanel extends React.Component {
             removeClassification,
             addClassificationUrl,
             removeClassificationUrl,
+            servers,
+            uploadCorpus,
             url,
             corpora,
             pristine,
@@ -46,6 +121,8 @@ class CorpuraPanel extends React.Component {
         } = this.props
 
         return (
+            <div>
+            <CorporaUploadDialog ref={(ref) => this.dialog = ref} uploadCorpus={uploadCorpus} servers={servers} />
             <List className="corporaList" style={{'overflow-y': 'scroll', height: '400px'}}>
                 <Subheader>Corpora</Subheader>
                 {Object.keys(corpora).map(corpus => {
@@ -77,6 +154,11 @@ class CorpuraPanel extends React.Component {
                                 }
                             />),
                         <AddableListItem addText="Add classification" hintText="Classification label" callback={(name) => addClassification(corpus, name)} />,
+                        <ListItem primaryText="Upload corpus" 
+                            key={"upload-corpus-" + corpus}
+                            leftIcon={<UploadIcon />}
+                            onTouchTap={() => this.showUploadDialog(corpus)}
+                        />,
                         <ListItem
                             leftIcon={<TrashIcon />}
                             key={'remove-' + corpus}
@@ -87,6 +169,7 @@ class CorpuraPanel extends React.Component {
                 })}
                 <AddableListItem addText="Add corpus" hintText="Corpus name" callback={(name) => addCorpus(name)} />
             </List>
+            </div>
         )
     }
 }
@@ -98,6 +181,9 @@ function mapDispatchToProps(dispatch) {
         },
         removeCorpus: (corpus) => {
             dispatch(uiRemoveCorpus({corpus}))
+        },
+        uploadCorpus: (corpus) => {
+            console.log('Upload corpus')
         },
         addClassification: (corpus, classification) => {
             dispatch(uiAddClassification({corpus, classification}))
@@ -118,6 +204,7 @@ function mapDispatchToProps(dispatch) {
 CorpuraPanel = connect(
     state => ({
         url: state.url,
+        servers: state.servers,
         corpora: state.corpora
     }),
     mapDispatchToProps
