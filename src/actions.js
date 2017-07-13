@@ -36,6 +36,8 @@ import {
     UI_REMOVE_CORPUS,
     REMOVE_CORPUS,
     UI_ADD_CORPUS,
+    UI_UPLOAD_CORPUS,
+    UPLOAD_CORPUS,
     ADD_CORPUS,
     UI_ADD_CLASSIFICATION,
     ADD_CLASSIFICATION,
@@ -361,6 +363,30 @@ export function readCorpora(server) {
         return fetch(server + '/wp-json/filterbubbler/v1/corpus').then(
             result => result.json(),
             error => dispatch(reportError('Could not fetch corpora'))
+        )
+    }
+}
+
+export function uiUploadCorpus({server, corpus}) {
+    return {
+        type: UI_UPLOAD_CORPUS,
+        server,
+        corpus
+    }
+}
+
+export function uploadCorpus({server, corpus}) {
+    return (dispatch, getState) => {
+        const corpora = getState().corpora
+        return fetch(server + '/wp-json/filterbubbler/v1/corpus', {
+            method: 'POST',
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            }),
+            body: JSON.stringify(corpora[corpus])
+        }).then(
+            result => {console.log('CORPUS UPLOAD RESULT', result)},
+            error => dispatch(reportError('Could not upload corpus'))
         )
     }
 }

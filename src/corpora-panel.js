@@ -25,6 +25,7 @@ import {
     uiRemoveClassification,
     uiRemoveClassificationUrl,
     uiRemoveCorpus,
+    uiUploadCorpus,
 } from 'actions'
 
 // Panel dialog
@@ -34,13 +35,12 @@ class CorporaUploadDialog extends React.Component {
 
         this.state = {
             open: false,
-            recipe: ''
+            corpus: ''
         }
     }
 
-    open(recipe) {
-        console.log('RECIPE', recipe)
-        this.setState({open: true, recipe})
+    open(corpus) {
+        this.setState({open: true, corpus})
     }
 
     close() {
@@ -52,7 +52,7 @@ class CorporaUploadDialog extends React.Component {
     }
 
     doUpload() {
-        this.props.uploadCorpus(this.state.recipe, this.state.server.url)
+        this.props.uploadCorpus(this.state.corpus, this.state.server.url)
         this.setState({open: false})
     }
 
@@ -71,7 +71,7 @@ class CorporaUploadDialog extends React.Component {
                 onRequestClose={this.handleClose}
                 contentStyle={{width: '90%'}}
             >
-                Push <strong>{this.state.recipe}</strong> to:
+                Push <strong>{this.state.corpus}</strong> to:
 
                 <SelectField 
                     floatingLabelText="Server"
@@ -99,8 +99,8 @@ class CorpuraPanel extends React.Component {
         this.dialog.close()
     }
 
-    showUploadDialog = (recipe) => {
-        this.dialog.open(recipe)
+    showUploadDialog = (corpus) => {
+        this.dialog.open(corpus)
     }
 
     render() {
@@ -182,8 +182,8 @@ function mapDispatchToProps(dispatch) {
         removeCorpus: (corpus) => {
             dispatch(uiRemoveCorpus({corpus}))
         },
-        uploadCorpus: (corpus) => {
-            console.log('Upload corpus')
+        uploadCorpus: (corpus, server) => {
+            dispatch(uiUploadCorpus({corpus, server}))
         },
         addClassification: (corpus, classification) => {
             dispatch(uiAddClassification({corpus, classification}))

@@ -52,6 +52,8 @@ export const UI_REMOVE_CLASSIFICATION_URL = 'UI_REMOVE_CLASSIFICATION_URL'
 export const APPLY_CORPUS = 'APPLY_CORPUS'
 export const APPLY_CORPORA = 'APPLY_CORPORA'
 export const UPDATE_CORPORA = 'UPDATE_CORPORA'
+export const UI_UPLOAD_CORPUS = 'UI_UPLOAD_CORPUS'
+export const UPLOAD_CORPUS = 'UPLOAD_CORPUS'
 
 // UI Text
 export const COULD_NOT_FETCH_TAB_TEXT = 'Could not fetch text from the active tab'
