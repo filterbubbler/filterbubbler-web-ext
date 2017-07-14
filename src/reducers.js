@@ -81,8 +81,15 @@ const corpora = (state = initialState.corpora, action) => {
             delete newState[action.corpus]
             return newState
         case APPLY_CORPUS:
-            //newState[action.corpus.url] = action.corpus
-            console.log('APPLY CORPUS', action)
+            if (typeof newState[action.corpus.corpus] == 'undefined') {
+                newState[action.corpus.corpus] = {classifications: {}, corpus: action.corpus.corpus}
+            }
+            action.corpus.classifications.map(classification => {
+                if (typeof newState[action.corpus.corpus].classifications[classification.classification] == 'undefined') {
+                    newState[action.corpus.corpus].classifications[classification.classification] = []
+                }
+                newState[action.corpus.corpus].classifications[classification.classification].push(classification.url)
+            })
             return newState
         case APPLY_CORPORA:
             return action.corpora

@@ -100,10 +100,10 @@ function mapDispatchToProps(dispatch) {
             dispatch(uiRemoveServer(server))
         },
         readRecipe: ({server, recipe}) => {
-            dispatch(uiReadRecipe({server, recipe: recipe.toLowerCase().replace(' ','-')}))
+            dispatch(uiReadRecipe({server, recipe}))
         },
         readCorpus: ({server, corpus}) => {
-            dispatch(uiReadCorpus({server, corpus: corpus.toLowerCase().replace(' ','-')}))
+            dispatch(uiReadCorpus({server, corpus}))
         }
     }
 }
