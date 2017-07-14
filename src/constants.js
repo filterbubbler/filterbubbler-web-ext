@@ -39,6 +39,8 @@ export const UPLOAD_RECIPE = 'UPLOAD_RECIPE'
 // Corpora and classifications
 export const ADD_CORPUS = 'ADD_CORPUS'
 export const UI_ADD_CORPUS = 'UI_ADD_CORPUS'
+export const READ_CORPUS = 'READ_CORPUS'
+export const UI_READ_CORPUS = 'UI_READ_CORPUS'
 export const REMOVE_CORPUS = 'REMOVE_CORPUS'
 export const UI_REMOVE_CORPUS = 'UI_REMOVE_CORPUS'
 export const ADD_CLASSIFICATION = 'ADD_CLASSIFICATION'

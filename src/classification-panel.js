@@ -9,12 +9,19 @@ class ClassificationPanel extends React.Component {
         console.log('CLASSIFICATIONS', classifications)
 
         return (
+            <div>
             <Paper style={{margin: 10, padding: 5}}>
-              {url}
+             <strong>URL:</strong>{url}
+            </Paper>
+            <Paper style={{margin: 10, padding: 5}}>
+              {Object.keys(classifications).length == 0 ?
+                  <div>You have not created any recipes</div> : ''
+              }
               {Object.keys(classifications).map(recipe => {
                 return <div><b>{recipe}:</b> {classifications[recipe]}</div>
               })}
             </Paper>
+            </div>
         )
     }
 }

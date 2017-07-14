@@ -39,6 +39,8 @@ import {
     UI_UPLOAD_CORPUS,
     UPLOAD_CORPUS,
     ADD_CORPUS,
+    READ_CORPUS,
+    UI_READ_CORPUS,
     UI_ADD_CLASSIFICATION,
     ADD_CLASSIFICATION,
     UI_REMOVE_CLASSIFICATION,
@@ -308,19 +310,28 @@ export function requestActiveUrl() {
     }
 }
 
-export function applyCorpus(corpus) {
+export function applyCorpus({corpus}) {
     return {
         type: APPLY_CORPUS,
         corpus
     }
 }
 
-export function readCorpus(corpusUrl) {
-    return (dispatch) => fetch(corpusUrl).then(
+// Fetch a remote corpus local
+export function uiReadCorpus({server, corpus}) {
+    return {
+        type: UI_READ_CORPUS,
+        server,
+        corpus
+    }
+}
+
+export function readCorpus({server, corpus}) {
+    return (dispatch) => fetch(server + '/wp-json/filterbubbler/v1/corpus/' + corpus).then(
         result => result.json(),
         error => dispatch(reportError('Could not read corpus'))
     ).then(
-        corpus => dispatch(applyCorpus({ ...corpus, url: corpusUrl})),
+        corpus => dispatch(applyCorpus({ corpus })),
         error => dispatch(reportError('Could not decode json'))
     ).then(
         () => dispatch(persistStateToLocalStorage()),
@@ -359,12 +370,10 @@ export function readRecipes(server) {
 
 // Corpora retrieval
 export function readCorpora(server) {
-    return function(dispatch) {
-        return fetch(server + '/wp-json/filterbubbler/v1/corpus').then(
-            result => result.json(),
-            error => dispatch(reportError('Could not fetch corpora'))
-        )
-    }
+    return fetch(server + '/wp-json/filterbubbler/v1/corpus').then(
+        result => result.json(),
+        error => dispatch(reportError('Could not fetch corpora'))
+    )
 }
 
 export function uiUploadCorpus({server, corpus}) {
@@ -462,7 +471,7 @@ export function addServer(server) {
             recipes => dispatch(updateRecipes(server, recipes)),
             error => dispatch(reportError('Could not read recipes'))
         ).then(
-            () => readCorpora(server),
+            result => readCorpora(server),
             error => dispatch(reportError('Could not update recipes'))
         ).then(
             corpora => dispatch(updateCorpora({server, corpora})),

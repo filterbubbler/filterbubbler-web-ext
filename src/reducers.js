@@ -81,7 +81,8 @@ const corpora = (state = initialState.corpora, action) => {
             delete newState[action.corpus]
             return newState
         case APPLY_CORPUS:
-            newState[action.corpus.url] = action.corpus
+            //newState[action.corpus.url] = action.corpus
+            console.log('APPLY CORPUS', action)
             return newState
         case APPLY_CORPORA:
             return action.corpora
@@ -195,7 +196,7 @@ const servers = (state = initialState.servers, action) => {
             })
         case UPDATE_CORPORA:
             newState = [...state].map(server => {
-                if (server.url == action.server.url) {
+                if (server.url == action.server) {
                     server.corpora = action.corpora
                 }
                 return server

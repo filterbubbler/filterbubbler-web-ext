@@ -8,7 +8,7 @@ import AddIcon from 'material-ui/svg-icons/content/add'
 import FolderIcon from 'material-ui/svg-icons/file/folder'
 import ComputerIcon from 'material-ui/svg-icons/hardware/computer'
 import DescriptionIcon from 'material-ui/svg-icons/action/description'
-import {uiAddServer, uiReadRecipe, uiRemoveServer} from 'actions'
+import {uiAddServer, uiReadRecipe, uiReadCorpus, uiRemoveServer} from 'actions'
 import AddableListItem from 'addable-list-item'
 
 class SettingsPanel extends React.Component {
@@ -26,7 +26,7 @@ class SettingsPanel extends React.Component {
     }
 
     render() {
-        const {servers, removeServer, currentServer, addServer, readRecipe} = this.props
+        const {servers, removeServer, currentServer, addServer, readRecipe, readCorpus} = this.props
 
         const {newServer, serverError} = this.state
 
@@ -66,8 +66,10 @@ class SettingsPanel extends React.Component {
                                         <ListItem
                                             key={index}
                                             leftIcon={<DescriptionIcon />}
-                                            primaryText={corpus.description}
+                                            primaryText={corpus.name}
+                                            secondaryText={corpus.description}
                                             rightIcon={<DownloadIcon />}
+                                            onTouchTap={() => readCorpus({server: server.url, corpus: corpus.name})}
                                         />)] : []}
                                 />,
                                 <ListItem
@@ -99,6 +101,9 @@ function mapDispatchToProps(dispatch) {
         },
         readRecipe: ({server, recipe}) => {
             dispatch(uiReadRecipe({server, recipe: recipe.toLowerCase().replace(' ','-')}))
+        },
+        readCorpus: ({server, corpus}) => {
+            dispatch(uiReadCorpus({server, corpus: corpus.toLowerCase().replace(' ','-')}))
         }
     }
 }
