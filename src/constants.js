@@ -39,6 +39,8 @@ export const UPLOAD_RECIPE = 'UPLOAD_RECIPE'
 // Corpora and classifications
 export const ADD_CORPUS = 'ADD_CORPUS'
 export const UI_ADD_CORPUS = 'UI_ADD_CORPUS'
+export const READ_CORPUS = 'READ_CORPUS'
+export const UI_READ_CORPUS = 'UI_READ_CORPUS'
 export const REMOVE_CORPUS = 'REMOVE_CORPUS'
 export const UI_REMOVE_CORPUS = 'UI_REMOVE_CORPUS'
 export const ADD_CLASSIFICATION = 'ADD_CLASSIFICATION'
@@ -52,6 +54,8 @@ export const UI_REMOVE_CLASSIFICATION_URL = 'UI_REMOVE_CLASSIFICATION_URL'
 export const APPLY_CORPUS = 'APPLY_CORPUS'
 export const APPLY_CORPORA = 'APPLY_CORPORA'
 export const UPDATE_CORPORA = 'UPDATE_CORPORA'
+export const UI_UPLOAD_CORPUS = 'UI_UPLOAD_CORPUS'
+export const UPLOAD_CORPUS = 'UPLOAD_CORPUS'
 
 // UI Text
 export const COULD_NOT_FETCH_TAB_TEXT = 'Could not fetch text from the active tab'

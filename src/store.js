@@ -20,7 +20,9 @@ import {
     UI_READ_RECIPE,
     UI_UPDATE_RECIPE,
     UI_REMOVE_RECIPE,
+    UI_UPLOAD_CORPUS,
     UI_ADD_CORPUS,
+    UI_READ_CORPUS,
     UI_REMOVE_CORPUS,
     UI_ADD_CLASSIFICATION,
     UI_REMOVE_CLASSIFICATION,
@@ -49,7 +51,9 @@ import {
     loadRecipe,
     uploadRecipe,
     addCorpus,
+    readCorpus,
     removeCorpus,
+    uploadCorpus,
 } from './actions'
 
 const actions = {}
@@ -81,6 +85,8 @@ actions[UI_REMOVE_CLASSIFICATION] = removeClassification
 actions[UI_ADD_CORPUS_CLASSIFICATION] = addCorpusClassification
 actions[UI_ADD_CLASSIFICATION_URL] = addClassificationUrl
 actions[UI_REMOVE_CLASSIFICATION_URL] = removeClassificationUrl
+actions[UI_UPLOAD_CORPUS] = uploadCorpus
+actions[UI_READ_CORPUS] = readCorpus
 
 // Recipes
 actions[UI_ADD_RECIPE] = addRecipe

@@ -36,7 +36,11 @@ import {
     UI_REMOVE_CORPUS,
     REMOVE_CORPUS,
     UI_ADD_CORPUS,
+    UI_UPLOAD_CORPUS,
+    UPLOAD_CORPUS,
     ADD_CORPUS,
+    READ_CORPUS,
+    UI_READ_CORPUS,
     UI_ADD_CLASSIFICATION,
     ADD_CLASSIFICATION,
     UI_REMOVE_CLASSIFICATION,
@@ -306,19 +310,28 @@ export function requestActiveUrl() {
     }
 }
 
-export function applyCorpus(corpus) {
+export function applyCorpus({corpus}) {
     return {
         type: APPLY_CORPUS,
         corpus
     }
 }
 
-export function readCorpus(corpusUrl) {
-    return (dispatch) => fetch(corpusUrl).then(
+// Fetch a remote corpus local
+export function uiReadCorpus({server, corpus}) {
+    return {
+        type: UI_READ_CORPUS,
+        server,
+        corpus
+    }
+}
+
+export function readCorpus({server, corpus}) {
+    return (dispatch) => fetch(server + '/wp-json/filterbubbler/v1/corpus/' + corpus).then(
         result => result.json(),
         error => dispatch(reportError('Could not read corpus'))
     ).then(
-        corpus => dispatch(applyCorpus({ ...corpus, url: corpusUrl})),
+        corpus => dispatch(applyCorpus({ corpus })),
         error => dispatch(reportError('Could not decode json'))
     ).then(
         () => dispatch(persistStateToLocalStorage()),
@@ -357,10 +370,35 @@ export function readRecipes(server) {
 
 // Corpora retrieval
 export function readCorpora(server) {
-    return function(dispatch) {
-        return fetch(server + '/wp-json/filterbubbler/v1/corpus').then(
-            result => result.json(),
-            error => dispatch(reportError('Could not fetch corpora'))
+    return fetch(server + '/wp-json/filterbubbler/v1/corpus').then(
+        result => result.json(),
+        error => dispatch(reportError('Could not fetch corpora'))
+    )
+}
+
+export function uiUploadCorpus({server, corpus}) {
+    return {
+        type: UI_UPLOAD_CORPUS,
+        server,
+        corpus
+    }
+}
+
+export function uploadCorpus({server, corpus}) {
+    return (dispatch, getState) => {
+        const corpora = getState().corpora
+        return fetch(server + '/wp-json/filterbubbler/v1/corpus', {
+            method: 'POST',
+            headers: new Headers({
+                'Content-Type': 'application/json'
+            }),
+            body: JSON.stringify(corpora[corpus])
+        }).then(
+            () => dispatch(refreshServer(server)),
+            error => dispatch(reportError('Could not upload corpus'))
+        ).then(
+            () => dispatch(persistStateToLocalStorage()),
+            error => dispatch(reportError('Could not refresh server'))
         )
     }
 }
@@ -413,8 +451,11 @@ export function uploadRecipe({server, recipe}) {
             }),
             body: JSON.stringify(recipes[recipe])
         }).then(
-            result => {console.log('UPLOAD RESULT', result)},
+            () => dispatch(refreshServer(server)),
             error => dispatch(reportError('Could not upload recipe'))
+        ).then(
+            () => dispatch(persistStateToLocalStorage()),
+            error => dispatch(reportError('Could not refresh server'))
         )
     }
 }
@@ -432,18 +473,24 @@ export function addServer(server) {
             type: ADD_SERVER,
             server
         })
+        return dispatch(refreshServer(server)).then(
+            () => dispatch(persistStateToLocalStorage()),
+            error => dispatch(reportError('Could not update corpora'))
+        )
+    }
+}
+
+export function refreshServer(server) {
+    return dispatch => {
         return readRecipes(server).then(
             recipes => dispatch(updateRecipes(server, recipes)),
             error => dispatch(reportError('Could not read recipes'))
         ).then(
-            () => readCorpora(server),
+            result => readCorpora(server),
             error => dispatch(reportError('Could not update recipes'))
         ).then(
             corpora => dispatch(updateCorpora({server, corpora})),
             error => dispatch(reportError('Could not read corpora'))
-        ).then(
-            () => dispatch(persistStateToLocalStorage()),
-            error => dispatch(reportError('Could not update corpora'))
         )
     }
 }
