@@ -394,8 +394,11 @@ export function uploadCorpus({server, corpus}) {
             }),
             body: JSON.stringify(corpora[corpus])
         }).then(
-            result => {console.log('CORPUS UPLOAD RESULT', result)},
+            () => dispatch(refreshServer(server)),
             error => dispatch(reportError('Could not upload corpus'))
+        ).then(
+            () => dispatch(persistStateToLocalStorage()),
+            error => dispatch(reportError('Could not refresh server'))
         )
     }
 }
@@ -448,8 +451,11 @@ export function uploadRecipe({server, recipe}) {
             }),
             body: JSON.stringify(recipes[recipe])
         }).then(
-            result => {console.log('UPLOAD RESULT', result)},
+            () => dispatch(refreshServer(server)),
             error => dispatch(reportError('Could not upload recipe'))
+        ).then(
+            () => dispatch(persistStateToLocalStorage()),
+            error => dispatch(reportError('Could not refresh server'))
         )
     }
 }
@@ -467,6 +473,15 @@ export function addServer(server) {
             type: ADD_SERVER,
             server
         })
+        return dispatch(refreshServer(server)).then(
+            () => dispatch(persistStateToLocalStorage()),
+            error => dispatch(reportError('Could not update corpora'))
+        )
+    }
+}
+
+export function refreshServer(server) {
+    return dispatch => {
         return readRecipes(server).then(
             recipes => dispatch(updateRecipes(server, recipes)),
             error => dispatch(reportError('Could not read recipes'))
@@ -476,9 +491,6 @@ export function addServer(server) {
         ).then(
             corpora => dispatch(updateCorpora({server, corpora})),
             error => dispatch(reportError('Could not read corpora'))
-        ).then(
-            () => dispatch(persistStateToLocalStorage()),
-            error => dispatch(reportError('Could not update corpora'))
         )
     }
 }
