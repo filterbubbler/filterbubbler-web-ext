@@ -418,12 +418,12 @@ export function readRecipe({server, recipe}) {
             result => result.json(),
             error => dispatch(reportError('Could not read recipe'))
         ).then(
-            recipe => dispatch(updateRecipe({
-                recipe: recipe.name,
-                corpus: recipe.corpora,
-                source: recipe.source,
-                sink: recipe.sink,
-                classifier: recipe.classifier,
+            newRecipe => dispatch(updateRecipe({
+                recipe: newRecipe.name,
+                corpus: newRecipe.corpora,
+                source: newRecipe.source,
+                sink: newRecipe.sink,
+                classifier: newRecipe.classifier,
             })),
             error => dispatch(reportError('Could not convert recipe JSON'))
         ).then(
