@@ -18,6 +18,8 @@ import {
     REQUEST_ACTIVE_TAB_TEXT,
     COULD_NOT_FETCH_TAB_TEXT,
     MAIN_TAB,
+    BEGIN_ANALYSIS,
+    END_ANALYSIS,
 
     ADD_RECIPE,
     UI_ADD_RECIPE,
@@ -52,6 +54,18 @@ import {
     ADD_CORPUS_CLASSIFICATION,
     CHANGE_CLASSIFICATION,
 } from './constants'
+
+export function beginAnalysis() {
+    return {
+        type: BEGIN_ANALYSIS
+    }
+}
+
+export function endAnalysis() {
+    return {
+        type: END_ANALYSIS
+    }
+}
 
 export function uiAddRecipe({recipe}) {
     return {
@@ -108,6 +122,7 @@ export function updateRecipe({recipe, source, sink, classifier, corpus}) {
             classifier,
             corpus,
         })
+        dispatch(beginAnalysis())
         return dispatch(persistStateToLocalStorage())
     }
 }
@@ -354,9 +369,13 @@ export function uiUpdateContent({content}) {
 }
 
 export function updateContent({content}) {
-    return {
-        type: UPDATE_CONTENT,
-        content
+    return function(dispatch) {
+        dispatch({
+            type: UPDATE_CONTENT,
+            content
+        })
+        dispatch(beginAnalysis())
+        return dispatch(persistStateToLocalStorage())
     }
 }
 

@@ -34,6 +34,7 @@ import {
 } from './constants';
 
 const initialState = {
+    analyze: false,
     url: '',
     content: '',
     version: '',
@@ -55,6 +56,20 @@ const initialState = {
     repositories: [],
     ui: {
         classification: ''
+    }
+}
+
+const analyze = (state = initialState.analyze, action) => {
+    let newState
+    switch (action.type) {
+        case BEGIN_ANALYSIS:
+            newState = {...state}
+            newState['analyze'] = true
+            return newState
+        case END_ANALYSIS:
+            newState = {...state}
+            newState['analyze'] = false
+            return newState
     }
 }
 

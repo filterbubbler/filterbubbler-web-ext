@@ -1,6 +1,6 @@
 import Recipe from 'recipe'
 import BayesClassifier from 'bayes-classifier'
-import {changeClassification} from 'actions'
+import {endAnalysis, changeClassification} from 'actions'
 
 class RecipeRunner {
     constructor(props) {
@@ -30,11 +30,11 @@ class RecipeRunner {
             }
         })
 
-        if (!this.analyzing && this.currentState && nextState.content != this.currentState.content) {
-            this.analyzing = true
+        // If content has changed then reanalyze
+        if (nextState.analyze) {
             let results = this.analyze(nextState.content)
             results.map(result => this.store.dispatch(changeClassification(result[0], result[1])))
-            this.analyzing = false
+            this.store.dispatch(endAnalysis())
         }
 
         this.currentState = nextState
