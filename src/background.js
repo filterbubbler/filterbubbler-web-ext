@@ -7,7 +7,7 @@ import RecipeRunner from 'recipe-runner'
 console.log('FilterBubbler: Background script starting')
 
 // Subscribe the recipe runner
-export const recipeRunner = new RecipeRunner()
-recipeRunner.subscribe(store)
+//export const recipeRunner = new RecipeRunner()
+//recipeRunner.subscribe(store)
 
 

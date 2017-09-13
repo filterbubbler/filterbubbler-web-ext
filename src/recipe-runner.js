@@ -32,9 +32,9 @@ class RecipeRunner {
 
         // If content has changed then reanalyze
         if (nextState.analyze) {
+            this.store.dispatch(endAnalysis())
             let results = this.analyze(nextState.content)
             results.map(result => this.store.dispatch(changeClassification(result[0], result[1])))
-            this.store.dispatch(endAnalysis())
         }
 
         this.currentState = nextState
