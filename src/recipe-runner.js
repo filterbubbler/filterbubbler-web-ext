@@ -3,10 +3,45 @@ import BayesClassifier from 'bayes-classifier'
 import {endAnalysis, changeClassification} from 'actions'
 
 class RecipeRunner {
-    constructor(props) {
-        this.props = props
+    constructor() {
+        this.store = null
         this.recipes = {}
         this.analyzing = false
+    }
+
+    setStore(store) {
+        this.store = store
+    }
+
+    dispatch(action) {
+        if (this.store != null) {
+            this.store.dispatch(action)
+        }
+    }
+
+    updateRecipe(recipe, state) {
+        console.log('Recipe update', recipe)
+
+        if (!this.recipes[recipe.recipe]) {
+            this.recipes[recipe.recipe] = new Recipe(this, recipe)
+        } 
+        this.recipes[recipe.recipe].retrain({
+            recipe: recipe.recipe,
+            classifier: new BayesClassifier(),
+            corpus: state.corpora[recipe.corpus],
+            source: recipe.source,
+            sink: recipe.sink,
+        })
+    }
+
+    retrain(recipe, state) {
+        this.recipes[recipe.recipe].retrain({
+            recipe: recipe.recipe,
+            classifier: new BayesClassifier(),
+            corpus: state.corpora[recipe.corpus],
+            source: recipe.source,
+            sink: recipe.sink,
+        })
     }
 
     handleChange() {
@@ -34,7 +69,7 @@ class RecipeRunner {
         if (nextState.analyze) {
             this.store.dispatch(endAnalysis())
             let results = this.analyze(nextState.content)
-            results.map(result => this.store.dispatch(changeClassification(result[0], result[1])))
+            results.map(result => this.dispatch(changeClassification(result[0], result[1])))
         }
 
         this.currentState = nextState
@@ -47,13 +82,9 @@ class RecipeRunner {
                results.push([recipe, this.recipes[recipe].analyze(content)])
             })
         }
+        console.log('ANALYZE', results)
+        results.map(result => this.dispatch(changeClassification(result[0], result[1])))
         return results
-    }
-
-    subscribe(store) {
-        this.unsubscribe()
-        this.store = store
-        this._unsubscribe = store.subscribe(() => { this.handleChange() })
     }
 
     unsubscribe() {
@@ -64,4 +95,4 @@ class RecipeRunner {
     }
 }
 
-export default RecipeRunner
+export default new RecipeRunner()

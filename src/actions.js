@@ -1,4 +1,5 @@
 import browser from 'webextension-polyfill'
+import recipeRunner from 'recipe-runner'
 import {
     DBNAME,
     APP_VERSION,
@@ -113,7 +114,7 @@ export function uiUpdateRecipe({recipe, source, sink, classifier, corpus}) {
 }
 
 export function updateRecipe({recipe, source, sink, classifier, corpus}) {
-    return function (dispatch) {
+    return function (dispatch, getState) {
         dispatch({
             type: UPDATE_RECIPE,
             recipe,
@@ -122,9 +123,19 @@ export function updateRecipe({recipe, source, sink, classifier, corpus}) {
             classifier,
             corpus,
         })
-        dispatch(beginAnalysis())
+        recipeRunner.updateRecipe({recipe, source, sink, classifier, corpus}, getState())
         return dispatch(persistStateToLocalStorage())
     }
+}
+
+function updateRecipesWithCorpus(corpus, dispatch, getState) {
+    let recipes = getState().recipes
+    Object.keys(recipes).map(recipeId => {
+        let recipe = recipes[recipeId]
+        if (recipe.corpus === corpus) {
+            recipeRunner.retrain(recipe, getState())
+        }
+    })
 }
 
 export function uiAddClassificationUrl({corpus, classification, url}) {
@@ -137,13 +148,14 @@ export function uiAddClassificationUrl({corpus, classification, url}) {
 }
 
 export function addClassificationUrl({corpus, classification, url}) {
-    return function(dispatch) {
+    return function(dispatch, getState) {
         dispatch({
             type: ADD_CLASSIFICATION_URL,
             corpus,
             classification,
             url
         })
+        updateRecipesWithCorpus(corpus, dispatch, getState)
         return dispatch(persistStateToLocalStorage())
     }
 }
@@ -158,13 +170,14 @@ export function uiRemoveClassificationUrl({corpus, classification, url}) {
 }
 
 export function removeClassificationUrl({corpus, classification, url}) {
-    return function(dispatch) {
+    return function(dispatch, getState) {
         dispatch({
             type: REMOVE_CLASSIFICATION_URL,
             corpus,
             classification,
             url
         })
+        updateRecipesWithCorpus(corpus, dispatch, getState)
         return dispatch(persistStateToLocalStorage())
     }
 }
@@ -374,7 +387,7 @@ export function updateContent({content}) {
             type: UPDATE_CONTENT,
             content
         })
-        dispatch(beginAnalysis())
+        recipeRunner.analyze(content)
         return dispatch(persistStateToLocalStorage())
     }
 }
@@ -575,7 +588,10 @@ export function restoreStateFromLocalStorage() {
             } else {
                 if ("undefined" !== typeof db[DBNAME]) {
                     console.log('Loaded classification DB from localstorage:', db)
-                    return dispatch(applyRestoredState(db[DBNAME]))
+                    dispatch(applyRestoredState(db[DBNAME]))
+                    let state = getState()
+                    console.log('STATE', state)
+                    Object.keys(state.recipes).map(recipe => recipeRunner.updateRecipe(state.recipes[recipe], getState()))
                 } else {
                     console.log('No pre-existing DB')
                     dispatch(updateAppVersion(APP_VERSION))

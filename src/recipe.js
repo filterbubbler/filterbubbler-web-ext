@@ -33,6 +33,7 @@ class Recipe {
     }
 
     _retrain(items) {
+        console.log('RETRAINING', this.state)
         let next = items.pop(1)
         let classifier = this.state.classifier
         if (classifier) {
