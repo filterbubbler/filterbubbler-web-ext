@@ -3,6 +3,8 @@ import { reducer as bayesReducer } from 'bayes-classifier'
 import { reducer as formReducer } from 'redux-form'
 import Recipe from 'recipe'
 import { 
+    BEGIN_ANALYSIS,
+    END_ANALYSIS,
     UPDATE_RECIPES,
     UPDATE_APP_VERSION,
     APP_VERSION,
@@ -34,6 +36,7 @@ import {
 } from './constants';
 
 const initialState = {
+    analyze: false,
     url: '',
     content: '',
     version: '',
@@ -55,6 +58,20 @@ const initialState = {
     repositories: [],
     ui: {
         classification: ''
+    }
+}
+
+const analyze = (state = initialState.analyze, action) => {
+    let newState
+    switch (action.type) {
+        case BEGIN_ANALYSIS:
+            newState = true
+            return newState
+        case END_ANALYSIS:
+            newState = false
+            return newState
+        default:
+            return state
     }
 }
 
@@ -254,6 +271,7 @@ const classifiers = (state = initialState.classifiers, action) => {
 }
 
 export default combineReducers({
+    analyze: analyze,
     url: urls,
     servers: servers,
     recipes: recipes,

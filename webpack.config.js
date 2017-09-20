@@ -65,5 +65,6 @@ module.exports = {
   ],
   // This will expose source map files so that errors will point to your
   // original source files instead of the transpiled files.
-  devtool: 'sourcemap',
+  // devtool: 'sourcemap',
+  devtool: false,
 };

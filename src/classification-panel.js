@@ -4,7 +4,7 @@ import Paper from 'material-ui/Paper';
 
 class ClassificationPanel extends React.Component {
     render() {
-        const {url, classifications } = this.props
+        const {url, classifications, recipes } = this.props
 
         console.log('CLASSIFICATIONS', classifications)
 
@@ -14,11 +14,11 @@ class ClassificationPanel extends React.Component {
              <strong>URL:</strong>{url}
             </Paper>
             <Paper style={{margin: 10, padding: 5}}>
-              {Object.keys(classifications).length == 0 ?
+              {Object.keys(recipes).length == 0 ?
                   <div>You have not created any recipes</div> : ''
               }
-              {Object.keys(classifications).map(recipe => {
-                return <div><b>{recipe}:</b> {classifications[recipe]}</div>
+              {Object.keys(recipes).map(recipe => {
+                return <div><b>{recipe}:</b> {classifications[recipe] ? classifications[recipe] : 'Processing...'}</div>
               })}
             </Paper>
             </div>
@@ -29,6 +29,7 @@ class ClassificationPanel extends React.Component {
 ClassificationPanel = connect(
     state => ({
         url: state.url,
+        recipes: state.recipes,
         classifications: state.classifications
     })
 )(ClassificationPanel)
