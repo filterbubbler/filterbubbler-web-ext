@@ -1,0 +1,13 @@
+{
+  "line"        : true,
+  "file"        : true,
+  "regexes"      : [
+    {
+      "fileName"        : "all",
+      "scope"           : "line",
+      "regex"           : "POOTOO",
+      "flags"           : "g",
+      "value"           : "window"
+    }
+  ]
+}
