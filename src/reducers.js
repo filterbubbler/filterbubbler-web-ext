@@ -1,7 +1,8 @@
 import {combineReducers} from 'redux';
-import { reducer as bayesReducer } from 'bayes-classifier'
 import { reducer as formReducer } from 'redux-form'
 import Recipe from 'recipe'
+import allSources from 'sources'
+import allSinks from 'sinks'
 import { 
     BEGIN_ANALYSIS,
     END_ANALYSIS,
@@ -45,12 +46,8 @@ const initialState = {
     classifiers: {
         'BAYES': { name: 'Naive Bayesian' }
     },
-    sources: {
-        'DEFAULT': { name: 'Current page' }
-    },
-    sinks: {
-        'DEFAULT': { name: 'Extension drop-down' }
-    },
+    sources: allSources,
+    sinks: allSinks,
     servers: [],
     currentServer: '',
     corpora: {},

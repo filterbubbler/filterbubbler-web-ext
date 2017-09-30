@@ -1,12 +1,19 @@
 import Recipe from 'recipe'
-import BayesClassifier from 'bayes-classifier'
+import BayesClassifier from 'classifiers/bayes'
 import {endAnalysis, changeClassification} from 'actions'
+import sources from 'sources'
+import sinks from 'sinks'
+import classifiers from 'classifiers'
 
 class RecipeRunner {
     constructor() {
         this.store = null
         this.recipes = {}
         this.analyzing = false
+
+        console.log('SOURCES', sources)
+        console.log('SINKS', sinks)
+        console.log('CLASSIFIERS', classifiers)
     }
 
     setStore(store) {

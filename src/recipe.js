@@ -52,7 +52,7 @@ class Recipe {
                     )
                 },
                 error => {
-                    console.log('ERROR TRAINING')
+                    console.log('ERROR TRAINING', error, next[1])
                 }
             )
         }
