@@ -1,5 +1,5 @@
 import bayes from './bayes'
 
-export default [
-    bayes
-]
+export default {
+    'BAYES': bayes
+}
