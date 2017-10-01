@@ -3,6 +3,12 @@
 This is an early sketch of a tool for performing collaborative text
 analysis and classification of web page text content.
 
+## Screencasts
+
+We have created some screencasts to introduce FilterBubbler and to demonstrate how to build the software.
+
+ * [FilterBubbler functionality demo](https://www.youtube.com/watch?v=-1W9dEkNHN8)
+ * [Checking out FilterBubbler from GIT and building it](https://youtu.be/Pnq_pwpR_ww)
 
 ## Getting started
 
