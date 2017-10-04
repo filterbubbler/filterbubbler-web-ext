@@ -1,9 +1,8 @@
 import bayes from 'bayes';
 
 class BayesClassifier {
-    constructor(props) {
-        this.props = props
-        this.name = 'BAYES'
+    constructor(recipe) {
+        this.recipe = recipe
         this.classifier = bayes()
     }
 
@@ -15,19 +14,25 @@ class BayesClassifier {
         this.classifier.fromJson(json)
     }
 
-    analyze(content) {
+    analyze(page) {
         let classification = 'None'
-        if (content) {
-            console.log('ANALYZING', content)
-            classification = this.classifier.categorize(content.replace(/<[^>]+>/g, ''))
-            console.log('CLASSIFIED', classification)
+        if (page) {
+            classification = this.classifier.categorize(page.content.replace(/<[^>]+>/g, ''))
+
+            if (this.recipe.sink != null) {
+                this.recipe.sink.consume(page, classification)
+            }
         }
+
         return classification
     }
 
-    classify(content, label) {
+    train(content, label) {
         this.classifier.learn(content.replace(/<[^>]+>/g, ''), label)
     }
 }
+
+BayesClassifier.label = 'Bayesian Classifier'
+BayesClassifier.description = 'A classifier that uses Bayesian analysis for categorizing content'
 
 export default BayesClassifier

@@ -1,16 +1,20 @@
 /*
  * Displays the results of a classifier in the classification popup
  */
-class PopUpSync {
-    constructor(dispatch, getState) {
-        this.dispatch = dispatch
-        this.getState = getState
-        this.name = 'Pop-up Sink'
-        this.description = 'Shows the current classification in the UI'
+
+import { changeClassification } from '../actions'
+
+class PopUpSink {
+    constructor(recipe) {
+        this.recipe = recipe
     }
 
-    receiveClassification(url, classification, data) {
+    consume(page, classification) {
+        this.recipe.runner.dispatch(changeClassification(this.recipe.label, classification))
     }
 }
 
-export default new PopUpSync()
+PopUpSink.label = 'Pop-up Sink'
+PopUpSink.description = 'Shows the current classification in the UI'
+
+export default PopUpSink

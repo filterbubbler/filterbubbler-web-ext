@@ -1,30 +1,24 @@
+import sources from 'sources'
+import sinks from 'sinks'
+import classifiers from 'classifiers'
+
 class Recipe {
-    constructor(runner, props) {
+    constructor(runner, label, source, sink, classifier, corpus) {
+        this.label = label
         this.runner = runner
-        this.state = {
-            status: 'READY',
-            progress: 0,
-            ...props,
-        }
+        this.status = 'READY'
+        this.progress = 0
+        this.source = new sources[source](this)
+        this.sink = new sinks[sink](this)
+        this.classifier = new classifiers[classifier](this)
+        this.corpus = corpus
     }
 
-    analyze(content) {
-        let classification = 'None'
-        if (this.state.classifier) {
-            classification = this.state.classifier.analyze(content)
-        }
-        return classification
-    }
-
-    classify(content, label) {
-    }
-
-    retrain(recipe) {
-        this.state = {...recipe}
+    retrain() {
         let items = []
-        if (this.state.corpus) {
-            Object.keys(this.state.corpus.classifications).map(label => {
-                this.state.corpus.classifications[label].map(url => {
+        if (this.isValid()) {
+            Object.keys(this.corpus.classifications).map(label => {
+                this.corpus.classifications[label].map(url => {
                     items.push([label, url])
                 })
             })
@@ -32,16 +26,29 @@ class Recipe {
         }
     }
 
+    isValid() {
+        if (this.source == null ||
+            this.sink == null ||
+            this.classifier == null ||
+            this.corpus == null) {
+            return false
+        } else {
+            return true
+        }
+    }
+
+    // This is a dumb hack to keep the training process from freezing the
+    // background thread. Recipes really need to use WebWorkers
     _retrain(items) {
-        console.log('RETRAINING', this.state)
         let next = items.pop(1)
-        let classifier = this.state.classifier
+        let classifier = this.classifier
         if (classifier) {
+            console.log('Training: ', next)
             fetch(next[1]).then(
                 response => {
                     response.text().then(
                         text => {
-                            classifier.classify(text, next[0])
+                            classifier.train(text, next[0])
                             if (items.length > 0) {
                                 setTimeout(() => this._retrain(items), 0)
                             }
@@ -56,17 +63,6 @@ class Recipe {
                 }
             )
         }
-    }
-    
-    setState(state, dispatch) {
-        if (this.state !== state) {
-            status = 'REFRESH'
-        }
-        this.state = {...this.state, ...state}
-    }
-
-    getState() {
-        return this.state
     }
 }
 

@@ -2,10 +2,15 @@
  * No-op demo source
  */
 class DummySource {
-    constructor(dispatch, getState) {
-        this.name = 'Dummy Source'
-        this.description = 'A no-op demonstration source'
+    constructor(recipe) {
+    }
+
+    trigger() {
+        console.log('Dummy source triggered, doing nothing')
     }
 }
 
-export default new DummySource()
+DummySource.label = 'Dummy Source'
+DummySource.description = 'A no-op demonstration source'
+
+export default DummySource

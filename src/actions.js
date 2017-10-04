@@ -1,5 +1,5 @@
 import browser from 'webextension-polyfill'
-import recipeRunner from 'recipe-runner'
+import RecipeRunner from './recipe-runner'
 import {
     DBNAME,
     APP_VERSION,
@@ -55,6 +55,14 @@ import {
     ADD_CORPUS_CLASSIFICATION,
     CHANGE_CLASSIFICATION,
 } from './constants'
+
+
+const recipeRunner = new RecipeRunner()
+export function prepareRecipes() {
+    return function(dispatch, getState) {
+        recipeRunner.connect(dispatch, getState)
+    }
+}
 
 export function beginAnalysis() {
     return {
@@ -115,6 +123,7 @@ export function uiUpdateRecipe({recipe, source, sink, classifier, corpus}) {
 
 export function updateRecipe({recipe, source, sink, classifier, corpus}) {
     return function (dispatch, getState) {
+        recipeRunner.updateRecipe({recipe, source, sink, classifier, corpus})
         dispatch({
             type: UPDATE_RECIPE,
             recipe,
@@ -123,7 +132,6 @@ export function updateRecipe({recipe, source, sink, classifier, corpus}) {
             classifier,
             corpus,
         })
-        recipeRunner.updateRecipe({recipe, source, sink, classifier, corpus}, getState())
         return dispatch(persistStateToLocalStorage())
     }
 }
@@ -383,12 +391,14 @@ export function uiUpdateContent({content}) {
 
 export function updateContent({content}) {
     return function(dispatch) {
+        /*
         dispatch({
             type: UPDATE_CONTENT,
             content
         })
         recipeRunner.analyze(content)
         return dispatch(persistStateToLocalStorage())
+        */
     }
 }
 
@@ -589,12 +599,14 @@ export function restoreStateFromLocalStorage() {
                 if ("undefined" !== typeof db[DBNAME]) {
                     console.log('Loaded classification DB from localstorage:', db)
                     dispatch(applyRestoredState(db[DBNAME]))
+                    dispatch(prepareRecipes())
                     let state = getState()
                     console.log('STATE', state)
                     Object.keys(state.recipes).map(recipe => recipeRunner.updateRecipe(state.recipes[recipe], getState()))
                 } else {
                     console.log('No pre-existing DB')
                     dispatch(updateAppVersion(APP_VERSION))
+                    dispatch(prepareRecipes())
                     return dispatch(persistStateToLocalStorage())
                 }
             }

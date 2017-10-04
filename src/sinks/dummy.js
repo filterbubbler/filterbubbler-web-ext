@@ -2,15 +2,15 @@
  * No-Op dummy sink
  */
 class DummySink {
-    constructor(dispatch, getState) {
-        this.dispatch = dispatch
-        this.getState = getState
-        this.name = 'Dummy Sink'
-        this.description = 'A no-op demonstration sink'
+    constructor(recipe) {
+        this.recipe = recipe
     }
 
-    receiveClassification(url, classification, data) {
+    consume(page, classification) {
     }
 }
 
-export default new DummySink()
+DummySink.label = 'Dummy Sink'
+DummySink.description = 'A no-op demonstration sink'
+
+export default DummySink

@@ -3,6 +3,7 @@ import { reducer as formReducer } from 'redux-form'
 import Recipe from 'recipe'
 import allSources from 'sources'
 import allSinks from 'sinks'
+import allClassifiers from 'classifiers'
 import { 
     BEGIN_ANALYSIS,
     END_ANALYSIS,
@@ -36,6 +37,18 @@ import {
     APPLY_RESTORED_STATE
 } from './constants';
 
+function extractDescriptions(components) {
+    return Object.keys(components).reduce(function(results, ckey) {
+        results[ckey] = {
+            label: components[ckey].label,
+            description: components[ckey].description
+        } 
+        return results 
+    }, {})
+}
+
+console.log(allSources, extractDescriptions(allSources))
+
 const initialState = {
     analyze: false,
     url: '',
@@ -43,11 +56,9 @@ const initialState = {
     version: '',
     classifierStatus: '',
     classifications : {},
-    classifiers: {
-        'BAYES': { name: 'Naive Bayesian' }
-    },
-    sources: allSources,
-    sinks: allSinks,
+    classifiers: extractDescriptions(allClassifiers),
+    sources: extractDescriptions(allSources),
+    sinks: extractDescriptions(allSinks),
     servers: [],
     currentServer: '',
     corpora: {},
