@@ -5,8 +5,6 @@ import allSources from 'sources'
 import allSinks from 'sinks'
 import allClassifiers from 'classifiers'
 import { 
-    BEGIN_ANALYSIS,
-    END_ANALYSIS,
     UPDATE_RECIPES,
     UPDATE_APP_VERSION,
     APP_VERSION,
@@ -66,20 +64,6 @@ const initialState = {
     repositories: [],
     ui: {
         classification: ''
-    }
-}
-
-const analyze = (state = initialState.analyze, action) => {
-    let newState
-    switch (action.type) {
-        case BEGIN_ANALYSIS:
-            newState = true
-            return newState
-        case END_ANALYSIS:
-            newState = false
-            return newState
-        default:
-            return state
     }
 }
 
