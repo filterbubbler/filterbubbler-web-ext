@@ -468,6 +468,14 @@ export function readRecipe({server, recipe}) {
     }
 }
 
+export function uiUploadRecipe({server, recipe}) {      
+     return {      
+         type: UI_UPLOAD_RECIPE,       
+         server,       
+         recipe        
+     }     
+ }
+
 export function uploadRecipe({server, recipe}) {
     return (dispatch, getState) => {
         const recipes = getState().recipes
