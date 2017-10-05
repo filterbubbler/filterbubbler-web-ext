@@ -17,7 +17,6 @@ import {
     UPDATE_CONTENT,
     UI_UPDATE_CONTENT,
     REQUEST_ACTIVE_TAB_TEXT,
-    COULD_NOT_FETCH_TAB_TEXT,
     MAIN_TAB,
     BEGIN_ANALYSIS,
     END_ANALYSIS,
@@ -31,6 +30,8 @@ import {
     UPDATE_RECIPES,
     UI_READ_RECIPE,
     READ_RECIPE,
+    UI_RUN_RECIPE,
+    RUN_RECIPE,
     UI_UPLOAD_RECIPE,
 
     APPLY_CORPUS,
@@ -61,12 +62,6 @@ const recipeRunner = new RecipeRunner()
 export function prepareRecipes() {
     return function(dispatch, getState) {
         recipeRunner.connect(dispatch, getState)
-    }
-}
-
-export function beginAnalysis() {
-    return {
-        type: BEGIN_ANALYSIS
     }
 }
 
@@ -127,6 +122,19 @@ export function updateRecipe({recipe, source, sink, classifier, corpus}) {
             corpus,
         })
         return dispatch(persistStateToLocalStorage())
+    }
+}
+
+export function uiRunRecipe({recipe}) {
+    return {
+        type: UI_RUN_RECIPE,
+        recipe
+    }
+}
+
+export function runRecipe({recipe}) {
+    return function (dispatch) {
+        console.log('Run recipe', recipe)
     }
 }
 
@@ -236,7 +244,7 @@ export function addCorpus({corpus, classifications}) {
             type: ADD_CORPUS,
             corpus,
             classifications
-        }) 
+        })
         return dispatch(persistStateToLocalStorage())
     }
 }
@@ -586,7 +594,7 @@ export function restoreStateFromLocalStorage() {
     return (dispatch, getState) => {
         return browser.storage.local.get(DBNAME).then(db => {
             if (db[DBNAME] && db[DBNAME].version && db[DBNAME].version != APP_VERSION) {
-               console.log('DB version mismatch') 
+               console.log('DB version mismatch')
                dispatch(updateAppVersion(APP_VERSION))
                return dispatch(persistStateToLocalStorage())
             } else {
@@ -623,7 +631,7 @@ export function persistStateToLocalStorage() {
         return browser.storage.local.set(db).then(
             result => {
                 console.log('Stored successfully', db)
-            }, 
+            },
             error => {
                 dispatch(reportError('Error storing DB', error))
             }

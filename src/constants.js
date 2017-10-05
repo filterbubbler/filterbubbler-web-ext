@@ -38,6 +38,8 @@ export const UPDATE_RECIPE = 'UPDATE_RECIPE'
 export const UI_UPDATE_RECIPE = 'UI_UPDATE_RECIPE'
 export const UI_UPLOAD_RECIPE = 'UI_UPLOAD_RECIPE'
 export const UPLOAD_RECIPE = 'UPLOAD_RECIPE'
+export const UI_RUN_RECIPE = 'UI_RUN_RECIPE'
+export const RUN_RECIPE = 'RUN_RECIPE'
 
 // Corpora and classifications
 export const ADD_CORPUS = 'ADD_CORPUS'
@@ -59,6 +61,3 @@ export const APPLY_CORPORA = 'APPLY_CORPORA'
 export const UPDATE_CORPORA = 'UPDATE_CORPORA'
 export const UI_UPLOAD_CORPUS = 'UI_UPLOAD_CORPUS'
 export const UPLOAD_CORPUS = 'UPLOAD_CORPUS'
-
-// UI Text
-export const COULD_NOT_FETCH_TAB_TEXT = 'Could not fetch text from the active tab'

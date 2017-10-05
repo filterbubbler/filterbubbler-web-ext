@@ -12,8 +12,9 @@ import SelectField from 'material-ui/SelectField'
 import AddableListItem from 'addable-list-item'
 import IconButton from 'material-ui/IconButton'
 import UploadIcon from 'material-ui/svg-icons/file/file-upload'
+import PlayIcon from 'material-ui/svg-icons/av/play-arrow'
 import TrashIcon from 'material-ui/svg-icons/action/delete'
-import {uiAddRecipe, uiRemoveRecipe, uiUpdateRecipe, uiUploadRecipe} from 'actions'
+import {uiRunRecipe, uiAddRecipe, uiRemoveRecipe, uiUpdateRecipe, uiUploadRecipe} from 'actions'
 
 // Panel list items
 class RecipeListItem extends React.Component {
@@ -23,6 +24,7 @@ class RecipeListItem extends React.Component {
             corpus,
             sink,
             source,
+            runRecipe,
             uploadRecipe,
             updateRecipe,
             removeRecipe,
@@ -76,6 +78,11 @@ class RecipeListItem extends React.Component {
                         )}
                     </SelectField>
                 </div>,
+                <ListItem primaryText="Run recipe" 
+                    key={"run-recipe-" + recipe}
+                    leftIcon={<PlayIcon />}
+                    onTouchTap={() => runRecipe(recipe)}
+                />,
                 <ListItem primaryText="Upload recipe" 
                     key={"upload-recipe-" + recipe}
                     leftIcon={<UploadIcon />}
@@ -182,6 +189,7 @@ class RecipePanel extends React.Component {
             servers,
             sources,
             sinks,
+            runRecipe,
             updateRecipe,
             uploadRecipe,
             removeRecipe,
@@ -200,6 +208,7 @@ class RecipePanel extends React.Component {
                             sink={recipes[recipe].sink}
                             classifier={recipes[recipe].classifier}
                             updateRecipe={updateRecipe}
+                            runRecipe={runRecipe}
                             uploadRecipe={() => this.showUploadDialog(recipe)}
                             removeRecipe={removeRecipe}
                             />
@@ -213,6 +222,7 @@ class RecipePanel extends React.Component {
 
 function mapDispatchToProps(dispatch) {
     return {
+        runRecipe: (recipe) => { console.log('RUN', recipe); dispatch(uiRunRecipe({recipe})) },
         addRecipe: ({recipe}) => { dispatch(uiAddRecipe({recipe})) },
         updateRecipe: ({recipe, source, sink, classifier, corpus}) => { dispatch(uiUpdateRecipe({recipe, source, sink, classifier, corpus})) },
         uploadRecipe: (recipe, server) => { dispatch(uiUploadRecipe({recipe, server})) },

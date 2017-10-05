@@ -16,6 +16,7 @@ import {
     LOAD_RECIPE,
     UI_UPLOAD_RECIPE,
     UI_UPDATE_CONTENT,
+    UI_RUN_RECIPE,
     UI_ADD_RECIPE,
     UI_READ_RECIPE,
     UI_UPDATE_RECIPE,
@@ -41,6 +42,7 @@ import {
     addClassificationUrl,
     removeClassificationUrl,
     requestActiveUrl,
+    runRecipe,
     addRecipe,
     readRecipe,
     removeRecipe,
@@ -90,6 +92,7 @@ actions[UI_UPLOAD_CORPUS] = uploadCorpus
 actions[UI_READ_CORPUS] = readCorpus
 
 // Recipes
+actions[UI_RUN_RECIPE] = runRecipe
 actions[UI_ADD_RECIPE] = addRecipe
 actions[UI_READ_RECIPE] = readRecipe
 actions[UI_UPDATE_RECIPE] = updateRecipe
