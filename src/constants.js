@@ -38,6 +38,8 @@ export const UPDATE_RECIPE = 'UPDATE_RECIPE'
 export const UI_UPDATE_RECIPE = 'UI_UPDATE_RECIPE'
 export const UI_UPLOAD_RECIPE = 'UI_UPLOAD_RECIPE'
 export const UPLOAD_RECIPE = 'UPLOAD_RECIPE'
+export const UI_RUN_RECIPE = 'UI_RUN_RECIPE'
+export const RUN_RECIPE = 'RUN_RECIPE'
 
 // Corpora and classifications
 export const ADD_CORPUS = 'ADD_CORPUS'
