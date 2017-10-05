@@ -1,6 +1,6 @@
 import Recipe from 'recipe'
 import BayesClassifier from 'classifiers/bayes'
-import {endAnalysis, changeClassification} from 'actions'
+import {changeClassification} from 'actions'
 
 class RecipeRunner {
     constructor() {

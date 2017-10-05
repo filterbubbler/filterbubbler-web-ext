@@ -40,8 +40,8 @@ function extractDescriptions(components) {
         results[ckey] = {
             label: components[ckey].label,
             description: components[ckey].description
-        } 
-        return results 
+        }
+        return results
     }, {})
 }
 
@@ -146,9 +146,6 @@ function urls(state = initialState.url, action) {
     }
 }
 
-function ui(state = initialState.ui, action) {
-    return state;
-}
 
 const recipes = (state = initialState.recipes, action) => {
     let newState = {...state}

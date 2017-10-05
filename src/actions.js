@@ -63,12 +63,6 @@ export function prepareRecipes() {
     }
 }
 
-export function endAnalysis() {
-    return {
-        type: END_ANALYSIS
-    }
-}
-
 export function uiAddRecipe({recipe}) {
     return {
         type: UI_ADD_RECIPE,
@@ -388,13 +382,6 @@ export function changeMainTab(index) {
     }
 }
 
-export function uiUpdateContent({content}) {
-    return {
-        type: UI_UPDATE_CONTENT,
-        content
-    };
-}
-
 export function updateContent({content}) {
     return function(dispatch) {
         /*
@@ -481,13 +468,13 @@ export function readRecipe({server, recipe}) {
     }
 }
 
-export function uiUploadRecipe({server, recipe}) {
-    return {
-        type: UI_UPLOAD_RECIPE,
-        server,
-        recipe
-    }
-}
+export function uiUploadRecipe({server, recipe}) {      
+     return {      
+         type: UI_UPLOAD_RECIPE,       
+         server,       
+         recipe        
+     }     
+ }
 
 export function uploadRecipe({server, recipe}) {
     return (dispatch, getState) => {
@@ -507,6 +494,7 @@ export function uploadRecipe({server, recipe}) {
         )
     }
 }
+
 
 export function uiAddServer(server) {
     return {
