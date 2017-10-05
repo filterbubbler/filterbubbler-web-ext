@@ -31,6 +31,8 @@ import {
     UPDATE_RECIPES,
     UI_READ_RECIPE,
     READ_RECIPE,
+    UI_RUN_RECIPE,
+    RUN_RECIPE,
     UI_UPLOAD_RECIPE,
 
     APPLY_CORPUS,
@@ -133,6 +135,19 @@ export function updateRecipe({recipe, source, sink, classifier, corpus}) {
             corpus,
         })
         return dispatch(persistStateToLocalStorage())
+    }
+}
+
+export function uiRunRecipe({recipe}) {
+    return {
+        type: UI_RUN_RECIPE,
+        recipe
+    }
+}
+
+export function runRecipe({recipe}) {
+    return function (dispatch) {
+        console.log('Run recipe', recipe)
     }
 }
 
