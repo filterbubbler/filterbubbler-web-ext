@@ -64,12 +64,6 @@ export function prepareRecipes() {
     }
 }
 
-export function beginAnalysis() {
-    return {
-        type: BEGIN_ANALYSIS
-    }
-}
-
 export function endAnalysis() {
     return {
         type: END_ANALYSIS
