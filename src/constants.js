@@ -3,9 +3,6 @@ export const DBNAME = 'FilterBubblerDB'
 export const UPDATE_APP_VERSION = 'UPDATE_APP_VERSION'
 export const APP_VERSION = '0.0.1'
 
-export const BEGIN_ANALYSIS = 'BEGIN_ANALYSIS'
-export const END_ANALYSIS = 'END_ANALYSIS'
-
 export const CHANGE_CLASSIFICATION = 'CHANGE_CLASSIFICATION'
 export const ANALYZE_CONTENT = 'ANALYZE_CONTENT'
 export const ACTIVE_URL = 'ACTIVE_URL'
