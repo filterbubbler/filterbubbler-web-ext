@@ -17,7 +17,6 @@ import {
     UPDATE_CONTENT,
     UI_UPDATE_CONTENT,
     REQUEST_ACTIVE_TAB_TEXT,
-    COULD_NOT_FETCH_TAB_TEXT,
     MAIN_TAB,
     BEGIN_ANALYSIS,
     END_ANALYSIS,
@@ -236,7 +235,7 @@ export function addCorpus({corpus, classifications}) {
             type: ADD_CORPUS,
             corpus,
             classifications
-        }) 
+        })
         return dispatch(persistStateToLocalStorage())
     }
 }
@@ -586,7 +585,7 @@ export function restoreStateFromLocalStorage() {
     return (dispatch, getState) => {
         return browser.storage.local.get(DBNAME).then(db => {
             if (db[DBNAME] && db[DBNAME].version && db[DBNAME].version != APP_VERSION) {
-               console.log('DB version mismatch') 
+               console.log('DB version mismatch')
                dispatch(updateAppVersion(APP_VERSION))
                return dispatch(persistStateToLocalStorage())
             } else {
@@ -623,7 +622,7 @@ export function persistStateToLocalStorage() {
         return browser.storage.local.set(db).then(
             result => {
                 console.log('Stored successfully', db)
-            }, 
+            },
             error => {
                 dispatch(reportError('Error storing DB', error))
             }
