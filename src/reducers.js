@@ -48,7 +48,6 @@ function extractDescriptions(components) {
 console.log(allSources, extractDescriptions(allSources))
 
 const initialState = {
-    analyze: false,
     url: '',
     content: '',
     version: '',
@@ -260,7 +259,6 @@ const classifiers = (state = initialState.classifiers, action) => {
 }
 
 export default combineReducers({
-    analyze: analyze,
     url: urls,
     servers: servers,
     recipes: recipes,
@@ -273,6 +271,5 @@ export default combineReducers({
     classifications: classifications,
     content: content,
     form: formReducer,
-    mainTab: tabs,
-    ui: ui
+    mainTab: tabs
 });
