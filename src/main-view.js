@@ -52,10 +52,10 @@ class MainView extends Component {
             </SwipeableViews>
 
               <BottomNavigation selectedIndex={mainTab}>
-                <div onTouchTap={() => changeMainTab(0)}><BottomNavigationItem label="Matches" icon={matchesIcon} /></div>
-                <div onTouchTap={() => changeMainTab(1)}><BottomNavigationItem icon={dashboardIcon} label="Corpora" /></div>
-                <div onTouchTap={() => changeMainTab(2)}><BottomNavigationItem icon={cloudIcon} label="Recipes" /></div>
-                <div onTouchTap={() => changeMainTab(3)}><BottomNavigationItem icon={settingsIcon} label="Settings" /></div>
+                <div onTouchTap={() => changeMainTab(0)}><BottomNavigationItem label={browser.i18n.getMessage("matchesTab")} icon={matchesIcon} /></div>
+                <div onTouchTap={() => changeMainTab(1)}><BottomNavigationItem icon={dashboardIcon} label={browser.i18n.getMessage("corporaTab")} /></div>
+                <div onTouchTap={() => changeMainTab(2)}><BottomNavigationItem icon={cloudIcon} label={browser.i18n.getMessage("recipesTab")} /></div>
+                <div onTouchTap={() => changeMainTab(3)}><BottomNavigationItem icon={settingsIcon} label={browser.i18n.getMessage("settingsTab")} /></div>
               </BottomNavigation>
             </div>
         );
