@@ -70,12 +70,6 @@ export function beginAnalysis() {
     }
 }
 
-export function endAnalysis() {
-    return {
-        type: END_ANALYSIS
-    }
-}
-
 export function uiAddRecipe({recipe}) {
     return {
         type: UI_ADD_RECIPE,
