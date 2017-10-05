@@ -1,78 +1,45 @@
 import Recipe from 'recipe'
-import BayesClassifier from 'bayes-classifier'
+import BayesClassifier from 'classifiers/bayes'
 import {endAnalysis, changeClassification} from 'actions'
 
 class RecipeRunner {
     constructor() {
-        this.store = null
         this.recipes = {}
-        this.analyzing = false
+    }
+s
+    connect(dispatch, getState) {
+        this.dispatch = dispatch
+        this.getState = getState
+
+        Object.values(getState().recipes).map(recipe => {
+            this.updateRecipe(recipe)
+        })
     }
 
-    setStore(store) {
-        this.store = store
+    updateRecipe(recipe) {
+        let corpus = this.getState().corpora[recipe.corpus]
+        let newRecipe = new Recipe(
+            this,
+            recipe.recipe,
+            recipe.source,
+            recipe.sink,
+            recipe.classifier,
+            corpus
+        )
+        this.recipes[recipe.recipe] = newRecipe
+
+        newRecipe.retrain()
     }
 
-    dispatch(action) {
-        if (this.store != null) {
-            this.store.dispatch(action)
-        }
-    }
-
-    updateRecipe(recipe, state) {
-        console.log('Recipe update', recipe)
-
-        if (!this.recipes[recipe.recipe]) {
-            this.recipes[recipe.recipe] = new Recipe(this, recipe)
-        } 
+    /*
+    retrain(recipe) {
         this.recipes[recipe.recipe].retrain({
             recipe: recipe.recipe,
             classifier: new BayesClassifier(),
-            corpus: state.corpora[recipe.corpus],
+            corpus: this.getState().corpora[recipe.corpus],
             source: recipe.source,
             sink: recipe.sink,
         })
-    }
-
-    retrain(recipe, state) {
-        this.recipes[recipe.recipe].retrain({
-            recipe: recipe.recipe,
-            classifier: new BayesClassifier(),
-            corpus: state.corpora[recipe.corpus],
-            source: recipe.source,
-            sink: recipe.sink,
-        })
-    }
-
-    handleChange() {
-        let nextState = this.store.getState()
-
-        Object.keys(nextState.recipes).map(recipe => {
-            let nextRecipe = nextState.recipes[recipe]
-            let currentRecipe = this.currentState ? this.currentState.recipes[recipe] : {}
-
-            if (nextRecipe !== currentRecipe) {
-                if (!this.recipes[recipe]) {
-                    this.recipes[recipe] = new Recipe(this, nextRecipe)
-                }
-                this.recipes[recipe].retrain({
-                    recipe: nextRecipe.recipe,
-                    classifier: new BayesClassifier(),
-                    corpus: nextState.corpora[nextRecipe.corpus],
-                    source: nextRecipe.source,
-                    sink: nextRecipe.sink,
-                })
-            }
-        })
-
-        // If content has changed then reanalyze
-        if (nextState.analyze) {
-            this.store.dispatch(endAnalysis())
-            let results = this.analyze(nextState.content)
-            results.map(result => this.dispatch(changeClassification(result[0], result[1])))
-        }
-
-        this.currentState = nextState
     }
 
     analyze(content) {
@@ -82,17 +49,10 @@ class RecipeRunner {
                results.push([recipe, this.recipes[recipe].analyze(content)])
             })
         }
-        console.log('ANALYZE', results)
         results.map(result => this.dispatch(changeClassification(result[0], result[1])))
         return results
     }
-
-    unsubscribe() {
-        if (this._unsubscribe) {
-            this._unsubscribe()
-            delete this._unsubscribe
-        }
-    }
+    */
 }
 
-export default new RecipeRunner()
+export default RecipeRunner

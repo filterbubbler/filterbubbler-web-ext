@@ -2,3 +2,4 @@ node_modules
 extension/dist
 infobubble.xpi
 extension/web-ext-artifacts
+web-ext-artifacts

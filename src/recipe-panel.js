@@ -33,6 +33,8 @@ class RecipeListItem extends React.Component {
             recipe,
         } = this.props
 
+        console.log('RECIPE LIST', classifiers, sources, sinks)
+
         return (
             <ListItem 
                 leftIcon={<DescriptionIcon />}
@@ -46,7 +48,7 @@ class RecipeListItem extends React.Component {
                         value={classifier}
                         onChange={(ev, key, classifier) => updateRecipe({recipe, classifier, source, sink, corpus})}>
                         {Object.keys(classifiers).map(cname =>  
-                            <MenuItem value={cname} primaryText={classifiers[cname].name} />
+                            <MenuItem value={cname} primaryText={classifiers[cname].label} />
                         )}
                     </SelectField>
                     <SelectField 
@@ -54,7 +56,7 @@ class RecipeListItem extends React.Component {
                         value={source}
                         onChange={(ev, key, source) => updateRecipe({recipe, classifier, source, sink, corpus})}>
                         {Object.keys(sources).map(sname =>  
-                            <MenuItem key={sname} value={sname} primaryText={sources[sname].name} />
+                            <MenuItem key={sname} value={sname} primaryText={sources[sname].label} />
                         )}
                     </SelectField>
                     <SelectField 
@@ -62,7 +64,7 @@ class RecipeListItem extends React.Component {
                         value={sink}
                         onChange={(ev, key, sink) => updateRecipe({recipe, classifier, source, sink, corpus})}>
                         {Object.keys(sinks).map(sname =>  
-                            <MenuItem key={sname} value={sname} primaryText={sinks[sname].name} />
+                            <MenuItem key={sname} value={sname} primaryText={sinks[sname].label} />
                         )}
                     </SelectField>
                     <SelectField 

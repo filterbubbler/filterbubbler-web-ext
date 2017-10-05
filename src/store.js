@@ -4,7 +4,6 @@ import reducers from './reducers'
 import {actions as formActions} from 'redux-form'
 import {actionTypes as formActionTypes} from 'redux-form'
 import thunk from 'redux-thunk'
-import recipeRunner from 'recipe-runner'
 import {
     MAIN_TAB,
     CHANGE_CLASSIFICATION,
@@ -32,6 +31,7 @@ import {
     UI_ADD_CORPUS_CLASSIFICATION,
 } from './constants'
 import {
+    prepareRecipes,
     addCorpusClassification,
     changeMainTab,
     addServer,
@@ -107,8 +107,6 @@ const backgroundStore = createBackgroundStore({
     store,
     actions: actions
 })
-
-recipeRunner.setStore(store)
 
 // Fetch recipes from the current server
 store.dispatch(restoreStateFromLocalStorage());
