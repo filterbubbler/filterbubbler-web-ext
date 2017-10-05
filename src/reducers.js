@@ -4,7 +4,7 @@ import Recipe from 'recipe'
 import allSources from 'sources'
 import allSinks from 'sinks'
 import allClassifiers from 'classifiers'
-import { 
+import {
     BEGIN_ANALYSIS,
     END_ANALYSIS,
     UPDATE_RECIPES,
@@ -42,8 +42,8 @@ function extractDescriptions(components) {
         results[ckey] = {
             label: components[ckey].label,
             description: components[ckey].description
-        } 
-        return results 
+        }
+        return results
     }, {})
 }
 
@@ -162,9 +162,6 @@ function urls(state = initialState.url, action) {
     }
 }
 
-function ui(state = initialState.ui, action) {
-    return state;
-}
 
 const recipes = (state = initialState.recipes, action) => {
     let newState = {...state}
