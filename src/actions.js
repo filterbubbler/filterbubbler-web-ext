@@ -133,6 +133,7 @@ export function uiRunRecipe({recipe}) {
 export function runRecipe({recipe}) {
     return function (dispatch) {
         console.log('Run recipe', recipe)
+        recipeRunner.run(recipe)
     }
 }
 
@@ -301,6 +302,61 @@ function fetchActiveTabContent() {
             return 'error sending'
         }
     )
+}
+
+export function fbFeed(query) {
+    return function(dispatch, getState) {
+        return browser.tabs.query({active: true, currentWindow: true}).then(
+            tabs => {
+                return browser.tabs.sendMessage(
+                    tabs[0].id,
+                    {
+                        type: 'FB_FEED',
+                        query
+                    }
+                )
+            },
+            error => {
+                return 'error fetching'
+            }
+        ).then(
+            response => {
+                return response.results
+            },
+            error => {
+                console.log('Error fetching tab content', error)
+                return 'error sending'
+            }
+        )
+    }
+}
+
+export function fbLabel(id, classification) {
+    return function(dispatch, getState) {
+        return browser.tabs.query({active: true, currentWindow: true}).then(
+            tabs => {
+                return browser.tabs.sendMessage(
+                    tabs[0].id,
+                    {
+                        type: 'FB_LABEL',
+                        id,
+                        classification
+                    }
+                )
+            },
+            error => {
+                return 'error fetching'
+            }
+        ).then(
+            response => {
+                return response.results
+            },
+            error => {
+                console.log('Error fetching tab content', error)
+                return 'error sending'
+            }
+        )
+    }
 }
 
 export function requestActiveTabContent() {

@@ -9,7 +9,7 @@ module.exports = {
     // background: './src/background.js',
     popup: ['babel-polyfill', './src/popup.js'],
     content: './src/content.js',
-    background: './src/background.js',
+    background: ['babel-polyfill', './src/background.js'],
   },
   output: {
     // This copies each source entry into the extension dist folder named

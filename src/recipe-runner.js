@@ -6,7 +6,7 @@ class RecipeRunner {
     constructor() {
         this.recipes = {}
     }
-s
+
     connect(dispatch, getState) {
         this.dispatch = dispatch
         this.getState = getState
@@ -29,6 +29,10 @@ s
         this.recipes[recipe.recipe] = newRecipe
 
         newRecipe.retrain()
+    }
+
+    run(recipe) {
+        this.recipes[recipe].source.trigger()
     }
 
     /*
